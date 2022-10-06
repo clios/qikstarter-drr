@@ -1,7 +1,7 @@
 import './Sider.css'
 
-import { Identification24, Power24 } from '@carbon/icons-react'
-import { User24, UserAvatar24 } from '@carbon/icons-react'
+import { CropGrowth24, Hotel24, Identification24, Industry24, TrafficIncident24 } from '@carbon/icons-react'
+import { UserAvatar24, PedestrianFamily24, Power24, TrafficFlow24 } from '@carbon/icons-react'
 
 import FadeAnimation from '../components/FadeAnimation'
 import Panel from '../components/Panel'
@@ -16,17 +16,32 @@ function Sider({ children }) {
       <div className="sider">
         <Panel>
           <PanelSection>
-            <PanelLink to="/your-account">
-              <UserAvatar24 /> <p>Your Account</p>
+            <PanelLink to="/your-account" tooltip="Your Account">
+              <UserAvatar24 />
             </PanelLink>
-            <PanelLink to="/residents">
-              <User24 /> <p>Residents</p>
+            <PanelLink to="/settlement-area" tooltip="Settlement Area">
+              <Hotel24 />
             </PanelLink>
-            <PanelLink to="/users">
-              <Identification24 /> <p>Users</p>
+            <PanelLink to="/population" tooltip="Population">
+              <PedestrianFamily24 />
             </PanelLink>
-            <div className="panel-link" onClick={() => navigate('/', { replace: true })}>
-              <Power24 /> <p>Sign Out</p>
+            <PanelLink to="/agriculture" tooltip="Agriculture">
+              <CropGrowth24 />
+            </PanelLink>
+            <PanelLink to="/critical-infrastructure" tooltip="Critical Infrastructure">
+              <Industry24 />
+            </PanelLink>
+            <PanelLink to="/road-lifeline" tooltip="Road Lifeline">
+              <TrafficFlow24 />
+            </PanelLink>
+            <PanelLink to="/incidents" tooltip="Incidents">
+              <TrafficIncident24 />
+            </PanelLink>
+            <PanelLink to="/users" tooltip="User Accounts">
+              <Identification24 />
+            </PanelLink>
+            <div className="panel-link" onClick={() => navigate('/', { replace: true })} title="Sign Out">
+              <Power24 />
             </div>
           </PanelSection>
         </Panel>

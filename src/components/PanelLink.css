@@ -1,5 +1,6 @@
 .panel-link {
   display: block;
+  position: relative;
   font-size: 0.8rem;
   color: #ffffff;
   text-decoration: none;

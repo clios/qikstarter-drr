@@ -15,7 +15,7 @@ export default function PanelLink(props) {
 
   if (no_permission_required || isPermitted)
     return (
-      <Link className="panel-link" to={props.to} getProps={isPartiallyActive}>
+      <Link className="panel-link" to={props.to} getProps={isPartiallyActive} title={props.tooltip}>
         {props.children}
       </Link>
     )

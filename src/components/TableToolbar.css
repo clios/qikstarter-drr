@@ -1,0 +1,8 @@
+.table-toolbar {
+  display: flex;
+  width: 100%;
+}
+
+.table-toolbar .input {
+  width: 100%;
+}

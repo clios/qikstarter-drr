@@ -1,0 +1,38 @@
+.tabs {
+  display: grid;
+}
+
+.tabs-header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 10;
+  background-color: hsl(192, 20%, 10%);
+}
+
+.tabs-content {
+  display: flex;
+  flex-direction: row;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  border-bottom: 1px solid hsla(197, 10%, 50%, 1);
+}
+
+.tabs-item {
+  display: block;
+  padding: 0.4rem 1.5rem 0.2rem 1.5rem;
+  color: #ffffff;
+  text-decoration: none;
+  transition: background-color 300ms ease;
+}
+
+.tabs-item:hover,
+.tabs-item:visited {
+  background-color: #df9c20;
+  cursor: pointer;
+}
+
+.tabs-item.active {
+  background-color: hsla(197, 75%, 50%, 0.3);
+  border-bottom: 0.2rem solid #df9c20;
+}

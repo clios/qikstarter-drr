@@ -1,0 +1,4 @@
+.sider {
+  display: grid;
+  grid-template-columns: 5rem 1fr;
+}

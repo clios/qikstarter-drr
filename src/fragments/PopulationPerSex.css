@@ -1,0 +1,4 @@
+.population-per-sex {
+  display: flex;
+  column-gap: 1rem;
+}

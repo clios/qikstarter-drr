@@ -91,11 +91,12 @@ function YourAccountUpdate() {
     <PageContent>
       <FadeAnimation>
         <Form status={status}>
-          <SectionHeader title="Personal Information">
-            <ButtonIcon onClick={() => navigate(-1)} status={status} title="Close this form">
+          <SectionHeader bigTitle="Update Your Account">
+            <ButtonIcon onClick={() => navigate('/your-account/information')} status={status} title="Close this form">
               <Close20 />
             </ButtonIcon>
           </SectionHeader>
+          <SectionHeader title="1. Personal Information" />
           <FormRow>
             <Field error={helper.name} label="Name" status={status}>
               <Input className="uppercase" onChange={(e) => setName(e.target.value)} size={20} type="text" value={name} />
@@ -104,7 +105,7 @@ function YourAccountUpdate() {
               <Input onChange={(e) => setEmail(e.target.value)} size={30} type="email" value={email} />
             </Field>
           </FormRow>
-          <SectionHeader title="Password" subtitle="If you do not wish to change your password, just leave it blank." />
+          <SectionHeader title="2. Security Password" subtitle="If you do not wish to change your password, just leave it blank." />
           <FormRow>
             <Field error={helper.new_password} label="New password" status={status}>
               <Input
@@ -157,7 +158,7 @@ function YourAccountUpdate() {
               status={status}
               title="Update your account"
               type="submit">
-              Update
+              Update Your Account
             </Button>
           </FormFooter>
         </Form>

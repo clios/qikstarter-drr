@@ -14,6 +14,7 @@ import SectionBody from '../components/SectionBody'
 import SectionFooter from '../components/SectionFooter'
 import SectionHeader from '../components/SectionHeader'
 import axios from 'axios'
+import PaperView from '../components/PaperView'
 import { confirmAlert } from 'react-confirm-alert'
 import { toJpeg } from 'html-to-image'
 import { toast } from 'react-toastify'
@@ -175,93 +176,96 @@ function UserProfile() {
     // )} */}
     <PageContent status={status}>
       <FadeAnimation>
-        <SectionHeader title="Personal Information">
-          <CSVLink
-            filename="User.csv"
-            data={[{ ...User.data }] || []}
-            headers={[
-              { label: 'Name', key: 'name' },
-              { label: 'Email', key: 'email' },
-              { label: 'Office', key: 'office' },
-              { label: 'Position', key: 'position' },
-              { label: 'Permissions', key: 'permissions' },
-              { label: 'Deactivated', key: 'deactivated' },
-              { label: 'Date Created', key: 'created_at' },
-              { label: 'Date Updated', key: 'updated_at' }
-            ]}>
-            <ButtonIcon status={status} title="Download User Info">
-              <Download20 />
+        <PaperView>
+          <SectionHeader bigTitle="User Account Information">
+            <CSVLink
+              filename="User.csv"
+              data={[{ ...User.data }] || []}
+              headers={[
+                { label: 'Name', key: 'name' },
+                { label: 'Email', key: 'email' },
+                { label: 'Office', key: 'office' },
+                { label: 'Position', key: 'position' },
+                { label: 'Permissions', key: 'permissions' },
+                { label: 'Deactivated', key: 'deactivated' },
+                { label: 'Date Created', key: 'created_at' },
+                { label: 'Date Updated', key: 'updated_at' }
+              ]}>
+              <ButtonIcon status={status} title="Download User Info">
+                <Download20 />
+              </ButtonIcon>
+            </CSVLink>
+            <ButtonIcon
+              onClick={() => navigate('/users/records/' + ROUTE.user_id + '/edit')}
+              // permission="write_user"
+              // permissions={Account.permissions}
+              status={status}
+              title="Edit user account">
+              <Edit20 />
             </ButtonIcon>
-          </CSVLink>
-          <ButtonIcon
-            onClick={() => navigate('/users/records/' + ROUTE.user_id + '/edit')}
-            // permission="write_user"
-            // permissions={Account.permissions}
-            status={status}
-            title="Edit user account">
-            <Edit20 />
-          </ButtonIcon>
-          <ButtonIcon
-            onClick={deleteUser}
-            // permission="write_user"
-            // permissions={Account.permissions}
-            status={status}
-            title="Delete user account">
-            <TrashCan20 />
-          </ButtonIcon>
-          <ButtonIcon onClick={() => navigate('/users/records', { replace: true })} status={status} title="Close">
-            <Close20 />
-          </ButtonIcon>
-        </SectionHeader>
-        <SectionBody>
-          <Field label="Name" status={status} text={name} />
-          <Field label="Email" status={status} text={email} />
-        </SectionBody>
-        <SectionHeader title="Office Information" />
-        <SectionBody>
-          <Field label="Office" status={status} text={office} />
-          <Field label="Position" status={status} text={position} />
-        </SectionBody>
-        <SectionHeader title="Permissions" />
-        <SectionBody>
-          <Field label="Deactivated" status={status} text={deactivated} />
-        </SectionBody>
-        <SectionBody>
-          <Field label="Search and View Farmer Records" status={status} text={Help.checkPermission(permissions, 'read_farmer') ? 'YES' : 'NO'} />
-          <Field
-            label="Add, Edit and Delete Farmer Records"
-            status={status}
-            text={Help.checkPermission(permissions, 'write_farmer') ? 'YES' : 'NO'}
-          />
-        </SectionBody>
-        <SectionBody>
-          <Field label="View Farm Records" status={status} text={Help.checkPermission(permissions, 'read_farm') ? 'YES' : 'NO'} />
-          <Field label="Add, Edit and Delete Farm Records" status={status} text={Help.checkPermission(permissions, 'write_farm') ? 'YES' : 'NO'} />
-        </SectionBody>
-        <SectionBody>
-          <Field label="Search and View User Accounts" status={status} text={Help.checkPermission(permissions, 'read_user') ? 'YES' : 'NO'} />
-          <Field label="Add, Edit and Delete User Accounts" status={status} text={Help.checkPermission(permissions, 'write_user') ? 'YES' : 'NO'} />
-        </SectionBody>
-        <SectionFooter status={status}>Last Update {updated_at}</SectionFooter>
-        <SectionHeader title="Reset Password">
-          <ButtonIcon onClick={resetPassword} status={status} title="Reset password">
-            <Password20 />
-          </ButtonIcon>
-        </SectionHeader>
-        <SectionBody status={status}>
-          <div id="UserAccessTicket" className="uat">
-            <p className="uat-title">User Access Ticket</p>
-            <p className="uat-subtitle">Q-Agri MIS</p>
-            <p className="uat-item">Name: {name}</p>
-            <p className="uat-item">Email: {email}</p>
-            <p className="uat-item">Password: {password}</p>
-            <p className="uat-item">Office: {office}</p>
-            <p className="uat-item">Position: {position}</p>
-            <p className="uat-note">
-              Upon receipt of this ticket, use it immediately and change your password. Please refrain from sharing your password, thanks.
-            </p>
-          </div>
-        </SectionBody>
+            <ButtonIcon
+              onClick={deleteUser}
+              // permission="write_user"
+              // permissions={Account.permissions}
+              status={status}
+              title="Delete user account">
+              <TrashCan20 />
+            </ButtonIcon>
+            <ButtonIcon onClick={() => navigate('/users/records', { replace: true })} status={status} title="Close">
+              <Close20 />
+            </ButtonIcon>
+          </SectionHeader>
+          <SectionHeader title="1. Personal Information" />
+          <SectionBody>
+            <Field label="Name" status={status} text={name} />
+            <Field label="Email" status={status} text={email} />
+          </SectionBody>
+          <SectionHeader title="2. Office Information" />
+          <SectionBody>
+            <Field label="Office" status={status} text={office} />
+            <Field label="Position" status={status} text={position} />
+          </SectionBody>
+          <SectionHeader title="3. Permissions" />
+          <SectionBody>
+            <Field label="Deactivated" status={status} text={deactivated} />
+          </SectionBody>
+          <SectionBody>
+            <Field label="Search and View Farmer Records" status={status} text={Help.checkPermission(permissions, 'read_farmer') ? 'YES' : 'NO'} />
+            <Field
+              label="Add, Edit and Delete Farmer Records"
+              status={status}
+              text={Help.checkPermission(permissions, 'write_farmer') ? 'YES' : 'NO'}
+            />
+          </SectionBody>
+          <SectionBody>
+            <Field label="View Farm Records" status={status} text={Help.checkPermission(permissions, 'read_farm') ? 'YES' : 'NO'} />
+            <Field label="Add, Edit and Delete Farm Records" status={status} text={Help.checkPermission(permissions, 'write_farm') ? 'YES' : 'NO'} />
+          </SectionBody>
+          <SectionBody>
+            <Field label="Search and View User Accounts" status={status} text={Help.checkPermission(permissions, 'read_user') ? 'YES' : 'NO'} />
+            <Field label="Add, Edit and Delete User Accounts" status={status} text={Help.checkPermission(permissions, 'write_user') ? 'YES' : 'NO'} />
+          </SectionBody>
+          <SectionHeader title="4. Reset Security Password">
+            <ButtonIcon onClick={resetPassword} status={status} title="Reset password">
+              <Password20 />
+            </ButtonIcon>
+          </SectionHeader>
+          <SectionBody status={status}>
+            <div id="UserAccessTicket" className="uat">
+              <p className="uat-title">User Access Ticket</p>
+              <p className="uat-subtitle">Q-Agri MIS</p>
+              <p className="uat-item">Name: {name}</p>
+              <p className="uat-item">Email: {email}</p>
+              <p className="uat-item">Password: {password}</p>
+              <p className="uat-item">Office: {office}</p>
+              <p className="uat-item">Position: {position}</p>
+              <p className="uat-note">
+                Upon receipt of this ticket, use it immediately and change your password. Please refrain from sharing your password, thanks.
+              </p>
+            </div>
+          </SectionBody>
+          <SectionFooter status={status}>Last Update {updated_at}</SectionFooter>
+        </PaperView>
       </FadeAnimation>
     </PageContent>
     // </Authorization>

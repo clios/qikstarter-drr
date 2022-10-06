@@ -130,11 +130,12 @@ function UserCreate() {
     <PageContent>
       <FadeAnimation>
         <Form status={status}>
-          <SectionHeader title="New Personal Information">
+          <SectionHeader bigTitle="New User Account Form">
             <ButtonIcon onClick={() => navigate('/users/records', { replace: true })} status={status} title="Close">
               <Close20 />
             </ButtonIcon>
           </SectionHeader>
+          <SectionHeader title="1. Personal Information" />
           <FormRow>
             <Field error={helper.name} label="Full Name" status={status}>
               <Input uppercase onChange={(e) => setName(e.target.value)} required size={30} type="text" value={name} />
@@ -143,7 +144,7 @@ function UserCreate() {
               <Input onChange={(e) => setEmail(e.target.value)} required size={30} type="email" value={email} />
             </Field>
           </FormRow>
-          <SectionHeader title="New Office Information" />
+          <SectionHeader title="2. Office Information" />
           <FormRow>
             <Field label="Office" status={status}>
               <Input uppercase onChange={(e) => setOffice(e.target.value)} required size={30} type="text" value={office} />
@@ -186,7 +187,7 @@ function UserCreate() {
                 </Select>
               </Field>
             </FormRow> */}
-          <SectionHeader title="New Permissions" />
+          <SectionHeader title="3. Permissions" />
           <FormRow status={status}>
             <Field label="Deactivated" status={status}>
               <Select onChange={(e) => setDeactivated(e.target.value)} value={deactivated}>
@@ -207,7 +208,7 @@ function UserCreate() {
             <Checkbox checked={read_user} onChange={(e) => setReadUser(e.target.checked)} text="Search and View User Accounts" />
             <Checkbox checked={write_user} onChange={(e) => setWriteUser(e.target.checked)} text="Add, Edit and Delete User Accounts" />
           </FormRow>
-          <SectionHeader title="New User Access Ticket" />
+          <SectionHeader title="4. User Access Ticket" />
           <FormRow>
             <div id="UserAccessTicket" className="uat">
               <p className="uat-title">User Access Ticket</p>

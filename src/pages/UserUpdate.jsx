@@ -151,11 +151,12 @@ function UserUpdate() {
     <PageContent>
       <FadeAnimation>
         <Form status={status}>
-          <SectionHeader title="Personal Information">
+          <SectionHeader bigTitle="Existing User Account Form">
             <ButtonIcon onClick={() => navigate(`/users/records/${ROUTE.user_id}`, { replace: true })} status={status} title="Close">
               <Close20 />
             </ButtonIcon>
           </SectionHeader>
+          <SectionHeader title="1. Personal Information" />
           <FormRow>
             <Field error={helper.name} label="Full Name" status={status}>
               <Input uppercase onChange={(e) => setName(e.target.value)} required size={30} type="text" value={name} />
@@ -164,7 +165,7 @@ function UserUpdate() {
               <Input onChange={(e) => setEmail(e.target.value)} required size={30} type="email" value={email} />
             </Field>
           </FormRow>
-          <SectionHeader title="Office Information" />
+          <SectionHeader title="2. Office Information" />
           <FormRow>
             <Field label="Office" status={status}>
               <Input uppercase onChange={(e) => setOffice(e.target.value)} required size={30} type="text" value={office} />
@@ -173,7 +174,7 @@ function UserUpdate() {
               <Input uppercase onChange={(e) => setPosition(e.target.value)} required size={30} type="text" value={position} />
             </Field>
           </FormRow>
-          <SectionHeader title="Permissions" />
+          <SectionHeader title="3. Permissions" />
           <FormRow status={status}>
             <Field label="Deactivated" status={status}>
               <Select onChange={(e) => setDeactivated(e.target.value)} value={deactivated}>

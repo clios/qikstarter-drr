@@ -11,6 +11,7 @@ import SectionFooter from '../components/SectionFooter'
 import SectionHeader from '../components/SectionHeader'
 import getAccount from '../api/getAccount'
 import { navigate } from '@reach/router'
+import PaperView from '../components/PaperView'
 
 function YourAccountProfile() {
   // SEND GET ACCOUNT REQUEST
@@ -48,34 +49,41 @@ function YourAccountProfile() {
   return (
     <PageContent>
       <FadeAnimation>
-        <SectionHeader title="Personal Information">
-          <ButtonIcon onClick={() => navigate('/your-account/information/edit')} status={status} title="Edit your account">
-            <Edit20 />
-          </ButtonIcon>
-        </SectionHeader>
-        <SectionBody>
-          <Field label="Name" status={status} text={name} />
-          <Field label="Email" status={status} text={email} />
-        </SectionBody>
-        <SectionHeader title="Office Information" />
-        <SectionBody>
-          <Field label="Office" status={status} text={office} />
-          <Field label="Position" status={status} text={position} />
-        </SectionBody>
-        <SectionHeader title="Permissions" />
-        <SectionBody>
-          <Field label="Search and View Resident Records" status={status} text={Help.checkPermission(permissions, 'read_resident') ? 'YES' : 'NO'} />
-          <Field
-            label="Add, Edit and Delete Resident Records"
-            status={status}
-            text={Help.checkPermission(permissions, 'write_resident') ? 'YES' : 'NO'}
-          />
-        </SectionBody>
-        <SectionBody>
-          <Field label="Search and View User Accounts" status={status} text={Help.checkPermission(permissions, 'read_user') ? 'YES' : 'NO'} />
-          <Field label="Add, Edit and Delete User Accounts" status={status} text={Help.checkPermission(permissions, 'write_user') ? 'YES' : 'NO'} />
-        </SectionBody>
-        <SectionFooter status={status}>Last Update {updated_at}</SectionFooter>
+        <PaperView>
+          <SectionHeader bigTitle="Your Account Information">
+            <ButtonIcon onClick={() => navigate('/your-account/information/edit')} status={status} title="Edit your account">
+              <Edit20 />
+            </ButtonIcon>
+          </SectionHeader>
+          <SectionHeader title="1. Personal Information" />
+          <SectionBody>
+            <Field label="Name" status={status} text={name} />
+            <Field label="Email" status={status} text={email} />
+          </SectionBody>
+          <SectionHeader title="2. Office Information" />
+          <SectionBody>
+            <Field label="Office" status={status} text={office} />
+            <Field label="Position" status={status} text={position} />
+          </SectionBody>
+          <SectionHeader title="3. Permissions" />
+          <SectionBody>
+            <Field
+              label="Search and View Resident Records"
+              status={status}
+              text={Help.checkPermission(permissions, 'read_resident') ? 'YES' : 'NO'}
+            />
+            <Field
+              label="Add, Edit and Delete Resident Records"
+              status={status}
+              text={Help.checkPermission(permissions, 'write_resident') ? 'YES' : 'NO'}
+            />
+          </SectionBody>
+          <SectionBody>
+            <Field label="Search and View User Accounts" status={status} text={Help.checkPermission(permissions, 'read_user') ? 'YES' : 'NO'} />
+            <Field label="Add, Edit and Delete User Accounts" status={status} text={Help.checkPermission(permissions, 'write_user') ? 'YES' : 'NO'} />
+          </SectionBody>
+          <SectionFooter status={status}>Last Update {updated_at}</SectionFooter>
+        </PaperView>
       </FadeAnimation>
     </PageContent>
   )

@@ -8,6 +8,9 @@ import ResidentProfile from './pages/ResidentProfile'
 import ResidentRecords from './pages/ResidentRecords'
 import ResidentTabs from './layouts/ResidentTabs'
 import ResidentUpdate from './pages/ResidentUpdate'
+import SettlementAreaFlood from './pages/SettlementAreaFlood'
+import SettlementAreaLandslide from './pages/SettlementAreaLandslide'
+import SettlementAreaTabs from './layouts/SettlementAreaTabs'
 import Sider from './layouts/Sider'
 import SignIn from './pages/SignIn'
 import UserCreate from './pages/UserCreate'
@@ -29,6 +32,12 @@ function Routes() {
           <YourAccountProfile path="/information" />
           <YourAccountUpdate path="/information/edit" />
         </YourAccountTabs>
+
+        <Redirect from="/settlement-area" to="/settlement-area/landslide" noThrow />
+        <SettlementAreaTabs path="settlement-area">
+          <SettlementAreaLandslide path="/landslide" />
+          <SettlementAreaFlood path="/flood" />
+        </SettlementAreaTabs>
 
         <Redirect from="/residents" to="/residents/dashboard" noThrow />
         <ResidentTabs path="residents">

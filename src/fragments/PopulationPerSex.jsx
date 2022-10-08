@@ -8,7 +8,7 @@ import { VictoryPie } from 'victory'
 function PopulationBySex() {
   return (
     <div className="population-per-sex">
-      <Box>
+      <Box className="bg-gray">
         <Text orange>To Do</Text>
         <Text blue three>
           59%

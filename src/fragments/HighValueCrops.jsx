@@ -13,7 +13,6 @@ function HighValueCrops() {
       <div className="high-value-crops-item">
         <VictoryPie
           height={250}
-          labels={() => null}
           padding={0}
           innerRadius={50}
           colorScale={['#DF2020', '#DF9C20', '#DFDF20', '#20DF20', '#20A8DF', '#D020DF', '#DF207C']}

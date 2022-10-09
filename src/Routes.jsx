@@ -1,5 +1,7 @@
 import { Redirect, Router } from '@reach/router'
 
+import PopulationDashboard from './pages/PopulationDashboard'
+import PopulationTabs from './layouts/PopulationTabs'
 import React from 'react'
 import ResidentCreate from './pages/ResidentCreate'
 import ResidentDashboard from './pages/ResidentDashboard'
@@ -38,6 +40,11 @@ function Routes() {
           <SettlementAreaLandslide path="/landslide" />
           <SettlementAreaFlood path="/flood" />
         </SettlementAreaTabs>
+
+        <Redirect from="/population" to="/population/dashboard" noThrow />
+        <PopulationTabs path="population">
+          <PopulationDashboard path="/dashboard" />
+        </PopulationTabs>
 
         <Redirect from="/residents" to="/residents/dashboard" noThrow />
         <ResidentTabs path="residents">

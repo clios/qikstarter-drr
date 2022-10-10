@@ -17,3 +17,8 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
 }
+
+.ppd-row-five {
+  display: grid;
+  grid-template-columns: 1fr;
+}

@@ -19,10 +19,19 @@ function PopulationByAgeAndSex() {
     { x: 'Above 100', y: 5 }
   ]
 
-  const dataB = dataA.map((point) => {
-    const y = Math.round(point.y + 3 * (Math.random() - 0.5))
-    return { ...point, y }
-  })
+  const dataB = [
+    { x: '1 - 10', y: 57 },
+    { x: '11 - 20', y: 40 },
+    { x: '21 - 30', y: 38 },
+    { x: '31 - 40', y: 37 },
+    { x: '41 - 50', y: 25 },
+    { x: '51 - 60', y: 19 },
+    { x: '61 - 70', y: 15 },
+    { x: '71 - 80', y: 13 },
+    { x: '81 - 90', y: 11 },
+    { x: '91 - 100', y: 8 },
+    { x: 'Above 100', y: 5 }
+  ]
 
   const width = 400
   const height = 200
@@ -32,26 +41,26 @@ function PopulationByAgeAndSex() {
       <VictoryChart horizontal height={height} width={width} padding={40}>
         <VictoryStack style={{ data: { width: 10 }, labels: { fontSize: 7, fill: '#FFFFFF' } }}>
           <VictoryBar
-            style={{ data: { fill: '#20A8DF' } }}
+            style={{ data: { fill: '#20A8DF', opacity: 0.2 } }}
             data={dataA}
             y={(data) => -Math.abs(data.y)}
             labels={({ datum }) => `${Math.abs(datum.y)}%`}
           />
-          <VictoryBar style={{ data: { fill: '#DFDF20' } }} data={dataB} labels={({ datum }) => `${Math.abs(datum.y)}%`} />
+          <VictoryBar style={{ data: { fill: '#DFDF20', opacity: 0.2 } }} data={dataB} labels={({ datum }) => `${Math.abs(datum.y)}%`} />
         </VictoryStack>
         <VictoryAxis
           axisLabelComponent={<VictoryLabel dy={-80} angle={0} />}
           label="Population by Age Bracket"
           style={{
-            axisLabel: { fill: '#DF9C20', fontSize: 8, padding: 0 },
-            tickLabels: { opacity: 0 }
+            axisLabel: { fill: '#DF9C20', fontSize: 8, padding: 0, stroke: 'transparent' },
+            tickLabels: { opacity: 0, stroke: 'transparent' }
           }}
         />
         <VictoryAxis
           style={{
             axis: { stroke: 'transparent' },
             ticks: { stroke: 'transparent' },
-            tickLabels: { fontSize: 7, fill: '#FFFFFF', strokeWidth: 0.4, fontWeight: 600 }
+            tickLabels: { fontSize: 7, fill: '#FFFFFF', fontWeight: 300 }
           }}
           tickLabelComponent={<VictoryLabel x={width / 2} textAnchor="middle" />}
           tickValues={dataA.map((point) => point.x).reverse()}

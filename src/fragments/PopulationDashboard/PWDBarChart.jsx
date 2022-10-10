@@ -7,7 +7,7 @@ import React from 'react'
 function PWDBarChart() {
   return (
     <div className="fpdpwdbc">
-      <VictoryChart animate={{ easing: 'poly' }} padding={32} domainPadding={{ x: [32, 32], y: [16, 32] }} height={250}>
+      <VictoryChart padding={32} domainPadding={{ x: [32, 32], y: [16, 32] }} height={250}>
         <VictoryAxis
           label="Persons With Disabilities"
           style={{

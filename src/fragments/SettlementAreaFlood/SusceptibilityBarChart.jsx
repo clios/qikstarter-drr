@@ -7,7 +7,7 @@ import React from 'react'
 function SusceptibilityBarChart() {
   return (
     <div className="fsalsbc">
-      <VictoryChart animate={{ easing: 'poly' }} domainPadding={{ x: [50, 50], y: [16, 50] }}>
+      <VictoryChart domainPadding={{ x: [50, 50], y: [16, 50] }}>
         <VictoryAxis label="Susceptibility and Area (ha) Comparison" style={{ axisLabel: { fill: '#DF9C20', fontSize: 18, padding: -230 } }} />
         <VictoryAxis
           style={{

@@ -7,7 +7,7 @@ import React from 'react'
 function TotalBarChart() {
   return (
     <div className="fpdtbc">
-      <VictoryChart animate={{ easing: 'poly' }} domainPadding={{ x: [32, 32], y: [0, 24] }} height={200}>
+      <VictoryChart domainPadding={{ x: [32, 32], y: [0, 24] }} height={200}>
         <VictoryAxis
           label="Total Population of Municipalities"
           style={{

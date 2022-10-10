@@ -7,7 +7,7 @@ import React from 'react'
 function SusceptibilityAreaChart() {
   return (
     <div className="fsalsac">
-      <VictoryChart animate={{ easing: 'poly' }} domainPadding={{ x: [50, 50], y: [16, 50] }}>
+      <VictoryChart domainPadding={{ x: [50, 50], y: [16, 50] }}>
         <VictoryAxis label="Susceptibility and Area (ha) Relation" style={{ axisLabel: { fill: '#DF9C20', fontSize: 18, padding: -230 } }} />
         <VictoryAxis
           style={{
@@ -25,10 +25,10 @@ function SusceptibilityAreaChart() {
           interpolation="natural"
           style={{ data: { stroke: '#DF9C20', strokeWidth: 3, fill: '#20A8DF', fillOpacity: 0.2 }, labels: { color: 'red' } }}
           data={[
-            { x: 'Very High', y: 2.943 },
-            { x: 'High', y: 364.319 },
+            { x: 'Low', y: 996.874 },
             { x: 'Moderate', y: 713.299 },
-            { x: 'Low', y: 996.874 }
+            { x: 'High', y: 364.319 },
+            { x: 'Very High', y: 2.943 }
           ]}
         />
       </VictoryChart>

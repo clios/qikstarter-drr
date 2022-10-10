@@ -8,7 +8,6 @@ function SusceptibilityBarChartMunicipalities() {
   return (
     <div>
       <VictoryChart
-        animate={{ easing: 'poly' }}
         domainPadding={{ x: [50, 50], y: [0, 8] }}
         padding={{ left: 16, right: 16, bottom: 32, top: 32 }}
         height={160}

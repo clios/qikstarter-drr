@@ -7,11 +7,7 @@ import React from 'react'
 function TotalBarChartMinicipalities() {
   return (
     <div>
-      <VictoryChart
-        animate={{ easing: 'poly' }}
-        domainPadding={{ x: [30, 30], y: [0, 24] }}
-        padding={{ left: 16, right: 16, bottom: 32, top: 32 }}
-        height={170}>
+      <VictoryChart domainPadding={{ x: [30, 30], y: [0, 24] }} padding={{ left: 16, right: 16, bottom: 32, top: 32 }} height={170}>
         <VictoryAxis
           style={{
             axis: { stroke: 'white' },

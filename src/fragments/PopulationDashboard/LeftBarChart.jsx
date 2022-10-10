@@ -7,7 +7,7 @@ import React from 'react'
 function LeftBarChart() {
   return (
     <div className="fpdlbc">
-      <VictoryChart animate={{ easing: 'poly' }} padding={{ left: 32, top: 32, right: 32 }} domainPadding={{ x: [32, 32], y: [32, 32] }}>
+      <VictoryChart padding={{ left: 32, top: 32, right: 32 }} domainPadding={{ x: [32, 32], y: [32, 32] }}>
         <VictoryAxis
           style={{
             tickLabels: { opacity: 0 },

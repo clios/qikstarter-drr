@@ -1,10 +1,10 @@
-import './TotalBarChartMinicipalities.css'
+import './TotalBarChartMunicipalities.css'
 
 import { VictoryAxis, VictoryBar, VictoryChart, VictoryLabel, VictoryLine } from 'victory'
 
 import React from 'react'
 
-function TotalBarChartMinicipalities() {
+function TotalBarChartMunicipalities() {
   return (
     <div>
       <VictoryChart
@@ -57,4 +57,4 @@ function TotalBarChartMinicipalities() {
   )
 }
 
-export default TotalBarChartMinicipalities
+export default TotalBarChartMunicipalities

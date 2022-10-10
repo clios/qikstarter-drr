@@ -8,7 +8,7 @@ function PerennialBarChart() {
   return (
     <div className="falpbc">
       <VictoryChart domainPadding={{ x: [50, 50], y: [16, 50] }}>
-        <VictoryAxis label="Perennial Crops" style={{ axisLabel: { fill: '#DF9C20', fontSize: 18, padding: -245 } }} />
+        <VictoryAxis label="Perennial Crops: 78,323 Hectares" style={{ axisLabel: { fill: '#DF9C20', fontSize: 18, padding: -245 } }} />
         <VictoryAxis label="Susceptibility and Area (ha) Comparison" style={{ axisLabel: { fill: '#FFFFFF', fontSize: 16, padding: -225 } }} />
         <VictoryAxis
           style={{

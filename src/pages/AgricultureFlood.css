@@ -1,10 +1,10 @@
-.pal-row-one {
+.paf-row-one {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
   padding-top: 2rem;
 }
 
-.pal-row-two {
+.paf-row-two {
   display: grid;
   grid-template-columns: 1fr 1fr;
   padding-top: 2rem;

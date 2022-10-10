@@ -1,5 +1,6 @@
 import { Redirect, Router } from '@reach/router'
 
+import AgricultureFlood from './pages/AgricultureFlood'
 import AgricultureLandslide from './pages/AgricultureLandslide'
 import AgricultureTabs from './layouts/AgricultureTabs'
 import PopulationDashboard from './pages/PopulationDashboard'
@@ -51,6 +52,7 @@ function Routes() {
         <Redirect from="/agriculture" to="/agriculture/landslide" noThrow />
         <AgricultureTabs path="agriculture">
           <AgricultureLandslide path="/landslide" />
+          <AgricultureFlood path="/flood" />
         </AgricultureTabs>
 
         <Redirect from="/residents" to="/residents/dashboard" noThrow />

@@ -5,6 +5,7 @@ import PageContent from '../components/PageContent'
 import React from 'react'
 import SusceptibilityAreaChart from '../fragments/SettlementAreaLandslide/SusceptibilityAreaChart'
 import SusceptibilityBarChart from '../fragments/SettlementAreaLandslide/SusceptibilityBarChart'
+import SusceptibilityBarChartMunicipalities from '../fragments/SettlementAreaLandslide/SusceptibilityBarChartMunicipalities'
 import TotalBarChartMunicipalities from '../fragments/SettlementAreaLandslide/TotalBarChartMunicipalities'
 import TotalCard from '../fragments/SettlementAreaLandslide/TotalCard'
 
@@ -21,7 +22,7 @@ function SettlementAreaLandslide() {
           <TotalBarChartMunicipalities />
         </div>
         <div className="psal-row-three">
-          <TotalBarChartMunicipalities />
+          <SusceptibilityBarChartMunicipalities />
         </div>
       </FadeAnimation>
     </PageContent>

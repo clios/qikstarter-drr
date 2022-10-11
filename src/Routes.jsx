@@ -16,6 +16,8 @@ import ResidentProfile from './pages/ResidentProfile'
 import ResidentRecords from './pages/ResidentRecords'
 import ResidentTabs from './layouts/ResidentTabs'
 import ResidentUpdate from './pages/ResidentUpdate'
+import RoadLifelineLandslide from './pages/RoadLifelineLandslide'
+import RoadLifelineTabs from './layouts/RoadLifelineTabs'
 import SettlementAreaFlood from './pages/SettlementAreaFlood'
 import SettlementAreaLandslide from './pages/SettlementAreaLandslide'
 import SettlementAreaTabs from './layouts/SettlementAreaTabs'
@@ -63,6 +65,11 @@ function Routes() {
           <CriticalInfrastructureLandslide path="/landslide" />
           <CriticalInfrastructureFlood path="/flood" />
         </CriticalInfrastructureTabs>
+
+        <Redirect from="/road-lifeline" to="/road-lifeline/landslide" noThrow />
+        <RoadLifelineTabs path="road-lifeline">
+          <RoadLifelineLandslide path="/landslide" />
+        </RoadLifelineTabs>
 
         <Redirect from="/residents" to="/residents/dashboard" noThrow />
         <ResidentTabs path="residents">

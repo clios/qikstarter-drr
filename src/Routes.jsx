@@ -3,6 +3,9 @@ import { Redirect, Router } from '@reach/router'
 import AgricultureFlood from './pages/AgricultureFlood'
 import AgricultureLandslide from './pages/AgricultureLandslide'
 import AgricultureTabs from './layouts/AgricultureTabs'
+import CriticalInfrastructureFlood from './pages/CriticalInfrastructureFlood'
+import CriticalInfrastructureLandslide from './pages/CriticalInfrastructureLandslide'
+import CriticalInfrastructureTabs from './layouts/CriticalInfrastructureTabs'
 import PopulationDashboard from './pages/PopulationDashboard'
 import PopulationTabs from './layouts/PopulationTabs'
 import React from 'react'
@@ -54,6 +57,12 @@ function Routes() {
           <AgricultureLandslide path="/landslide" />
           <AgricultureFlood path="/flood" />
         </AgricultureTabs>
+
+        <Redirect from="/critical-infrastructure" to="/critical-infrastructure/landslide" noThrow />
+        <CriticalInfrastructureTabs path="critical-infrastructure">
+          <CriticalInfrastructureLandslide path="/landslide" />
+          <CriticalInfrastructureFlood path="/flood" />
+        </CriticalInfrastructureTabs>
 
         <Redirect from="/residents" to="/residents/dashboard" noThrow />
         <ResidentTabs path="residents">

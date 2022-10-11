@@ -9,12 +9,12 @@ import FadeAnimation from '../components/FadeAnimation'
 import Field from '../components/Field'
 import Help from '../Help'
 import PageContent from '../components/PageContent'
+import PaperView from '../components/PaperView'
 import React from 'react'
 import SectionBody from '../components/SectionBody'
 import SectionFooter from '../components/SectionFooter'
 import SectionHeader from '../components/SectionHeader'
 import axios from 'axios'
-import PaperView from '../components/PaperView'
 import { confirmAlert } from 'react-confirm-alert'
 import { toJpeg } from 'html-to-image'
 import { toast } from 'react-toastify'
@@ -253,7 +253,7 @@ function UserProfile() {
           <SectionBody status={status}>
             <div id="UserAccessTicket" className="uat">
               <p className="uat-title">User Access Ticket</p>
-              <p className="uat-subtitle">Q-Agri MIS</p>
+              <p className="uat-subtitle">Q-DRR MIS</p>
               <p className="uat-item">Name: {name}</p>
               <p className="uat-item">Email: {email}</p>
               <p className="uat-item">Password: {password}</p>

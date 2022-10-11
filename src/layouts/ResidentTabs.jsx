@@ -15,7 +15,7 @@ function ResidentTabs(props) {
     <div className="tabs">
       <div className="tabs-header">
         <div className="tabs-title">Residents</div>
-        <div className="tabs-system">Q-Agri MIS</div>
+        <div className="tabs-system">Q-DRR MIS</div>
         <div className="tabs-content">
           <Link className="tabs-item" to="/residents/dashboard" getProps={isPartiallyActive}>
             Dashboard

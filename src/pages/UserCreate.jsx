@@ -212,7 +212,7 @@ function UserCreate() {
           <FormRow>
             <div id="UserAccessTicket" className="uat">
               <p className="uat-title">User Access Ticket</p>
-              <p className="uat-subtitle">Q-Agri MIS</p>
+              <p className="uat-subtitle">Q-DRR MIS</p>
               <p className="uat-item">Name: {name?.toUpperCase() || 'N/A'}</p>
               <p className="uat-item">Email: {email || 'N/A'}</p>
               <p className="uat-item">Password: {password}</p>

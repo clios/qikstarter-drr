@@ -20,7 +20,7 @@ function TotalPopulationPieChart() {
             { x: 'Female', y: 170000 },
             { x: 'Male', y: 130000 }
           ]}
-          style={{ labels: { fontSize: 16, fill: '#000000' } }}
+          style={{ labels: { fontSize: 16, fill: '#000000' }, data: { fillOpacity: 0.7 } }}
         />
       </div>
       <p className="fpdtppc-value">300,000</p>

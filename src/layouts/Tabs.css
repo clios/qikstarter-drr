@@ -19,6 +19,8 @@
   padding-left: 1rem;
   color: #20a8df;
   font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: #df9c20;
 }
 
 .tabs-title::first-letter {

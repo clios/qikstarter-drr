@@ -10,7 +10,7 @@
   padding-right: 3rem;
   width: 100%;
   z-index: 10;
-  background-color: hsl(192, 100%, 10%);
+  background-color: hsl(192, 100%, 10%, 0.9);
   border-bottom: 1px solid hsla(197, 10%, 50%, 1);
 }
 
@@ -47,7 +47,6 @@
   color: #ffffff;
   text-decoration: none;
   transition: background-color 300ms ease;
-  border: 1px solid hsla(197, 10%, 50%, 0.5);
 }
 
 .tabs-item:hover,
@@ -58,5 +57,5 @@
 
 .tabs-item.active {
   background-color: hsla(197, 75%, 50%, 0.3);
-  border-bottom: 0.23rem solid #df9c20;
+  border-bottom: 0.23rem solid hsl(39, 75%, 50%);
 }

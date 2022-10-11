@@ -1,6 +1,7 @@
 import './FormRow.css'
-import React from 'react'
+
 import CustomSkeleton from './CustomSkeleton'
+import React from 'react'
 
 function FormRow(props) {
   if (props.status === 'loading')
@@ -10,7 +11,7 @@ function FormRow(props) {
       </div>
     )
 
-  return <div className="form-row bg-dark">{props.children}</div>
+  return <div className="form-row">{props.children}</div>
 }
 
 export default FormRow

@@ -4,7 +4,7 @@ import React from 'react'
 
 function SectionHeader(props) {
   return (
-    <div className={`section-header bg-dark ${props.className}`}>
+    <div className={`section-header ${props.className}`}>
       <div className="section-header-toolbar">
         <p className="section-header-title title-5 text-blue">
           {props.bigTitle && <label className="section-header-big-title">{props.bigTitle}</label>}

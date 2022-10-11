@@ -65,11 +65,11 @@ function SignIn() {
     <FadeAnimation>
       <div className="sign-in-container">
         {/* {Account.data && <Redirect to="/farmers/dashboard" noThrow replace />} */}
-        <div className="sign-in-content bg-dark">
+        <div className="sign-in-content">
           <img className="sign-in-image" src={require('../assets/sign_in_bg.svg')} alt="poster" />
           <form className="sign-in-form" onSubmit={submitForm} status={status}>
-            <div className="sign-in-title text-orange">qikstarter-drr</div>
-            <p className="sign-in-note">By signing in, you agree to our Terms of Use and Privacy Policy.</p>
+            <div className="sign-in-title text-orange">Q-DRR MIS</div>
+            {/* <p className="sign-in-note">By signing in, you agree to our Terms of Use and Privacy Policy.</p> */}
             <Field label="Email">
               <Input className="sign-in-input" onChange={(e) => setEmail(e.target.value)} required size="35" type="email" value={email} />
             </Field>

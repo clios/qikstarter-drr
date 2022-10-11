@@ -11,6 +11,9 @@
   padding-top: 2rem;
   padding-bottom: 2rem;
   width: 100vw;
+  background-color: rgba(0, 0, 0, 0.3);
+  border-top: 1rem solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1rem solid rgba(255, 255, 255, 0.1);
 }
 
 .sign-in-image {

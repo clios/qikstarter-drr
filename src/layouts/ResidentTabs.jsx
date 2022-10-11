@@ -14,13 +14,14 @@ function ResidentTabs(props) {
   return (
     <div className="tabs">
       <div className="tabs-header">
-        <PageTitle title="Residents" />
+        <div className="tabs-title">Residents</div>
+        <div className="tabs-system">Q-Agri MIS</div>
         <div className="tabs-content">
           <Link className="tabs-item" to="/residents/dashboard" getProps={isPartiallyActive}>
-            <Meter24 /> Dashboard
+            Dashboard
           </Link>
           <Link className="tabs-item" to="/residents/records" getProps={isPartiallyActive}>
-            <TableOfContents24 /> Records
+            Records
           </Link>
           <Link className="tabs-item" to="/residents/map" getProps={isPartiallyActive}>
             <Map24 /> Map

@@ -1,8 +1,6 @@
 import './Tabs.css'
 
-import { Dashboard24 } from '@carbon/icons-react'
 import { Link } from '@reach/router'
-import PageTitle from '../components/PageTitle'
 import React from 'react'
 
 function PopulationTabs(props) {
@@ -13,10 +11,11 @@ function PopulationTabs(props) {
   return (
     <div className="tabs">
       <div className="tabs-header">
-        <PageTitle title="Population" />
+        <div className="tabs-title">Population</div>
+        <div className="tabs-system">Q-Agri MIS</div>
         <div className="tabs-content">
           <Link className="tabs-item" to="/population/dashboard" getProps={isPartiallyActive}>
-            <Dashboard24 /> Dashboard
+            Dashboard
           </Link>
         </div>
       </div>

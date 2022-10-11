@@ -1,9 +1,7 @@
 import './Tabs.css'
 
 import { Link } from '@reach/router'
-import PageTitle from '../components/PageTitle'
 import React from 'react'
-import { TableOfContents24 } from '@carbon/icons-react'
 
 function UserTabs(props) {
   function isPartiallyActive({ isPartiallyCurrent }) {
@@ -13,10 +11,11 @@ function UserTabs(props) {
   return (
     <div className="tabs">
       <div className="tabs-header">
-        <PageTitle title="Users" />
+        <div className="tabs-title">User Accounts</div>
+        <div className="tabs-system">Q-Agri MIS</div>
         <div className="tabs-content">
           <Link className="tabs-item" to="/users/records" getProps={isPartiallyActive}>
-            <TableOfContents24 /> Records
+            Records
           </Link>
         </div>
       </div>

@@ -1,9 +1,6 @@
 import './Tabs.css'
 
-import { Flood24, Mountain24 } from '@carbon/icons-react'
-
 import { Link } from '@reach/router'
-import PageTitle from '../components/PageTitle'
 import React from 'react'
 
 function AgricultureTabs(props) {
@@ -14,13 +11,14 @@ function AgricultureTabs(props) {
   return (
     <div className="tabs">
       <div className="tabs-header">
-        <PageTitle title="Agriculture" />
+        <div className="tabs-title">Agriculture Disaster Prone Area</div>
+        <div className="tabs-system">Q-Agri MIS</div>
         <div className="tabs-content">
           <Link className="tabs-item" to="/agriculture/landslide" getProps={isPartiallyActive}>
-            <Mountain24 /> Landslide
+            Landslide
           </Link>
           <Link className="tabs-item" to="/agriculture/flood" getProps={isPartiallyActive}>
-            <Flood24 /> Flood
+            Flood
           </Link>
         </div>
       </div>

@@ -1,8 +1,6 @@
 import './Tabs.css'
 
-import { Information24 } from '@carbon/icons-react'
 import { Link } from '@reach/router'
-import PageTitle from '../components/PageTitle'
 import React from 'react'
 
 function YourAccountTabs(props) {
@@ -13,10 +11,11 @@ function YourAccountTabs(props) {
   return (
     <div className="tabs">
       <div className="tabs-header">
-        <PageTitle title="Your Account" />
+        <div className="tabs-title">Your Account</div>
+        <div className="tabs-system">Q-Agri MIS</div>
         <div className="tabs-content">
           <Link className="tabs-item" to="/your-account/information" getProps={isPartiallyActive}>
-            <Information24 /> Information
+            Information
           </Link>
         </div>
       </div>

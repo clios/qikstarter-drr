@@ -1,9 +1,11 @@
 .table-footer {
+  position: sticky;
+  bottom: 0;
   display: grid;
   grid-template-columns: auto 1fr auto auto auto;
   width: 100%;
   height: 100%;
-  margin-bottom: 2rem;
+  background-color: hsl(195, 11%, 15%, 0.9);
 }
 
 .table-footer-desc {

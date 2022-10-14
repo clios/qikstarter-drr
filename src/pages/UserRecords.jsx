@@ -12,6 +12,7 @@ import FormRow from '../components/FormRow'
 import Help from '../Help'
 import Input from '../components/Input'
 import PageContent from '../components/PageContent'
+import PaperView from '../components/PaperView'
 import React from 'react'
 import SearchBox from '../components/SearchBox'
 import Select from '../components/Select'
@@ -22,7 +23,6 @@ import Users from '../json/users.json'
 import getUsers from '../api/getUsers'
 import { navigate } from '@reach/router'
 import { toast } from 'react-toastify'
-import PaperView from '../components/PaperView'
 
 function UserRecords() {
   // INFORMATION STATE
@@ -185,36 +185,34 @@ function UserRecords() {
             </Field>
           </FormRow>
         </SearchBox>
-        <PaperView>
-          <Table
-            status={status}
-            emptyLabel="No users found"
-            headers={[
-              'Index',
-              'Name',
-              'Office',
-              'Deactivated',
-              // !Account.vicinity_municipality && 'Municipality',
-              // !Account.vicinity_barangay && 'Barangay',
-              'Date Updated'
-            ].filter(Boolean)}
-            total={totalCount}>
-            {status === 'success' &&
-              Users.data?.records.map((item, index) => {
-                return (
-                  <tr key={index} onClick={() => navigate(`/users/records/${item.id}`)} title="Click to view more details">
-                    <td>{Help.displayTableIndex(limit, page, index)}</td>
-                    <td>{item.name}</td>
-                    <td>{item.office || 'NOT FOUND'}</td>
-                    <td>{item.deactivated ? 'YES' : 'NO'}</td>
-                    {/* {!Account.vicinity_municipality && <td>{item.vicinity_municipality}</td>}
+        <Table
+          status={status}
+          emptyLabel="No users found"
+          headers={[
+            'Index',
+            'Name',
+            'Office',
+            'Deactivated',
+            // !Account.vicinity_municipality && 'Municipality',
+            // !Account.vicinity_barangay && 'Barangay',
+            'Date Updated'
+          ].filter(Boolean)}
+          total={totalCount}>
+          {status === 'success' &&
+            Users.data?.records.map((item, index) => {
+              return (
+                <tr key={index} onClick={() => navigate(`/users/records/${item.id}`)} title="Click to view more details">
+                  <td>{Help.displayTableIndex(limit, page, index)}</td>
+                  <td>{item.name}</td>
+                  <td>{item.office || 'NOT FOUND'}</td>
+                  <td>{item.deactivated ? 'YES' : 'NO'}</td>
+                  {/* {!Account.vicinity_municipality && <td>{item.vicinity_municipality}</td>}
                     {!Account.vicinity_barangay && <td>{item.vicinity_barangay}</td>} */}
-                    <td>{Help.displayDate(item.updated_at)}</td>
-                  </tr>
-                )
-              })}
-          </Table>
-        </PaperView>
+                  <td>{Help.displayDate(item.updated_at)}</td>
+                </tr>
+              )
+            })}
+        </Table>
         <TableFooter
           status={status}
           label="Users"

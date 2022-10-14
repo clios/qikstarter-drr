@@ -60,7 +60,8 @@ function UserCreate() {
       confirmAlert({
         title: 'New User Account Created',
         message: 'User Access Ticket has been downloaded.',
-        buttons: [{ label: 'Return to records', onClick: () => navigate(-1, { replace: true }) }]
+        buttons: [{ label: 'Return to records', onClick: () => navigate('/users/records', { replace: true }) }],
+        onClickOutside: () => navigate('/users/records', { replace: true })
       })
     }
 

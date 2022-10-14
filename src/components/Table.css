@@ -1,6 +1,13 @@
 .table-custom {
   text-align: center;
   width: 100%;
+  background-color: hsl(195, 11%, 15%, 0.4);
+}
+
+.table-custom thead {
+  position: sticky;
+  top: 2.3rem;
+  background-color: hsl(195, 11%, 15%, 0.9);
 }
 
 .table-custom tr {

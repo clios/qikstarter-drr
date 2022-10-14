@@ -6,6 +6,8 @@ import AgricultureTabs from './layouts/AgricultureTabs'
 import CriticalInfrastructureFlood from './pages/CriticalInfrastructureFlood'
 import CriticalInfrastructureLandslide from './pages/CriticalInfrastructureLandslide'
 import CriticalInfrastructureTabs from './layouts/CriticalInfrastructureTabs'
+import IncidentDashboard from './pages/IncidentDashboard'
+import IncidentTabs from './layouts/IncidentTabs'
 import PopulationDashboard from './pages/PopulationDashboard'
 import PopulationTabs from './layouts/PopulationTabs'
 import React from 'react'
@@ -72,6 +74,12 @@ function Routes() {
           <RoadLifelineLandslide path="/landslide" />
           <RoadLifelineFlood path="/flood" />
         </RoadLifelineTabs>
+
+        <Redirect from="/incidents" to="/incidents/dashboard" noThrow />
+        <IncidentTabs path="incidents">
+          <IncidentDashboard path="/dashboard" />
+          {/* <RoadLifelineFlood path="/records" /> */}
+        </IncidentTabs>
 
         <Redirect from="/residents" to="/residents/dashboard" noThrow />
         <ResidentTabs path="residents">

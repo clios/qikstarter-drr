@@ -13,6 +13,7 @@ function Textarea(props) {
       required={props.required}
       size={props.size}
       value={props.value}
+      cols={props.cols}
     />
   )
 }

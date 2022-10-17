@@ -6,7 +6,10 @@ import AgricultureTabs from './layouts/AgricultureTabs'
 import CriticalInfrastructureFlood from './pages/CriticalInfrastructureFlood'
 import CriticalInfrastructureLandslide from './pages/CriticalInfrastructureLandslide'
 import CriticalInfrastructureTabs from './layouts/CriticalInfrastructureTabs'
+import IncidentCreate from './pages/IncidentCreate'
 import IncidentDashboard from './pages/IncidentDashboard'
+import IncidentInformation from './pages/IncidentInformation'
+import IncidentRecords from './pages/IncidentRecords'
 import IncidentTabs from './layouts/IncidentTabs'
 import PopulationDashboard from './pages/PopulationDashboard'
 import PopulationTabs from './layouts/PopulationTabs'
@@ -31,6 +34,7 @@ import UserProfile from './pages/UserProfile'
 import UserRecords from './pages/UserRecords'
 import UserTabs from './layouts/UserTabs'
 import UserUpdate from './pages/UserUpdate'
+import VictimCreate from './pages/VictimCreate'
 import YourAccountProfile from './pages/YourAccountProfile'
 import YourAccountTabs from './layouts/YourAccountTabs'
 import YourAccountUpdate from './pages/YourAccountUpdate'
@@ -78,7 +82,10 @@ function Routes() {
         <Redirect from="/incidents" to="/incidents/dashboard" noThrow />
         <IncidentTabs path="incidents">
           <IncidentDashboard path="/dashboard" />
-          {/* <RoadLifelineFlood path="/records" /> */}
+          <IncidentRecords path="/records" />
+          <IncidentInformation path="/records/:incident_id" />
+          <IncidentCreate path="/records/add" />
+          <VictimCreate path="/records/:incident_id/victims/add" />
         </IncidentTabs>
 
         <Redirect from="/residents" to="/residents/dashboard" noThrow />

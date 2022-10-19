@@ -20,8 +20,8 @@ function SignIn() {
   const [helper, setHelper] = React.useState('')
 
   // INPUT STATE
-  const [email, setEmail] = React.useState('cliemtor@devhaus.ph')
-  const [password, setPassword] = React.useState('admin123')
+  const [email, setEmail] = React.useState('')
+  const [password, setPassword] = React.useState('')
 
   // ON FETCH ACCOUNT
   // React.useEffect(() => {
@@ -46,7 +46,7 @@ function SignIn() {
     //     if (response.status === 201) {
     //       localStorage.setItem('qikstarter-drr-token', response.headers['x-token'])
     //       toast.success('Welcome ' + response?.data?.name)
-    navigate('/residents/dashboard', { replace: true })
+    navigate('/settlement-area/landslide', { replace: true })
     //   }
     // })
     // .catch((error) => {

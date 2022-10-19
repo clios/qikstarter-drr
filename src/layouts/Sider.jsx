@@ -1,7 +1,7 @@
 import './Sider.css'
 
 import { CropGrowth24, Hotel24, Identification24, Industry24, TrafficIncident24 } from '@carbon/icons-react'
-import { UserAvatar24, PedestrianFamily24, Power24, TrafficFlow24 } from '@carbon/icons-react'
+import { HealthCross24, PedestrianFamily24, Power24, TrafficFlow24, UserAvatar24 } from '@carbon/icons-react'
 
 import FadeAnimation from '../components/FadeAnimation'
 import Panel from '../components/Panel'
@@ -36,6 +36,9 @@ function Sider({ children }) {
             </PanelLink>
             <PanelLink to="/incidents" tooltip="Incidents">
               <TrafficIncident24 />
+            </PanelLink>
+            <PanelLink to="/evacuation" tooltip="Evacuation">
+              <HealthCross24 />
             </PanelLink>
             <PanelLink to="/users" tooltip="User Accounts">
               <Identification24 />

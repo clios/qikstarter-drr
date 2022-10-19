@@ -6,6 +6,8 @@ import AgricultureTabs from './layouts/AgricultureTabs'
 import CriticalInfrastructureFlood from './pages/CriticalInfrastructureFlood'
 import CriticalInfrastructureLandslide from './pages/CriticalInfrastructureLandslide'
 import CriticalInfrastructureTabs from './layouts/CriticalInfrastructureTabs'
+import EvacuationCenterInformation from './pages/EvacuationCenterInformation'
+import EvacuationCenterRecords from './pages/EvacuationCenterRecords'
 import EvacuationDashboard from './pages/EvacuationDashboard'
 import EvacuationTabs from './layouts/EvacuationTabs'
 import IncidentCreate from './pages/IncidentCreate'
@@ -93,6 +95,8 @@ function Routes() {
         <Redirect from="/evacuation" to="/evacuation/dashboard" noThrow />
         <EvacuationTabs path="/evacuation">
           <EvacuationDashboard path="/dashboard" />
+          <EvacuationCenterRecords path="/centers" />
+          <EvacuationCenterInformation path="/centers/:evacuation_center_id" />
         </EvacuationTabs>
 
         <Redirect from="/residents" to="/residents/dashboard" noThrow />

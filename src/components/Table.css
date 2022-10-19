@@ -7,7 +7,7 @@
 .table-custom thead {
   position: sticky;
   top: 2.3rem;
-  background-color: hsl(195, 11%, 15%, 0.9);
+  background-color: hsl(195, 11%, 15%);
 }
 
 .table-custom tr {

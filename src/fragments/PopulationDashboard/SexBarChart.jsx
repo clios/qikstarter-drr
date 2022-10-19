@@ -1,6 +1,6 @@
 import './SexBarChart.css'
 
-import { VictoryAxis, VictoryBar, VictoryChart, VictoryGroup, VictoryLegend, VictoryVoronoiContainer } from 'victory'
+import { VictoryAxis, VictoryBar, VictoryChart, VictoryGroup, VictoryLabel, VictoryLegend, VictoryVoronoiContainer } from 'victory'
 
 import React from 'react'
 
@@ -14,9 +14,19 @@ function SexBarChart() {
         containerComponent={
           <VictoryVoronoiContainer
             voronoiDimension="x"
+            labelComponent={
+              <VictoryLabel
+                textAnchor="middle"
+                verticalAnchor="start"
+                labelPlacement="perpendicular"
+                backgroundPadding={8}
+                backgroundStyle={{ fill: '#22282A', opacity: 0.7, stroke: '#FFFFFF' }}
+                style={{ fill: '#FFFFFF', fontSize: 8 }}
+              />
+            }
             labels={({ datum }) => {
-              if (datum.childName === 'bar-chart-group-2-0') return `Male: ${datum.y}`
-              if (datum.childName === 'bar-chart-group-2-1') return `Female: ${datum.y}`
+              if (datum.childName === 'bar-chart-group-2-0') return `Male: ${datum.y?.toLocaleString()}`
+              if (datum.childName === 'bar-chart-group-2-1') return `Female: ${datum.y?.toLocaleString()}`
             }}
           />
         }>

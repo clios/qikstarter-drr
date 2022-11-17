@@ -20,6 +20,9 @@ function EvacuationTabs(props) {
           <Link className="tabs-item" to="/evacuation/centers" getProps={isPartiallyActive}>
             Centers
           </Link>
+          <Link className="tabs-item" to="/evacuation/map" getProps={isPartiallyActive}>
+            Map
+          </Link>
         </div>
       </div>
       <div>{props.children}</div>

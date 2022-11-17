@@ -10,8 +10,8 @@
   padding-right: 3rem;
   width: 100%;
   z-index: 10;
-  background-color: hsl(192, 100%, 10%, 0.9);
-  border-bottom: 1px solid hsla(197, 10%, 50%, 1);
+  background-color: hsl(192, 100%, 10%, 1);
+  border-bottom: 0.1rem solid #df9c20;
 }
 
 .tabs-title {

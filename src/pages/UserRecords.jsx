@@ -100,17 +100,23 @@ function UserRecords() {
     // <Authorization permissions={Account.permissions} permission="read_user">
     <PageContent>
       <FadeAnimation>
-        <TableToolbar>
-          <Input
-            onChange={(e) => setName(e.target.value)}
-            onKeyUp={(e) => e.key === 'Enter' && updateParams()}
-            placeholder="Search by name"
-            value={name}
-          />
-          <ButtonIcon onClick={() => setDisplay(!display)} title={display ? 'Hide filter options' : 'Display more filter options'} status={status}>
+        <TableToolbar
+          mainChild={
+            <Input
+              onChange={(e) => setName(e.target.value)}
+              onKeyUp={(e) => e.key === 'Enter' && updateParams()}
+              placeholder="Search by name"
+              value={name}
+            />
+          }>
+          <ButtonIcon
+            label="Filter"
+            onClick={() => setDisplay(!display)}
+            title={display ? 'Hide filter options' : 'Display more filter options'}
+            status={status}>
             <Filter20 />
           </ButtonIcon>
-          <ButtonIcon onClick={refreshTable} status={status} title="Refresh and reset table">
+          <ButtonIcon label="Refresh" onClick={refreshTable} status={status} title="Refresh and reset table">
             <Reset20 />
           </ButtonIcon>
           <CSVLink
@@ -126,7 +132,7 @@ function UserRecords() {
               { label: 'Date Created', key: 'created_at' },
               { label: 'Date Updated', key: 'updated_at' }
             ]}>
-            <ButtonIcon status={status} title="Download current table">
+            <ButtonIcon label="Download" status={status} title="Download current table">
               <Download20 />
             </ButtonIcon>
           </CSVLink>

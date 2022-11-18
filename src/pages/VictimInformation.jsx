@@ -153,6 +153,43 @@ function VictimInformation() {
             <SectionBody status={status}>SLIPPERY ROAD DUE TO HEAVY RAIN</SectionBody>
           </SectionBody>
         </PaperView>
+
+        {/* <PaperView>
+          <SectionHeader bigTitle="Vital Signs Monitoring">
+            <ButtonIcon
+              // permission="write_user"
+              // permissions={Account.permissions}
+              status={status}
+              title="Refresh vital signs">
+              <Reset20 />
+            </ButtonIcon>
+            <ButtonIcon
+              label="Add Vital Sign"
+              onClick={() => navigate('/incidents/records/1/victims/1/vital_signs/1', { replace: true })}
+              // permission="write_user"
+              // permissions={Account.permissions}
+              status={status}>
+              <Add20 />
+            </ButtonIcon>
+          </SectionHeader>
+          <SectionHeader title="1. 05-21-2022 04:47 PM">
+            <ButtonIcon
+              // permission="write_user"
+              // permissions={Account.permissions}
+              status={status}
+              title="Delete vital sign record">
+              <TrashCan20 />
+            </ButtonIcon>
+          </SectionHeader>
+          <SectionBody>
+            <Field label="Airway" status={status} text="CLEAR" />
+            <Field label="Respiratory Rate" status={status} text="80 cycles per minute" />
+          </SectionBody>
+          <SectionBody>
+            <Field label="Pulse/Heart Rate" status={status} text="200 beats per minute" />
+            <Field label="Blood Pressure" status={status} text="80/50 mmHg" />
+          </SectionBody>
+        </PaperView> */}
       </FadeAnimation>
     </PageContent>
   )

@@ -4,6 +4,7 @@ import Address from '../Address'
 import Authorization from '../components/Authorization'
 import Button from '../components/Button'
 import ButtonIcon from '../components/ButtonIcon'
+import Checkbox from '../components/Checkbox'
 import { Close20 } from '@carbon/icons-react'
 import FadeAnimation from '../components/FadeAnimation'
 import Field from '../components/Field'
@@ -77,16 +78,12 @@ function VictimCreate() {
     <PageContent>
       <FadeAnimation>
         <Form status={status}>
-          <SectionHeader bigTitle="New Victim Form">
-            <ButtonIcon onClick={() => navigate('/incidents/records/1', { replace: true })} status={status} title="Close this form">
+          <SectionHeader bigTitle="Victim Profile">
+            <ButtonIcon color="red" onClick={() => navigate('/incidents/records/1', { replace: true })} status={status} title="Close this form">
               <Close20 />
             </ButtonIcon>
           </SectionHeader>
-          <SectionHeader title="1. Victim" />
           <FormRow>
-            <Field error={helper.name} label="Full Name" status={status}>
-              <Input uppercase onChange={(e) => setName(e.target.value)} required size={30} type="text" value={name} />
-            </Field>
             <Field error={helper.name} label="Status" status={status}>
               <Select>
                 <option>GREEN</option>
@@ -96,23 +93,33 @@ function VictimCreate() {
               </Select>
             </Field>
           </FormRow>
+          <SectionHeader title="1. Personal Information" />
           <FormRow>
-            <Field label="Intervention">
-              <Textarea cols={51} />
+            <Field error={helper.name} label="Name of Victim" status={status}>
+              <Input uppercase onChange={(e) => setName(e.target.value)} required size={30} type="text" value={name} />
+            </Field>
+            <Field error={helper.name} label="Birthdate" status={status}>
+              <Input uppercase required type="date" />
+            </Field>
+            <Field error={helper.sex} label="Gender" status={status}>
+              <Select onChange={(e) => setSex(e.target.value)} value={sex}>
+                <option value="">NO ANSWER</option>
+                <option value="male">MALE</option>
+                <option value="female">FEMALE</option>
+              </Select>
+            </Field>
+            <Field error={helper.marital_status} label="Civil Status" status={status}>
+              <Select onChange={(e) => setMaritalStatus(e.target.value)} value={marital_status}>
+                <option value="">NO ANSWER</option>
+                <option value="single">SINGLE</option>
+                <option value="married">MARRIED</option>
+                <option value="widowed">WIDOWED</option>
+                <option value="separated">SEPARATED</option>
+                <option value="divorced">DIVORCED</option>
+              </Select>
             </Field>
           </FormRow>
-          <SectionHeader title="2. Personal" />
           <FormRow>
-            <Field label="Region" status={status}>
-              <Select disabled>
-                <option>02</option>
-              </Select>
-            </Field>
-            <Field label="Province" status={status}>
-              <Select disabled>
-                <option>Quirino</option>
-              </Select>
-            </Field>
             <Field label="Municipality" status={status}>
               <Select
                 onChange={(e) => {
@@ -143,33 +150,151 @@ function VictimCreate() {
             </Field>
           </FormRow>
           <FormRow>
-            <Field error={helper.birthday} label="Birthday" status={status}>
-              <Input size={35} onChange={(e) => setBirthday(e.target.value)} type="date" value={birthday} />
-            </Field>
-            <Field error={helper.sex} label="Sex" status={status}>
-              <Select onChange={(e) => setSex(e.target.value)} value={sex}>
-                <option value="">NO ANSWER</option>
-                <option value="male">MALE</option>
-                <option value="female">FEMALE</option>
-              </Select>
-            </Field>
-            <Field error={helper.marital_status} label="Civil Status" status={status}>
-              <Select onChange={(e) => setMaritalStatus(e.target.value)} value={marital_status}>
-                <option value="">NO ANSWER</option>
-                <option value="single">SINGLE</option>
-                <option value="married">MARRIED</option>
-                <option value="widowed">WIDOWED</option>
-                <option value="separated">SEPARATED</option>
-                <option value="divorced">DIVORCED</option>
-              </Select>
-            </Field>
-          </FormRow>
-          <FormRow>
             <Field error={helper.name} label="Contact Person" status={status}>
               <Input uppercase onChange={(e) => setName(e.target.value)} required size={30} type="text" value={name} />
             </Field>
             <Field error={helper.name} label="Contact Number" status={status}>
               <Input uppercase onChange={(e) => setName(e.target.value)} required size={30} type="text" value={name} />
+            </Field>
+          </FormRow>
+          <SectionHeader title="2. Glasgow Coma Scale" />
+          <FormRow status={status}>
+            <Field label="Eye Response">
+              <Checkbox text="(4) Spontaneous opening" />
+            </Field>
+            <Checkbox text="(3) To verbal command" />
+            <Checkbox text="(2) To pain" />
+            <Checkbox text="(1) No eye opening" />
+          </FormRow>
+          <FormRow status={status}>
+            <Field label="Verbal Response">
+              <Checkbox text="(5) Oriented" />
+            </Field>
+            <Checkbox text="(4) Confused" />
+            <Checkbox text="(3) Inappropriate word" />
+            <Checkbox text="(2) Incomprehensible sounds" />
+            <Checkbox text="(1) No verbal response" />
+          </FormRow>
+          <FormRow status={status}>
+            <Field label="Moter Response">
+              <Checkbox text="(6) Obeys command" />
+            </Field>
+            <Checkbox text="(5) Localizes pain" />
+            <Checkbox text="(4) Withdrawal from pain" />
+            <Checkbox text="(3) Flexion to pain" />
+            <Checkbox text="(2) Extension to pain" />
+            <Checkbox text="(1) No motor response" />
+          </FormRow>
+          <SectionHeader title="3. Bleeding" />
+          <FormRow>
+            <Field label="Bleeding status">
+              <Checkbox text="No bleeding" />
+            </Field>
+            <Checkbox text="With bleeding" />
+          </FormRow>
+          <FormRow>
+            <Field label="With bleeding">
+              <Checkbox text="Mild" />
+            </Field>
+            <Checkbox text="Profuse / Severe" />
+          </FormRow>
+          <FormRow>
+            <Field label="Location">
+              <Input uppercase onChange={(e) => setName(e.target.value)} required size={30} type="text" value={name} />
+            </Field>
+          </FormRow>
+          <SectionHeader title="4. Pain Scale" />
+          <FormRow>
+            <Field label="Onset">
+              <Checkbox text="Sudden" />
+            </Field>
+            <Checkbox text="Recurrent" />
+            <Checkbox text="Continuous" />
+          </FormRow>
+          <FormRow>
+            <Field label="Location">
+              <Input uppercase onChange={(e) => setName(e.target.value)} required size={30} type="text" value={name} />
+            </Field>
+          </FormRow>
+          <SectionHeader title="5. Secondary Assessment" />
+          <FormRow>
+            <Field label="History of Illness">
+              <Checkbox text="Heart Disease" />
+            </Field>
+            <Checkbox text="Hypertension" />
+            <Checkbox text="Stroke" />
+            <Checkbox text="Stroke" />
+            <Checkbox text="Diabetes" />
+          </FormRow>
+          <FormRow>
+            <Checkbox text="Asthma" />
+            <Checkbox text="Tuberculosis" />
+            <Checkbox text="Seizure" />
+            <Checkbox text="Covid-19" />
+            <Checkbox text="Others" />
+          </FormRow>
+          <FormRow>
+            <Field label="Others, specify">
+              <Input uppercase onChange={(e) => setName(e.target.value)} required size={30} type="text" value={name} />
+            </Field>
+          </FormRow>
+          <FormRow title="History of Last Hospitalization">
+            <FormRow>
+              <Field label="Date">
+                <Input type="date" />
+              </Field>
+              <Field label="Name of Hospital/Institution">
+                <Input type="text" />
+              </Field>
+              <Field label="Reason for Hospitalization">
+                <Input type="text" />
+              </Field>
+            </FormRow>
+          </FormRow>
+          <FormRow title="Oral Intake">
+            <FormRow>
+              <Field error={helper.name} label="Date" status={status}>
+                <Input uppercase required type="date" />
+              </Field>
+              <Field error={helper.name} label="Time" status={status}>
+                <Input uppercase required type="time" />
+              </Field>
+            </FormRow>
+          </FormRow>
+          <FormRow title="Alcohol Intake">
+            <FormRow>
+              <Field error={helper.name} label="Date" status={status}>
+                <Input uppercase required type="date" />
+              </Field>
+              <Field error={helper.name} label="Time" status={status}>
+                <Input uppercase required type="time" />
+              </Field>
+            </FormRow>
+          </FormRow>
+          <FormRow>
+            <Field label="Activities leading to the incident or injury">
+              <Input type="text" size={50} />
+            </Field>
+          </FormRow>
+          <SectionHeader title="6. Interventions Given" />
+          <FormRow>
+            <Field label="Description">
+              <Textarea cols={51} />
+            </Field>
+          </FormRow>
+          <SectionHeader title="7. Endorsement to Health Facility" />
+          <FormRow>
+            <Field label="Full Name">
+              <Input type="text" />
+            </Field>
+            <Field error={helper.name} label="Date" status={status}>
+              <Input uppercase required type="date" />
+            </Field>
+            <Field error={helper.name} label="Time" status={status}>
+              <Input uppercase required type="time" />
+            </Field>
+            <Field label="Name of Hospitalization / Institution">
+              <Input type="text" size={30} />
             </Field>
           </FormRow>
           <FormFooter>

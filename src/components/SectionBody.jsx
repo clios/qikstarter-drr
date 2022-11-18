@@ -11,10 +11,13 @@ function SectionBody(props) {
       </div>
     )
   return (
-    <div className="section-body">
-      {props.text}
-      {props.children}
-    </div>
+    <React.Fragment>
+      {props.title && <div className="section-body-title">{props.title}</div>}
+      <div className="section-body">
+        {props.text}
+        {props.children}
+      </div>
+    </React.Fragment>
   )
 }
 

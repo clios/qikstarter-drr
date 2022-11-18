@@ -6,6 +6,12 @@
   background-color: hsla(0, 0%, 100%, 0.1);
 }
 
+.form-row-title {
+  color: #df9c20;
+  padding: 0.5rem 3rem 0 3rem;
+  background-color: hsla(0, 0%, 100%, 0.1);
+}
+
 .form-row-loading {
   padding-left: 1rem;
   padding-right: 1rem;

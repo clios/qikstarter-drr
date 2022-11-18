@@ -1,3 +1,5 @@
+import './Checkbox.css'
+
 import React from 'react'
 
 function Checkbox(props) {

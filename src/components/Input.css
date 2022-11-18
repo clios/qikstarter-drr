@@ -1,7 +1,14 @@
 .input[type='date'] {
   height: 1.85rem;
+  align-self: end;
 }
 
 .input[type='time'] {
   height: 1.85rem;
+  align-self: end;
+}
+
+.input[type='text'] {
+  height: 1.85rem;
+  align-self: end;
 }

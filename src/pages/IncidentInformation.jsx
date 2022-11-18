@@ -14,6 +14,7 @@ import React from 'react'
 import SectionBody from '../components/SectionBody'
 import SectionFooter from '../components/SectionFooter'
 import SectionHeader from '../components/SectionHeader'
+import Toggle from '../components/Toggle'
 import axios from 'axios'
 import { confirmAlert } from 'react-confirm-alert'
 import { toJpeg } from 'html-to-image'
@@ -97,7 +98,7 @@ function IncidentInformation() {
     <PageContent status={status}>
       <FadeAnimation>
         <PaperView>
-          <SectionHeader bigTitle="Incident Information">
+          <SectionHeader bigTitle="Incident Rescue Information">
             <CSVLink
               filename="INCIDENT.csv"
               data={[{ ...Incident.data }] || []}
@@ -131,33 +132,79 @@ function IncidentInformation() {
               title="Delete incident record">
               <TrashCan20 />
             </ButtonIcon>
-            <ButtonIcon onClick={() => navigate('/incidents/records', { replace: true })} status={status} title="Close">
+            <ButtonIcon color="red" onClick={() => navigate('/incidents/records', { replace: true })} status={status} title="Close">
               <Close20 />
             </ButtonIcon>
           </SectionHeader>
-          <SectionHeader title="1. Caller" />
+          <SectionHeader title="1. Incident Response" />
           <SectionBody>
             <Field label="Date and Time" status={status} text="AUG 3, 2021 08:52 AM" />
-            <Field label="Name" status={status} text="DONDIE ADUWAN" />
-            <Field label="Contact #" status={status} text={'09123456789'} />
           </SectionBody>
-          <SectionHeader title="2. Response" />
+          <SectionBody>
+            <Field label="Name of Caller" status={status} text="DONDIE ADUWAN" />
+            <Field label="Caller Contact #" status={status} text={'09123456789'} />
+          </SectionBody>
           <SectionBody>
             <Field label="Team" status={status} text="CHARLIE" />
             <Field label="Vehicle" status={status} text="AMBULANCE VICKY" />
           </SectionBody>
-          <SectionHeader title="3. Incident" />
-          <SectionBody>
-            <Field label="Incident" status={status} text="TRANSPORT" />
-            <Field label="Date and Time" status={status} text="AUG 3, 2021 08:52 AM" />
-            <Field label="Address" status={status} text="P2, GUNDAWAY, CABARROGUIS" />
-            <Field label="Type" status={status} text="VEHICULAR" />
-            <Field label="Remarks / Actions Taken" status={status} text="FOLLOW UP CHECK UP" />
-            <Field label="SUV" status={status} text="0" />
-            <Field label="AUV" status={status} text="1" />
-            <Field label="Motorcycle" status={status} text="1" />
+          <SectionHeader title="2. Incident Information" />
+
+          <SectionBody title="Type/s of Incident">
+            <SectionBody>
+              <Field label="Trauma" status={status}>
+                <Toggle available={true} />
+              </Field>
+              <Field label="Medical" status={status}>
+                <Toggle available={false} />
+              </Field>
+              <Field label="Obstetric" status={status}>
+                <Toggle available={true} />
+              </Field>
+              <Field label="Transfer" status={status}>
+                <Toggle available={false} />
+              </Field>
+              <Field label="Vehicular" status={status}>
+                <Toggle available={true} />
+              </Field>
+              <Field label="Others" status={status}>
+                <Toggle available={false} />
+              </Field>
+            </SectionBody>
           </SectionBody>
-          <SectionFooter status={status}>Last Update AUG 4, 2021 10:42 AM</SectionFooter>
+          <SectionBody title="Name of Incident">
+            <SectionBody>
+              <Field status={status} text="TRANSPORT" />
+            </SectionBody>
+          </SectionBody>
+          <SectionBody title="Vehicle/s Involved">
+            <SectionBody>
+              <Field label="SUV" status={status} text="1" />
+              <Field label="Motorcycle" status={status} text="1" />
+            </SectionBody>
+          </SectionBody>
+          <SectionBody title="Place of Incident">
+            <SectionBody>
+              <Field label="Municipality" status={status} text="CABARROGUIS" />
+              <Field label="Barangay" status={status} text="EDEN" />
+              <Field label="Purok / Street" status={status} text="PINOK" />
+            </SectionBody>
+          </SectionBody>
+          <SectionBody title="Coordinates of Incident">
+            <SectionBody>
+              <Field label="Latitude" status={status} text="NOT FOUND" />
+              <Field label="Longitude" status={status} text="NOT FOUND" />
+            </SectionBody>
+            <SectionBody>
+              <Field label="Location" status={status} text="[MAP HERE]" />
+            </SectionBody>
+          </SectionBody>
+          <SectionBody title="Date and Time">
+            <SectionBody>
+              <Field status={status} text="NOT FOUND" />
+            </SectionBody>
+          </SectionBody>
+          <SectionFooter status={status}>Last updated by [NAME HERE] was [DATE AND TIME HERE]</SectionFooter>
         </PaperView>
 
         <PaperView>

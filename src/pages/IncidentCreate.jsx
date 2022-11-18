@@ -34,6 +34,8 @@ function IncidentCreate() {
   const [marital_status, setMaritalStatus] = React.useState('')
   const [barangay, setBarangay] = React.useState(Account.vicinity_barangay)
   const [municipality, setMunicipality] = React.useState(Account.vicinity_municipality)
+  const [address_latitude, setAddressLatitude] = React.useState('')
+  const [address_longitude, setAddressLongitude] = React.useState('')
   const [purok, setPurok] = React.useState('')
   const [street, setStreet] = React.useState('')
   const [house_number, setHouseNumber] = React.useState('')
@@ -78,12 +80,12 @@ function IncidentCreate() {
     <PageContent>
       <FadeAnimation>
         <Form status={status}>
-          <SectionHeader bigTitle="New Incident Form">
-            <ButtonIcon onClick={() => navigate('/incidents/records', { replace: true })} status={status} title="Close this form">
+          <SectionHeader bigTitle="Incident Rescue Form">
+            <ButtonIcon color="red" onClick={() => navigate('/incidents/records', { replace: true })} status={status} title="Close this form">
               <Close20 />
             </ButtonIcon>
           </SectionHeader>
-          <SectionHeader title="1. Caller" />
+          <SectionHeader title="1. Incident Response" />
           <FormRow>
             <Field error={helper.name} label="Date" status={status}>
               <Input uppercase required type="date" />
@@ -91,14 +93,15 @@ function IncidentCreate() {
             <Field error={helper.name} label="Time" status={status}>
               <Input uppercase required type="time" />
             </Field>
-            <Field error={helper.name} label="Full Name" status={status}>
+          </FormRow>
+          <FormRow>
+            <Field error={helper.name} label="Name of Caller" status={status}>
               <Input uppercase onChange={(e) => setName(e.target.value)} required size={30} type="text" value={name} />
             </Field>
-            <Field error={helper.name} label="Contact Number" status={status}>
+            <Field error={helper.name} label="Caller Contact #" status={status}>
               <Input uppercase onChange={(e) => setName(e.target.value)} required size={30} type="text" value={name} />
             </Field>
           </FormRow>
-          <SectionHeader title="2. Response" />
           <FormRow>
             <Field label="Team">
               <Select>
@@ -117,29 +120,96 @@ function IncidentCreate() {
               </Select>
             </Field>
           </FormRow>
-          <SectionHeader title="3. Incident" />
-          <FormRow>
-            <Field error={helper.name} label="Name of Incident" status={status}>
-              <Input uppercase onChange={(e) => setName(e.target.value)} required size={30} type="text" value={name} />
+          <SectionHeader title="2. Incident Information" />
+          <FormRow status={status}>
+            <Field label="Types">
+              <Checkbox text="Trauma" />
             </Field>
-            <Field error={helper.name} label="Date" status={status}>
-              <Input uppercase required type="date" />
-            </Field>
-            <Field error={helper.name} label="Time" status={status}>
-              <Input uppercase required type="time" />
+            <Checkbox text="Medical" />
+            <Checkbox text="Obstetric" />
+            <Checkbox text="Transfer" />
+            <Checkbox text="Vehicular" />
+            <Checkbox text="Others" />
+            <Field error={helper.name} label="Please specify" status={status}>
+              <Input uppercase required />
             </Field>
           </FormRow>
           <FormRow>
-            <Field label="Region" status={status}>
-              <Select disabled>
-                <option>02</option>
-              </Select>
+            <Field error={helper.name} label="Name of incident" status={status}>
+              <Input uppercase onChange={(e) => setName(e.target.value)} required size={30} type="text" value={name} />
             </Field>
-            <Field label="Province" status={status}>
-              <Select disabled>
-                <option>Quirino</option>
-              </Select>
+          </FormRow>
+          <FormRow>
+            <Field label="Vehicle/s involved">
+              <Cleave
+                className="input"
+                options={{
+                  numeral: true,
+                  numeralIntegerScale: 3,
+                  numeralDecimalScale: 0,
+                  numeralPositiveOnly: true
+                }}
+                placeholder="Hatchback"
+                size={10}
+              />
             </Field>
+            <Cleave
+              className="input"
+              options={{
+                numeral: true,
+                numeralIntegerScale: 3,
+                numeralDecimalScale: 0,
+                numeralPositiveOnly: true
+              }}
+              placeholder="Sedan"
+              size={10}
+            />
+            <Cleave
+              className="input"
+              options={{
+                numeral: true,
+                numeralIntegerScale: 3,
+                numeralDecimalScale: 0,
+                numeralPositiveOnly: true
+              }}
+              placeholder="SUV"
+              size={10}
+            />
+            <Cleave
+              className="input"
+              options={{
+                numeral: true,
+                numeralIntegerScale: 3,
+                numeralDecimalScale: 0,
+                numeralPositiveOnly: true
+              }}
+              placeholder="Pickup truck"
+              size={10}
+            />
+            <Cleave
+              className="input"
+              options={{
+                numeral: true,
+                numeralIntegerScale: 3,
+                numeralDecimalScale: 0,
+                numeralPositiveOnly: true
+              }}
+              placeholder="Van"
+              size={10}
+            />
+            <Cleave
+              className="input"
+              options={{
+                numeral: true,
+                numeralIntegerScale: 3,
+                numeralDecimalScale: 0,
+                numeralPositiveOnly: true
+              }}
+              placeholder="Motorcycle"
+              size={10}
+            />
+          </FormRow>
+          <FormRow>
             <Field label="Municipality" status={status}>
               <Select
                 onChange={(e) => {
@@ -169,57 +239,44 @@ function IncidentCreate() {
               <Input uppercase onChange={(e) => setPurok(e.target.value)} size={13} type="text" value={purok} />
             </Field>
           </FormRow>
-          <FormRow status={status}>
-            <Checkbox text="Trauma" />
-            <Checkbox text="Medical" />
-            <Checkbox text="Obstetric" />
-            <Checkbox text="Transfer" />
-            <Checkbox text="Vehicular" />
-            <Checkbox text="Other" />
-          </FormRow>
-          <SectionHeader title="3.1 Vehicles Involved" />
           <FormRow>
-            <Field label="SUV">
+            <Field error={helper.address_latitude} label="Latitude" status={status}>
               <Cleave
                 className="input"
+                onChange={(e) => setAddressLatitude(e.target.value)}
+                size={20}
+                type="text"
                 options={{
                   numeral: true,
-                  numeralIntegerScale: 3,
-                  numeralDecimalScale: 0,
-                  numeralPositiveOnly: true
+                  numeralIntegerScale: 2,
+                  numeralDecimalScale: 15,
+                  numeralThousandsGroupStyle: 'none'
                 }}
-                placeholder="Units"
-                size={5}
-                title="Available soon..."
+                value={address_latitude}
               />
             </Field>
-            <Field label="AUV">
+            <Field error={helper.address_longitude} label="Longitude" status={status}>
               <Cleave
                 className="input"
+                onChange={(e) => setAddressLongitude(e.target.value)}
+                size={20}
+                type="text"
                 options={{
                   numeral: true,
                   numeralIntegerScale: 3,
-                  numeralDecimalScale: 0,
-                  numeralPositiveOnly: true
+                  numeralDecimalScale: 15,
+                  numeralThousandsGroupStyle: 'none'
                 }}
-                placeholder="Units"
-                size={5}
-                title="Available soon..."
+                value={address_longitude}
               />
             </Field>
-            <Field label="Motorcycle">
-              <Cleave
-                className="input"
-                options={{
-                  numeral: true,
-                  numeralIntegerScale: 3,
-                  numeralDecimalScale: 0,
-                  numeralPositiveOnly: true
-                }}
-                placeholder="Units"
-                size={5}
-                title="Available soon..."
-              />
+          </FormRow>
+          <FormRow>
+            <Field error={helper.name} label="Date" status={status}>
+              <Input uppercase required type="date" />
+            </Field>
+            <Field error={helper.name} label="Time" status={status}>
+              <Input uppercase required type="time" />
             </Field>
           </FormRow>
           <FormFooter>

@@ -11,7 +11,12 @@ function FormRow(props) {
       </div>
     )
 
-  return <div className="form-row">{props.children}</div>
+  return (
+    <React.Fragment>
+      {props.title && <div className="form-row-title">{props.title}</div>}
+      <div className="form-row">{props.children}</div>
+    </React.Fragment>
+  )
 }
 
 export default FormRow

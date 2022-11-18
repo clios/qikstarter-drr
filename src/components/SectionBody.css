@@ -7,6 +7,12 @@
   background-color: hsla(0, 0%, 100%, 0.1);
 }
 
+.section-body-title {
+  color: #df9c20;
+  padding: 0.5rem 3rem 0 3rem;
+  background-color: hsla(0, 0%, 100%, 0.1);
+}
+
 .section-body-loader {
   padding: 0 2rem;
 }

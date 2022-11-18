@@ -1,4 +1,4 @@
-import { Add20, Close20, Download20, Edit20, Reset20, TrashCan20 } from '@carbon/icons-react'
+import { Add20, Catalog20, Close20, Download20, Edit20, Reset20, TrashCan20 } from '@carbon/icons-react'
 import { navigate, useParams } from '@reach/router'
 
 import AccountContext from '../contexts/AccountContext'
@@ -95,7 +95,7 @@ function IncidentInformation() {
     //     recordAddress={Help.displayTags([User.data?.vicinity_province, User.data?.vicinity_municipality, User.data?.vicinity_barangay])}
     //   />
     // )} */}
-    <PageContent status={status}>
+    <PageContent>
       <FadeAnimation>
         <PaperView>
           <SectionHeader bigTitle="Incident Rescue Information">
@@ -149,7 +149,6 @@ function IncidentInformation() {
             <Field label="Vehicle" status={status} text="AMBULANCE VICKY" />
           </SectionBody>
           <SectionHeader title="2. Incident Information" />
-
           <SectionBody title="Type/s of Incident">
             <SectionBody>
               <Field label="Trauma" status={status}>
@@ -227,32 +226,13 @@ function IncidentInformation() {
           </SectionHeader>
           <SectionHeader title="1. BEN KAPPA">
             <ButtonIcon
+              onClick={() => navigate('/incidents/records/1/victims/1')}
               // permission="write_user"
               // permissions={Account.permissions}
               status={status}
-              title="Edit victim record">
-              <Edit20 />
+              title="View victim record">
+              <Catalog20 />
             </ButtonIcon>
-            <ButtonIcon
-              // permission="write_user"
-              // permissions={Account.permissions}
-              status={status}
-              title="Delete victim record">
-              <TrashCan20 />
-            </ButtonIcon>
-          </SectionHeader>
-          <SectionBody>
-            <Field label="Status" status={status} text="YELLOW" />
-            <Field label="Intervention" status={status} text="LOAD AND TRANSPORT TO BAGUIO GENERAL HOSPITAL" />
-            <Field label="Address" status={status} text="P2, GUNDWAY, CABARROGUIS" />
-            <Field label="Birthday" status={status} text="AUG 4, 1995" />
-            <Field label="Age" status={status} text="27" />
-            <Field label="Sex" status={status} text="MALE" />
-            <Field label="Civil Status" status={status} text="SINGLE" />
-            <Field label="Contact Person" status={status} text="MARIO GANDETO" />
-            <Field label="Contact Number" status={status} text="09123456789" />
-          </SectionBody>
-          <SectionHeader title="2. DONDON TAMANI">
             <ButtonIcon
               // permission="write_user"
               // permissions={Account.permissions}
@@ -270,14 +250,8 @@ function IncidentInformation() {
           </SectionHeader>
           <SectionBody>
             <Field label="Status" status={status} text="YELLOW" />
-            <Field label="Intervention" status={status} text="LOAD AND TRANSPORT TO BAGUIO GENERAL HOSPITAL" />
-            <Field label="Address" status={status} text="P2, GUNDWAY, CABARROGUIS" />
-            <Field label="Birthday" status={status} text="AUG 4, 1995" />
+            <Field label="Gender" status={status} text="MALE" />
             <Field label="Age" status={status} text="27" />
-            <Field label="Sex" status={status} text="MALE" />
-            <Field label="Civil Status" status={status} text="SINGLE" />
-            <Field label="Contact Person" status={status} text="MARIO GANDETO" />
-            <Field label="Contact Number" status={status} text="09123456789" />
           </SectionBody>
         </PaperView>
       </FadeAnimation>

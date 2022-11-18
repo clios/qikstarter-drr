@@ -40,6 +40,7 @@ import UserRecords from './pages/UserRecords'
 import UserTabs from './layouts/UserTabs'
 import UserUpdate from './pages/UserUpdate'
 import VictimCreate from './pages/VictimCreate'
+import VictimInformation from './pages/VictimInformation'
 import YourAccountProfile from './pages/YourAccountProfile'
 import YourAccountTabs from './layouts/YourAccountTabs'
 import YourAccountUpdate from './pages/YourAccountUpdate'
@@ -91,6 +92,7 @@ function Routes() {
           <IncidentInformation path="/records/:incident_id" />
           <IncidentCreate path="/records/add" />
           <VictimCreate path="/records/:incident_id/victims/add" />
+          <VictimInformation path="/records/:incident_id/victims/:victim_id" />
         </IncidentTabs>
 
         <Redirect from="/evacuation" to="/evacuation/dashboard" noThrow />

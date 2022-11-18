@@ -176,7 +176,7 @@ function VictimCreate() {
             <Checkbox text="(1) No verbal response" />
           </FormRow>
           <FormRow status={status}>
-            <Field label="Moter Response">
+            <Field label="Motor Response">
               <Checkbox text="(6) Obeys command" />
             </Field>
             <Checkbox text="(5) Localizes pain" />

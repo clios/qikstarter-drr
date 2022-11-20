@@ -3,6 +3,7 @@ import './Sider.css'
 import { CropGrowth24, Hotel24, Identification24, Industry24, TrafficIncident24 } from '@carbon/icons-react'
 import { HealthCross24, PedestrianFamily24, Power24, TrafficFlow24, UserAvatar24 } from '@carbon/icons-react'
 
+import AccountContext from '../contexts/AccountContext'
 import FadeAnimation from '../components/FadeAnimation'
 import Panel from '../components/Panel'
 import PanelLink from '../components/PanelLink'
@@ -44,44 +45,59 @@ function Sider({ children }) {
       .catch((error) => console.log(error))
   }
 
+  // IF NO TOKEN, SIGN OUT
+  if (!has_token) {
+    navigate('/', { replace: true })
+    location.reload()
+  }
+
+  // IF EXISTING ACCOUNT SESSION, SIGN OUT
+  if (Account.error?.response?.status === 403) {
+    localStorage.removeItem('qikstarter-drr-token')
+    navigate('/', { replace: true })
+    location.reload()
+  }
+
   return (
     <FadeAnimation>
       <div className="sider">
-        <Panel>
-          <PanelSection>
-            <PanelLink to="/your-account" tooltip="Your Account">
-              <UserAvatar24 />
-            </PanelLink>
-            <PanelLink to="/settlement-area" tooltip="Settlement Area">
-              <Hotel24 />
-            </PanelLink>
-            <PanelLink to="/population" tooltip="Population">
-              <PedestrianFamily24 />
-            </PanelLink>
-            <PanelLink to="/agriculture" tooltip="Agriculture">
-              <CropGrowth24 />
-            </PanelLink>
-            <PanelLink to="/critical-infrastructure" tooltip="Critical Infrastructure">
-              <Industry24 />
-            </PanelLink>
-            <PanelLink to="/road-lifeline" tooltip="Road Lifeline">
-              <TrafficFlow24 />
-            </PanelLink>
-            <PanelLink to="/incidents" tooltip="Incidents">
-              <TrafficIncident24 />
-            </PanelLink>
-            <PanelLink to="/evacuation" tooltip="Evacuation">
-              <HealthCross24 />
-            </PanelLink>
-            <PanelLink to="/users" tooltip="User Accounts">
-              <Identification24 />
-            </PanelLink>
-            <div className="panel-link" onClick={signOut} title="Sign Out">
-              <Power24 />
-            </div>
-          </PanelSection>
-        </Panel>
-        <div>{children}</div>
+        {status === 'success' && (
+          <Panel>
+            <PanelSection>
+              <PanelLink to="/your-account" tooltip={`Your Account: ${Account.data.name}`}>
+                <UserAvatar24 />
+              </PanelLink>
+              <PanelLink to="/settlement-area" tooltip="Settlement Area">
+                <Hotel24 />
+              </PanelLink>
+              <PanelLink to="/population" tooltip="Population">
+                <PedestrianFamily24 />
+              </PanelLink>
+              <PanelLink to="/agriculture" tooltip="Agriculture">
+                <CropGrowth24 />
+              </PanelLink>
+              <PanelLink to="/critical-infrastructure" tooltip="Critical Infrastructure">
+                <Industry24 />
+              </PanelLink>
+              <PanelLink to="/road-lifeline" tooltip="Road Lifeline">
+                <TrafficFlow24 />
+              </PanelLink>
+              <PanelLink to="/incidents" tooltip="Incidents">
+                <TrafficIncident24 />
+              </PanelLink>
+              <PanelLink to="/evacuation" tooltip="Evacuation">
+                <HealthCross24 />
+              </PanelLink>
+              <PanelLink to="/users" tooltip="User Accounts">
+                <Identification24 />
+              </PanelLink>
+              <div className="panel-link" onClick={signOut} title="Sign Out">
+                <Power24 />
+              </div>
+            </PanelSection>
+          </Panel>
+        )}
+        <div>{Account.data && <AccountContext.Provider value={Account.data}>{children}</AccountContext.Provider>}</div>
       </div>
     </FadeAnimation>
   )

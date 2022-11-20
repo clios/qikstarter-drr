@@ -16,7 +16,7 @@ const fetcher = (url) =>
     })
 
 export default function getAccount(should_fetch, swr_options) {
-  const url = process.env.BASE_URL + '/account'
+  const url = process.env.BASE_URL + '/me'
 
   const { data, error } = useSWR(should_fetch ? url : null, fetcher, {
     onError: (error) => {

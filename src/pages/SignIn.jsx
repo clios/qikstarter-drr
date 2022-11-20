@@ -1,5 +1,7 @@
 import './SignIn.css'
 
+import { Redirect, navigate } from '@reach/router'
+
 import Button from '../components/Button'
 import FadeAnimation from '../components/FadeAnimation'
 import Field from '../components/Field'
@@ -8,12 +10,12 @@ import Input from '../components/Input'
 import React from 'react'
 import axios from 'axios'
 import getAccount from '../api/getAccount'
-import { navigate } from '@reach/router'
+import { toast } from 'react-toastify'
 
 function SignIn() {
   // SEND GET ACCOUNT REQUEST
-  // const has_token = localStorage.getItem('qikstarter-drr-token') ? true : false
-  // const Account = getAccount(has_token)
+  const has_token = localStorage.getItem('qikstarter-drr-token') ? true : false
+  const Account = getAccount(has_token)
 
   // INFORMATION STATE
   const [status, setStatus] = React.useState('success')
@@ -24,47 +26,47 @@ function SignIn() {
   const [password, setPassword] = React.useState('')
 
   // ON FETCH ACCOUNT
-  // React.useEffect(() => {
-  //   if (has_token && Account.loading) setStatus('loading')
-  //   if (Account.error) setStatus('error')
-  //   if (Account.data) setStatus('success')
-  //   return () => setStatus('loading')
-  // }, [Account.loading, Account.error, Account.data])
+  React.useEffect(() => {
+    if (has_token && Account.loading) setStatus('loading')
+    if (Account.error) setStatus('error')
+    if (Account.data) setStatus('success')
+    return () => setStatus('loading')
+  }, [Account.loading, Account.error, Account.data])
 
   // SEND POST LOGIN REQUEST
   function submitForm(e) {
     e.preventDefault()
-    // setStatus('loading')
+    setStatus('loading')
 
-    // const URL = process.env.BASE_URL + '/login'
-    // const DATA = { email: email, password: password }
+    const URL = process.env.BASE_URL + '/login'
+    const DATA = { email: email, password: password }
 
-    // axios
-    //   .post(URL, DATA)
-    //   .then((response) => {
-    //     setStatus('success')
-    //     if (response.status === 201) {
-    //       localStorage.setItem('qikstarter-drr-token', response.headers['x-token'])
-    //       toast.success('Welcome ' + response?.data?.name)
-    navigate('/settlement-area/landslide', { replace: true })
-    //   }
-    // })
-    // .catch((error) => {
-    //   setStatus('success')
-    //   if (error.response) {
-    //     if (error.response?.status === 400) toast.error('Form input is invalid')
-    //     else if (error.response?.status === 401) toast.error('Email and/or password is incorrect')
-    //     else if (error.response?.status === 403) toast.error('Your account was deactivated by admin')
-    //     else if (error.response?.status === 500) toast.error('Unexpected server error')
-    //   } else if (error.request) console.error(error.request)
-    //   else console.error('Error', error.message)
-    // })
+    axios
+      .post(URL, DATA)
+      .then((response) => {
+        setStatus('success')
+        if (response.status === 201) {
+          localStorage.setItem('qikstarter-drr-token', response.headers['token'])
+          toast.success('Welcome ' + response?.data?.name)
+          navigate('/incidents/records', { replace: true })
+        }
+      })
+      .catch((error) => {
+        setStatus('success')
+        if (error.response) {
+          if (error.response?.status === 400) toast.error('Form input is invalid')
+          else if (error.response?.status === 401) toast.error('Email and/or password is incorrect')
+          else if (error.response?.status === 403) toast.error('Your account was deactivated by admin')
+          else if (error.response?.status === 500) toast.error('Unexpected server error')
+        } else if (error.request) console.error(error.request)
+        else console.error('Error', error.message)
+      })
   }
 
   return (
     <FadeAnimation>
       <div className="sign-in-container">
-        {/* {Account.data && <Redirect to="/farmers/dashboard" noThrow replace />} */}
+        {Account.data && <Redirect to="/incidents/records" noThrow replace />}
         <div className="sign-in-content">
           <img className="sign-in-image" src={require('../assets/sign_in_bg.svg')} alt="poster" />
           <form className="sign-in-form" onSubmit={submitForm} status={status}>

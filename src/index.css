@@ -103,7 +103,7 @@ body {
 /* BODY GRADIENT */
 
 body {
-  background: linear-gradient(-45deg, hsl(136, 82%, 8%), hsl(226, 78%, 8%), hsl(196, 72%, 8%), hsl(166, 72%, 8%));
+  background-color: hsl(180, 80%, 8%);
   background-size: 1000% 1000%;
   animation: gradient 15s ease infinite;
   height: 100vh;

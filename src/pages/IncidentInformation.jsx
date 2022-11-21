@@ -1,10 +1,9 @@
-import { Add20, Catalog20, Close20, Download20, Edit20, Reset20, TrashCan20 } from '@carbon/icons-react'
+import { Add20, Catalog20, Close20, Edit20, Reset20, TrashCan20 } from '@carbon/icons-react'
+import { DPI, Format, MapboxExportControl, PageOrientation, Size } from '@watergis/mapbox-gl-export'
 import { navigate, useParams } from '@reach/router'
 
 import AccountContext from '../contexts/AccountContext'
 import ButtonIcon from '../components/ButtonIcon'
-import { CSVLink } from 'react-csv'
-import { Entropy } from 'entropy-string'
 import FadeAnimation from '../components/FadeAnimation'
 import Field from '../components/Field'
 import Help from '../Help'
@@ -18,8 +17,12 @@ import Toggle from '../components/Toggle'
 import axios from 'axios'
 import { confirmAlert } from 'react-confirm-alert'
 import getIncidentById from '../api/getIncidentById'
-import { toJpeg } from 'html-to-image'
+import mapMarker from '../mapMarker'
+import mapboxgl from 'mapbox-gl'
 import { toast } from 'react-toastify'
+
+mapboxgl.accessToken = process.env.MAPBOX_ACCESS_TOKEN
+mapboxgl.prewarm()
 
 function IncidentInformation() {
   // SEND GET USER REQUEST
@@ -29,6 +32,8 @@ function IncidentInformation() {
   // INFORMATION STATE
   const Account = React.useContext(AccountContext)
   const [status, setStatus] = React.useState('loading')
+  const [map, setMap] = React.useState(null)
+
   // INFORMATION STATE: INCIDENT
   const [incident, setIncident] = React.useState({
     name: null,
@@ -54,6 +59,79 @@ function IncidentInformation() {
     created_at: null,
     updated_at: null
   })
+
+  // ON RENDER, REVALIDATE INCIDENT AND CREATE MAP
+  React.useEffect(() => {
+    setMap(
+      new mapboxgl.Map({
+        center: [121.647584, 16.323105],
+        container: 'incident-map',
+        cooperativeGestures: true,
+        style: 'mapbox://styles/mapbox/satellite-streets-v11',
+        zoom: 8
+      })
+    )
+  }, [])
+
+  // AFTER CREATING MAP, ADD CONTROLS
+  React.useEffect(() => {
+    if (map) {
+      map.addControl(new mapboxgl.NavigationControl({ visualizePitch: true }))
+      map.addControl(new mapboxgl.FullscreenControl())
+      map.addControl(
+        new MapboxExportControl({
+          PageSize: Size.A4,
+          PageOrientation: PageOrientation.Portrait,
+          Format: Format.PNG,
+          DPI: DPI[96],
+          Crosshair: true,
+          PrintableArea: true,
+          accessToken: process.env.MAPBOX_ACCESS_TOKEN
+        })
+      )
+    }
+  }, [map])
+
+  // ON LOAD FARMER DATA
+  React.useEffect(() => {
+    if (map && Incident.data) {
+      let lat = Incident.data.latitude
+      let lng = Incident.data.longitude
+      map.resize()
+
+      // HAS COORDINATES
+      if (lat && lng) {
+        map.jumpTo({ center: [lng, lat], zoom: 17 })
+
+        // ON LOAD OF STYLE DATA
+        map.on('load', () => {
+          // INCIDENT COORDINATES
+          if (!map.getSource('incident-coordinates-src')) {
+            map.addSource('incident-coordinates-src', {
+              'type': 'geojson',
+              'data': { 'type': 'Feature', 'geometry': { 'type': 'Point', 'coordinates': [lng, lat] } }
+            })
+            map.addImage('incident-mark', mapMarker(100, '#DF2020', map), { pixelRatio: 2 })
+            map.addLayer({
+              'id': 'incident-layer',
+              'type': 'symbol',
+              'source': 'incident-coordinates-src',
+              'layout': { 'icon-image': 'incident-mark' }
+            })
+          } else {
+            map.getSource('incident-coordinates-src').setData({ 'type': 'Feature', 'geometry': { 'type': 'Point', 'coordinates': [lng, lat] } })
+          }
+        })
+      } else {
+        map.on('load', () => {
+          if (map.getSource('incident-coordinates-src')) {
+            map.jumpTo({ center: [121.647584, 16.323105], zoom: 8 })
+            map.getLayer('incident-layer') && map.setLayoutProperty('incident-layer', 'visibility', 'none')
+          }
+        })
+      }
+    }
+  }, [map, Incident.data])
 
   // ON FETCH INCIDENT
   React.useEffect(() => {
@@ -196,7 +274,7 @@ function IncidentInformation() {
             <Field label="Longitude" status={status} text={Help.displayNumber(incident.longitude)} />
           </SectionBody>
           <SectionBody>
-            <Field label="Location" status={status} text="[MAP HERE]" />
+            <div id="incident-map" className="map-container-incident" />
           </SectionBody>
           <div className="sub-section-header">2.5 Time of Incident</div>
           <SectionBody>

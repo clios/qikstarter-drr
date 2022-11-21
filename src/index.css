@@ -30,23 +30,19 @@ body {
   justify-content: center;
 }
 
+.mb-1 {
+  margin-bottom: 0.5rem;
+}
+
+/* MAP */
 .map-container {
   height: calc(100vh - 4.6rem);
   width: 100%;
 }
 
-.map-container-family {
+.map-container-incident {
   height: calc(100vh - 7rem);
   width: 100%;
-}
-
-.map-container-family-update {
-  height: calc(100vh - 20.5rem);
-  width: 100%;
-}
-
-.mb-1 {
-  margin-bottom: 0.5rem;
 }
 
 /* LEGENDS FOR DASHBOARD */
@@ -139,4 +135,18 @@ a:link {
 .sub-section-header {
   padding: 0.5rem 2rem;
   color: #20a8df;
+}
+
+/* FIX MAPBOX EXPORT */
+.mapboxgl-export-list {
+  background-color: hsl(226, 78%, 8%);
+}
+
+.mapboxgl-export-list label {
+  padding-right: 0.5rem;
+  padding-left: 0.5rem;
+}
+
+.mapboxgl-export-list button {
+  background-color: hsl(0, 0%, 99%) !important;
 }

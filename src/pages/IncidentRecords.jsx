@@ -1,6 +1,5 @@
 import { Add20, Download20, Filter20, Reset20 } from '@carbon/icons-react'
 
-import Account from '../json/account.json'
 import AccountContext from '../contexts/AccountContext'
 import Address from '../Address'
 import Authorization from '../components/Authorization'
@@ -10,7 +9,6 @@ import FadeAnimation from '../components/FadeAnimation'
 import Field from '../components/Field'
 import FormRow from '../components/FormRow'
 import Help from '../Help'
-import Incidents from '../json/incidents.json'
 import Input from '../components/Input'
 import PageContent from '../components/PageContent'
 import PaperView from '../components/PaperView'
@@ -20,12 +18,13 @@ import Select from '../components/Select'
 import Table from '../components/Table'
 import TableFooter from '../components/TableFooter'
 import TableToolbar from '../components/TableToolbar'
+import getIncidents from '../api/getIncidents'
 import { navigate } from '@reach/router'
 import { toast } from 'react-toastify'
 
 function IncidentRecords() {
   // INFORMATION STATE
-  // const Account = React.useContext(AccountContext)
+  const Account = React.useContext(AccountContext)
   const [status, setStatus] = React.useState('loading')
   const [display, setDisplay] = React.useState(false)
   const [totalCount, setTotalCount] = React.useState(0)
@@ -35,13 +34,14 @@ function IncidentRecords() {
   const [page, setPage] = React.useState(1)
   const [orders, setOrders] = React.useState('updated_at:desc')
   const [name, setName] = React.useState('')
+  const [types, setTypes] = React.useState('')
   const [address_province, setAddressProvince] = React.useState(Account.vicinity_province)
   const [address_municipality, setAddressMunicipality] = React.useState(Account.vicinity_municipality)
   const [address_barangay, setAddressBarangay] = React.useState(Account.vicinity_barangay)
   const [params, setParams] = React.useState({ limit, page, orders })
 
   // SEND GET INCIDENTS REQUEST
-  // const Incidents = getIncidents(params)
+  const Incidents = getIncidents(params)
 
   // UPDATE URL SEARCH PARAMETERS
   function updateParams() {
@@ -49,9 +49,10 @@ function IncidentRecords() {
     if (limit !== '') newParams.limit = limit
     if (page !== '') newParams.page = page
     if (orders !== '') newParams.orders = orders
-    // if (vicinity_province !== '') newParams.vicinity_province = vicinity_province
-    // if (vicinity_municipality !== '') newParams.vicinity_municipality = vicinity_municipality
-    // if (vicinity_barangay !== '') newParams.vicinity_barangay = vicinity_barangay
+    if (name !== '') newParams.name = name
+    if (types !== '') newParams.types = types
+    if (address_municipality !== '') newParams.municipal = address_municipality
+    if (address_barangay !== '') newParams.barangay = address_barangay
     setParams(newParams)
   }
 
@@ -62,7 +63,7 @@ function IncidentRecords() {
   }, [name])
 
   // ON QUICK UPDATE OF PARAMS
-  React.useEffect(() => updateParams(), [limit, page, orders])
+  React.useEffect(() => updateParams(), [limit, page, orders, types, address_municipality, address_barangay])
 
   // ON GET INCIDENTS
   React.useEffect(() => {
@@ -70,7 +71,7 @@ function IncidentRecords() {
     if (Incidents.error) setStatus('error')
     if (Incidents.data) {
       setStatus('success')
-      setTotalCount(Incidents.data?.total_count)
+      setTotalCount(Incidents.data?.records.total)
     }
     return () => setStatus('loading')
   }, [Incidents.loading, Incidents.error, Incidents.data])
@@ -78,21 +79,12 @@ function IncidentRecords() {
   // REFRESH AND RESET TABLE
   function refreshTable() {
     setStatus('loading')
-    setTimeout(() => {
+    Incidents.mutate().then(() => {
       setStatus('success')
-      setPage(1)
-      setLimit(50)
-      setName('')
-      setOrders('updated_at:desc')
-      // setVicinityProvince(Account.vicinity_province)
-      // setVicinityMunicipality(Account.vicinity_municipality)
-      // setVicinityBarangay(Account.vicinity_barangay)
-      // Users.mutate()
-    }, 500)
+    })
   }
 
   return (
-    // <Authorization permissions={Account.permissions} permission="read_incidents">
     <PageContent>
       <FadeAnimation>
         <TableToolbar
@@ -116,44 +108,46 @@ function IncidentRecords() {
           </ButtonIcon>
           <CSVLink
             filename={`INCIDENTS.csv`}
-            data={Incidents.data?.records || []}
+            data={Incidents.data?.records.incidents || []}
             headers={[
-              { label: 'Date Incident', key: 'incident_at' },
-              { label: 'Name of Incident', key: 'name' },
-              { label: 'Type', key: 'type' },
+              { label: 'ID', key: 'id' },
+              { label: 'Name', key: 'name' },
+              { label: 'Types', key: 'types' },
+              { label: 'Other Type', key: 'types_ex' },
+              { label: 'Municipality', key: 'municipal' },
               { label: 'Barangay', key: 'barangay' },
-              { label: 'Municipality', key: 'municipality' },
-              { label: 'Province', key: 'province' },
-              { label: 'Date Created', key: 'created_at' },
-              { label: 'Date Updated', key: 'updated_at' }
+              { label: 'Purok', key: 'purok' },
+              { label: 'Caller Name', key: 'caller_name' },
+              { label: 'Caller Number', key: 'caller_number' },
+              { label: 'Response Team', key: 'response_team' },
+              { label: 'Response Vehicle', key: 'response_vehicle' },
+              { label: 'Called At', key: 'called_at' },
+              { label: 'Occured At', key: 'occured_at' },
+              { label: 'Created At', key: 'created_at' },
+              { label: 'Updated At', key: 'updated_at' }
             ]}>
             <ButtonIcon label="Download" status={status} title="Download current table">
               <Download20 />
             </ButtonIcon>
           </CSVLink>
-          <ButtonIcon
-            label="Add Incident Record"
-            onClick={() => navigate('/incidents/records/add')}
-            // permission="write_user"
-            // permissions={Account.permissions}
-            status={status}>
+          <ButtonIcon label="Add Incident Record" onClick={() => navigate('/incidents/records/add')} status={status}>
             <Add20 />
           </ButtonIcon>
         </TableToolbar>
         <SearchBox className={display ? 'display' : 'hidden'}>
           <FormRow>
-            <Field label="Type" status={status}>
-              <Select>
+            <Field label="Type">
+              <Select onChange={(e) => setTypes(e.target.value)} value={types}>
                 <option value=""></option>
-                <option value="">TRAUMA</option>
-                <option value="">MEDICAL</option>
-                <option value="">OBSTETRIC</option>
-                <option value="">TRANSFER</option>
-                <option value="">OTHER</option>
+                <option value="trauma">TRAUMA</option>
+                <option value="medical">MEDICAL</option>
+                <option value="obstetric">OBSTETRIC</option>
+                <option value="transfer">TRANSFER</option>
+                <option value="vehicular">VEHICULAR</option>
+                <option value="other">OTHER</option>
               </Select>
             </Field>
-            {/* {Account.vicinity_municipality === '' && ( */}
-            <Field label="Municipality" status={status}>
+            <Field label="Municipality">
               <Select
                 onChange={(e) => {
                   setAddressBarangay('')
@@ -168,9 +162,7 @@ function IncidentRecords() {
                 ))}
               </Select>
             </Field>
-            {/* )} */}
-            {/* {Account.vicinity_barangay === '' && ( */}
-            <Field label="Barangay" status={status}>
+            <Field label="Barangay">
               <Select onChange={(e) => setAddressBarangay(e.target.value)} value={address_barangay}>
                 <option value="">ALL BARANGAYS</option>
                 {Address.Barangays('02', 'QUIRINO', address_municipality).map((item, index) => (
@@ -180,13 +172,18 @@ function IncidentRecords() {
                 ))}
               </Select>
             </Field>
-            {/* )} */}
-            <Field label="Order By" status={status}>
+            <Field label="Order By">
               <Select onChange={(e) => setOrders(e.target.value)} value={orders}>
-                <option value="name:desc">NAME (DESC)</option>
+                <option value="id:asc">ID (ASC)</option>
+                <option value="id:desc">ID (DESC)</option>
                 <option value="name:asc">NAME (ASC)</option>
-                <option value="name:desc">DATE OCCURED (DESC)</option>
-                <option value="name:asc">DATE OCCURED (ASC)</option>
+                <option value="name:desc">NAME (DESC)</option>
+                <option value="called_at:asc">CALLED AT (ASC)</option>
+                <option value="called_at:desc">CALLED AT (DESC)</option>
+                <option value="occured_at:asc">OCCURED AT (ASC)</option>
+                <option value="occured_at:desc">OCCURED AT (DESC)</option>
+                <option value="updated_at:asc">UPDATED AT (ASC)</option>
+                <option value="updated_at:desc">UPDATED AT (DESC)</option>
               </Select>
             </Field>
           </FormRow>
@@ -194,18 +191,20 @@ function IncidentRecords() {
         <Table
           status={status}
           emptyLabel="No incidents found"
-          headers={['Index', 'Date Occured', 'Name', 'Type', 'Municipality', 'Barangay'].filter(Boolean)}
+          headers={['Index', 'Incident ID', 'Date Occured', 'Name of Incident', 'Type of Incident', 'Address'].filter(Boolean)}
           total={totalCount}>
           {status === 'success' &&
-            Incidents.data?.records.map((item, index) => {
+            Incidents.data?.records.incidents.map((item, index) => {
               return (
                 <tr key={index} onClick={() => navigate(`/incidents/records/${item.id}`)} title="Click to view more details">
                   <td>{Help.displayTableIndex(limit, page, index)}</td>
-                  <td>{Help.displayDate(item.incident_at)}</td>
+                  <td>{item.id}</td>
+                  <td>{Help.displayDate(item.occured_at)}</td>
                   <td>{item.name}</td>
-                  <td>{item.type}</td>
-                  <td>{item.municipality}</td>
-                  <td>{item.barangay}</td>
+                  <td>{Help.displayTags(item.types)}</td>
+                  <td>
+                    {item.municipal}, {item.barangay}
+                  </td>
                 </tr>
               )
             })}
@@ -221,7 +220,6 @@ function IncidentRecords() {
         />
       </FadeAnimation>
     </PageContent>
-    // </Authorization>
   )
 }
 

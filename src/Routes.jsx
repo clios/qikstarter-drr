@@ -1,11 +1,5 @@
 import { Redirect, Router } from '@reach/router'
 
-import AgricultureFlood from './pages/AgricultureFlood'
-import AgricultureLandslide from './pages/AgricultureLandslide'
-import AgricultureTabs from './layouts/AgricultureTabs'
-import CriticalInfrastructureFlood from './pages/CriticalInfrastructureFlood'
-import CriticalInfrastructureLandslide from './pages/CriticalInfrastructureLandslide'
-import CriticalInfrastructureTabs from './layouts/CriticalInfrastructureTabs'
 import EvacuationCenterInformation from './pages/EvacuationCenterInformation'
 import EvacuationCenterMap from './pages/EvacuationCenterMap'
 import EvacuationCenterRecords from './pages/EvacuationCenterRecords'
@@ -20,19 +14,6 @@ import IncidentUpdate from './pages/IncidentUpdate'
 import PopulationDashboard from './pages/PopulationDashboard'
 import PopulationTabs from './layouts/PopulationTabs'
 import React from 'react'
-import ResidentCreate from './pages/ResidentCreate'
-import ResidentDashboard from './pages/ResidentDashboard'
-import ResidentMap from './pages/ResidentMap'
-import ResidentProfile from './pages/ResidentProfile'
-import ResidentRecords from './pages/ResidentRecords'
-import ResidentTabs from './layouts/ResidentTabs'
-import ResidentUpdate from './pages/ResidentUpdate'
-import RoadLifelineFlood from './pages/RoadLifelineFlood'
-import RoadLifelineLandslide from './pages/RoadLifelineLandslide'
-import RoadLifelineTabs from './layouts/RoadLifelineTabs'
-import SettlementAreaFlood from './pages/SettlementAreaFlood'
-import SettlementAreaLandslide from './pages/SettlementAreaLandslide'
-import SettlementAreaTabs from './layouts/SettlementAreaTabs'
 import Sider from './layouts/Sider'
 import SignIn from './pages/SignIn'
 import UserCreate from './pages/UserCreate'
@@ -66,34 +47,10 @@ function Routes() {
           <VRIFlood path="/flood" />
         </VRITabs>
 
-        <Redirect from="/settlement-area" to="/settlement-area/landslide" noThrow />
-        <SettlementAreaTabs path="settlement-area">
-          <SettlementAreaLandslide path="/landslide" />
-          <SettlementAreaFlood path="/flood" />
-        </SettlementAreaTabs>
-
         <Redirect from="/population" to="/population/dashboard" noThrow />
         <PopulationTabs path="population">
           <PopulationDashboard path="/dashboard" />
         </PopulationTabs>
-
-        <Redirect from="/agriculture" to="/agriculture/landslide" noThrow />
-        <AgricultureTabs path="agriculture">
-          <AgricultureLandslide path="/landslide" />
-          <AgricultureFlood path="/flood" />
-        </AgricultureTabs>
-
-        <Redirect from="/critical-infrastructure" to="/critical-infrastructure/landslide" noThrow />
-        <CriticalInfrastructureTabs path="critical-infrastructure">
-          <CriticalInfrastructureLandslide path="/landslide" />
-          <CriticalInfrastructureFlood path="/flood" />
-        </CriticalInfrastructureTabs>
-
-        <Redirect from="/road-lifeline" to="/road-lifeline/landslide" noThrow />
-        <RoadLifelineTabs path="road-lifeline">
-          <RoadLifelineLandslide path="/landslide" />
-          <RoadLifelineFlood path="/flood" />
-        </RoadLifelineTabs>
 
         <Redirect from="/incidents" to="/incidents/dashboard" noThrow />
         <IncidentTabs path="incidents">
@@ -113,16 +70,6 @@ function Routes() {
           <EvacuationCenterInformation path="/centers/:evacuation_center_id" />
           <EvacuationCenterMap path="/map" />
         </EvacuationTabs>
-
-        <Redirect from="/residents" to="/residents/dashboard" noThrow />
-        <ResidentTabs path="residents">
-          <ResidentDashboard path="/dashboard" />
-          <ResidentRecords path="/records" />
-          <ResidentCreate path="/records/add" />
-          <ResidentProfile path="/records/:resident_id" />
-          <ResidentUpdate path="/records/:resident_id/edit" />
-          <ResidentMap path="/map" />
-        </ResidentTabs>
 
         <Redirect from="/users" to="/users/records" noThrow />
         <UserTabs path="users">

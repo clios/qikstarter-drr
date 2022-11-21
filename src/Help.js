@@ -54,8 +54,11 @@ export default Help = {
   formDataOrEmptyString: function (data) {
     return data || ''
   },
+  formInputDateTime: function (date, time) {
+    return date ? dayjs(`${date}T${time}:00`).format('YYYY-MM-DDTHH:mm:ssZ') : null
+  },
   formInputDate: function (date) {
-    return date ? dayjs(date).format('YYYY-MM-DD') : ''
+    return date ? dayjs(date).format('YYYY-MM-DD') : null
   },
   formInputNumber: function (number) {
     if (number === '') return null

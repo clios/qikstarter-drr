@@ -8,6 +8,7 @@ import EvacuationTabs from './layouts/EvacuationTabs'
 import IncidentCreate from './pages/IncidentCreate'
 import IncidentDashboard from './pages/IncidentDashboard'
 import IncidentInformation from './pages/IncidentInformation'
+import IncidentMap from './pages/IncidentMap'
 import IncidentRecords from './pages/IncidentRecords'
 import IncidentTabs from './layouts/IncidentTabs'
 import IncidentUpdate from './pages/IncidentUpdate'
@@ -61,6 +62,7 @@ function Routes() {
           <IncidentUpdate path="/records/:incident_id/edit" />
           <VictimCreate path="/records/:incident_id/victims/add" />
           <VictimInformation path="/records/:incident_id/victims/:victim_id" />
+          <IncidentMap path="/map" />
         </IncidentTabs>
 
         <Redirect from="/evacuation" to="/evacuation/dashboard" noThrow />

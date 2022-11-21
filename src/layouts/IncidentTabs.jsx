@@ -20,6 +20,9 @@ function IncidentTabs(props) {
           <Link className="tabs-item" to="/incidents/records" getProps={isPartiallyActive}>
             Records
           </Link>
+          <Link className="tabs-item" to="/incidents/map" getProps={isPartiallyActive}>
+            Map
+          </Link>
         </div>
       </div>
       <div>{props.children}</div>

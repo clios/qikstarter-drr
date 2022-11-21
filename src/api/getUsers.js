@@ -7,7 +7,7 @@ const fetcher = (url) =>
   axios
     .get(url, {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('qikstarter-drr-token')}`
+        Authorization: `Bearer ${localStorage.getItem('q-drr-web-token')}`
       }
     })
     .then((res) => {

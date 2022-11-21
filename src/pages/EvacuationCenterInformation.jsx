@@ -77,7 +77,7 @@ function EvacuationCenterInformation() {
   // DELETE RESIDENT
   function deleteEvacuationCenter() {
     const URL = process.env.BASE_URL + '/residents/' + ROUTE.resident_id
-    const CONFIG = { headers: { Authorization: `Bearer ${localStorage.getItem('qikstarter-drr-token')}` } }
+    const CONFIG = { headers: { Authorization: `Bearer ${localStorage.getItem('q-drr-web-token')}` } }
 
     confirmAlert({
       title: 'Delete Evacuation Center Information',

@@ -15,7 +15,7 @@ import { navigate } from '@reach/router'
 
 function Sider({ children }) {
   // SEND GET ACCOUNT REQUEST
-  const has_token = localStorage.getItem('qikstarter-drr-token') ? true : false
+  const has_token = localStorage.getItem('q-drr-web-token') ? true : false
   const Account = getAccount(has_token, { refreshInterval: 300000 })
 
   // INFORMATION STATE
@@ -31,13 +31,13 @@ function Sider({ children }) {
   // SEND SIGN OUT REQUEST
   function signOut() {
     const URL = process.env.BASE_URL + '/logout'
-    const CONFIG = { headers: { Authorization: `Bearer ${localStorage.getItem('qikstarter-drr-token')}` } }
+    const CONFIG = { headers: { Authorization: `Bearer ${localStorage.getItem('q-drr-web-token')}` } }
 
     axios
       .post(URL, null, CONFIG)
       .then((response) => {
         if (response.status === 204) {
-          localStorage.removeItem('qikstarter-drr-token')
+          localStorage.removeItem('q-drr-web-token')
           navigate('/', { replace: true })
         } else if (response.status === 403) toast.error('User credential is forbidden')
         else if (response.status === 500) toast.error('Unexpected server error occurs')
@@ -53,7 +53,7 @@ function Sider({ children }) {
 
   // IF EXISTING ACCOUNT SESSION, SIGN OUT
   if (Account.error?.response?.status === 403) {
-    localStorage.removeItem('qikstarter-drr-token')
+    localStorage.removeItem('q-drr-web-token')
     navigate('/', { replace: true })
     location.reload()
   }

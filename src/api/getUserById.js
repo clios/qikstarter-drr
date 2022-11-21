@@ -6,7 +6,7 @@ const fetcher = (url) =>
   axios
     .get(url, {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('qikstarter-drr-token')}`
+        Authorization: `Bearer ${localStorage.getItem('q-drr-web-token')}`
       }
     })
     .then((res) => res.data)
@@ -17,7 +17,7 @@ const fetcher = (url) =>
 export default function getUserById(user_id, swr_options) {
   const url = process.env.BASE_URL + `/users/${user_id}`
 
-  const { data, error } = useSWR(url, fetcher, {
+  const { data, error, mutate } = useSWR(url, fetcher, {
     onErrorRetry: (error) => {
       if (error.status === 404) return
       if (error.status === 403) return
@@ -34,6 +34,7 @@ export default function getUserById(user_id, swr_options) {
   return {
     data: data,
     loading: !error && !data,
-    error: error
+    error: error,
+    mutate: mutate
   }
 }

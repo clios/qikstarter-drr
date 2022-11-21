@@ -14,7 +14,7 @@ import { toast } from 'react-toastify'
 
 function SignIn() {
   // SEND GET ACCOUNT REQUEST
-  const has_token = localStorage.getItem('qikstarter-drr-token') ? true : false
+  const has_token = localStorage.getItem('q-drr-web-token') ? true : false
   const Account = getAccount(has_token)
 
   // INFORMATION STATE
@@ -46,7 +46,7 @@ function SignIn() {
       .then((response) => {
         setStatus('success')
         if (response.status === 201) {
-          localStorage.setItem('qikstarter-drr-token', response.headers['token'])
+          localStorage.setItem('q-drr-web-token', response.headers['token'])
           toast.success('Welcome ' + response?.data?.name)
           navigate('/incidents/records', { replace: true })
         }

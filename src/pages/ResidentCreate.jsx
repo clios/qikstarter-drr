@@ -47,7 +47,7 @@ function ResidentCreate() {
     //   municipality: municipality,
     //   province: province
     // }
-    // const CONFIG = { headers: { Authorization: `Bearer ${localStorage.getItem('qikstarter-drr-token')}` } }
+    // const CONFIG = { headers: { Authorization: `Bearer ${localStorage.getItem('q-drr-web-token')}` } }
 
     // axios
     //   .post(URL, DATA, CONFIG)

@@ -1,3 +1,4 @@
+import { Close20, Information24 } from '@carbon/icons-react'
 import { navigate, useParams } from '@reach/router'
 
 import AccountContext from '../contexts/AccountContext'
@@ -6,10 +7,10 @@ import Authorization from '../components/Authorization'
 import Button from '../components/Button'
 import ButtonIcon from '../components/ButtonIcon'
 import Checkbox from '../components/Checkbox'
-import { Close20 } from '@carbon/icons-react'
 import FadeAnimation from '../components/FadeAnimation'
 import Field from '../components/Field'
 import Form from '../components/Form'
+import FormError from '../components/FormError'
 import FormFooter from '../components/FormFooter'
 import FormRow from '../components/FormRow'
 import Help from '../Help'
@@ -23,48 +24,22 @@ import axios from 'axios'
 import getUserById from '../api/getUserById'
 import { toast } from 'react-toastify'
 
-const User = {
-  data: {
-    id: 1,
-    name: 'CLIEMTOR B. FABROS',
-    email: 'cliemtor@devhaus.ph',
-    position: 'SYSTEM ADMINISTRATOR',
-    inactive: false,
-    office: 'DEVHAUS TECHNOLOGIES',
-    vicinity_barangay: '',
-    vicinity_municipality: '',
-    vicinity_province: 'QUIRINO',
-    permissions: ['read_users', 'write_users', 'read_tasks', 'write_tasks', 'read_dashboard', 'read_map'],
-    created_at: '2021-11-05T06:11:56.926268Z',
-    updated_at: '2021-11-05T06:11:56.926268Z'
-  }
-}
-
 function UserUpdate() {
   // SEND GET USER REQUEST
   const ROUTE = useParams()
-  // const User = getUserById(ROUTE.user_id)
+  const User = getUserById(ROUTE.user_id)
 
-  // INFORMATIONAL STATE
+  // INFORMATION STATE
   const Account = React.useContext(AccountContext)
   const [status, setStatus] = React.useState('success')
   const [helper, setHelper] = React.useState({})
+  const [error, setError] = React.useState({})
 
   // INPUT STATE
   const [name, setName] = React.useState('')
-  const [email, setEmail] = React.useState('')
-  const [deactivated, setDeactivated] = React.useState('')
   const [office, setOffice] = React.useState('')
-  const [position, setPosition] = React.useState('')
-  const [vicinity_barangay, setVicinityBarangay] = React.useState('')
-  const [vicinity_municipality, setVicinityMunicipality] = React.useState('')
-  const [vicinity_province, setVicinityProvince] = React.useState('QUIRINO')
-  const [read_farmer, setReadFarmer] = React.useState(true)
-  const [write_farmer, setWriteFarmer] = React.useState(true)
-  const [read_farm, setReadFarm] = React.useState(true)
-  const [write_farm, setWriteFarm] = React.useState(true)
-  const [read_user, setReadUser] = React.useState(false)
-  const [write_user, setWriteUser] = React.useState(false)
+  const [email, setEmail] = React.useState('')
+  const [role, setRole] = React.useState('editor')
 
   // ON FETCH USER
   React.useEffect(() => {
@@ -76,16 +51,7 @@ function UserUpdate() {
       setName(User.data.name)
       setEmail(User.data.email)
       setOffice(User.data.office)
-      setPosition(User.data.position)
-      // setVicinityMunicipality(Help.formDataOrEmptyString(R.data.vicinity_municipality))
-      // setVicinityBarangay(Help.formDataOrEmptyString(R.data.vicinity_barangay))
-      setDeactivated(User.data.deactivated ? 'yes' : 'no')
-      setReadFarmer(Help.checkPermission(User.data.permissions, 'read_farmer'))
-      setWriteFarmer(Help.checkPermission(User.data.permissions, 'write_farmer'))
-      setReadFarm(Help.checkPermission(User.data.permissions, 'read_farm'))
-      setWriteFarm(Help.checkPermission(User.data.permissions, 'write_farm'))
-      setReadUser(Help.checkPermission(User.data.permissions, 'read_user'))
-      setWriteUser(Help.checkPermission(User.data.permissions, 'write_user'))
+      setRole(User.data.role)
     }
 
     return () => setStatus('loading')
@@ -94,69 +60,50 @@ function UserUpdate() {
   // SEND PATCH USER REQUEST
   function submitForm(e) {
     e.preventDefault()
-    // setStatus('loading')
+    setStatus('loading')
 
-    // const URL = process.env.BASE_URL + '/users/' + ROUTE.user_id
-    // const DATA = {
-    //   email: email,
-    //   name: name?.toUpperCase(),
-    //   office: office?.toUpperCase(),
-    //   position: position?.toUpperCase(),
-    //   vicinity_province: 'QUIRINO',
-    //   vicinity_municipality: vicinity_municipality,
-    //   vicinity_barangay: vicinity_barangay,
-    //   deactivated: Help.formSelect(deactivated),
-    //   permissions: [
-    //     read_farmer && 'read_farmer',
-    //     write_farmer && 'write_farmer',
-    //     read_farm && 'read_farm',
-    //     write_farm && 'write_farm',
-    //     read_user && 'read_user',
-    //     write_user && 'write_user'
-    //   ].filter(Boolean)
-    // }
-    // const CONFIG = { headers: { Authorization: `Bearer ${localStorage.getItem('q-agri-token')}` } }
+    const URL = process.env.BASE_URL + '/users/' + ROUTE.user_id
+    const DATA = {
+      email: email,
+      name: name?.toUpperCase(),
+      office: office?.toUpperCase(),
+      role: role
+    }
+    const CONFIG = { headers: { Authorization: `Bearer ${localStorage.getItem('q-drr-web-token')}` } }
 
-    // axios
-    //   .patch(URL, DATA, CONFIG)
-    //   .then((response) => {
-    //     if (response.status === 201) {
-    //       setStatus('success')
-    toast.success('User account has been updated')
-    navigate('/users/records/' + ROUTE.user_id, { replace: true })
-    //   }
-    // })
-    // .catch((error) => {
-    //   setStatus('success')
-    //   if (error.response) {
-    //     if (error.response?.status === 400) {
-    //       setHelper(error.response.data)
-    //       toast.error('Form input is invalid')
-    //     } else if (error.response?.status === 403) toast.error('User credential is forbidden')
-    //     else if (error.response?.status === 404) toast.error('User was not found')
-    //     else if (error.response?.status === 500) toast.error('Unexpected server error')
-    //   } else if (error.request) console.error(error.request)
-    //   else console.error('Error', error.message)
-    // })
+    axios
+      .patch(URL, DATA, CONFIG)
+      .then((response) => {
+        if (response.status === 201) {
+          setStatus('success')
+          toast.success('User account has been updated')
+          navigate('/users/records/' + ROUTE.user_id, { replace: true })
+        }
+      })
+      .catch((error) => {
+        setStatus('success')
+        if (error.response) {
+          if (error.response?.status === 400) {
+            setHelper(error.response.data)
+            toast.error('Form input is invalid')
+          } else if (error.response?.status === 403) toast.error('User credential is forbidden')
+          else if (error.response?.status === 404) toast.error('User was not found')
+          else if (error.response?.status === 500) toast.error('Unexpected server error')
+        } else if (error.request) console.error(error.request)
+        else console.error('Error', error.message)
+      })
   }
 
   return (
-    // <Authorization permissions={Account.permissions} permission="write_user">
-    // {/* {status === 'success' && (
-    //   <VicinityChecker
-    //     accountVicinity={Help.displayTags([Account.vicinity_province, Account.vicinity_municipality, Account.vicinity_barangay])}
-    //     recordAddress={Help.displayTags([User.data?.vicinity_province, User.data?.vicinity_municipality, User.data?.vicinity_barangay])}
-    //   />
-    // )} */}
     <PageContent>
       <FadeAnimation>
         <Form status={status}>
           <SectionHeader bigTitle="Existing User Account Form">
-            <ButtonIcon onClick={() => navigate(`/users/records/${ROUTE.user_id}`, { replace: true })} status={status} title="Close">
+            <ButtonIcon color="red" onClick={() => navigate(`/users/records/${ROUTE.user_id}`, { replace: true })} status={status} title="Close">
               <Close20 />
             </ButtonIcon>
           </SectionHeader>
-          <SectionHeader title="1. Personal Information" />
+          <SectionHeader title="1. Personal" />
           <FormRow>
             <Field error={helper.name} label="Full Name" status={status}>
               <Input uppercase onChange={(e) => setName(e.target.value)} required size={30} type="text" value={name} />
@@ -165,36 +112,20 @@ function UserUpdate() {
               <Input onChange={(e) => setEmail(e.target.value)} required size={30} type="email" value={email} />
             </Field>
           </FormRow>
-          <SectionHeader title="2. Office Information" />
+          <SectionHeader title="2. Office" />
           <FormRow>
             <Field label="Office" status={status}>
               <Input uppercase onChange={(e) => setOffice(e.target.value)} required size={30} type="text" value={office} />
             </Field>
-            <Field label="Position" status={status}>
-              <Input uppercase onChange={(e) => setPosition(e.target.value)} required size={30} type="text" value={position} />
-            </Field>
-          </FormRow>
-          <SectionHeader title="3. Permissions" />
-          <FormRow status={status}>
-            <Field label="Deactivated" status={status}>
-              <Select onChange={(e) => setDeactivated(e.target.value)} value={deactivated}>
-                <option value="yes">YES</option>
-                <option value="no">NO</option>
+            <Field label="Role" status={status}>
+              <Select onChange={(e) => setRole(e.target.value)} value={role}>
+                <option value="admin">ADMIN</option>
+                <option value="editor">EDITOR</option>
+                <option value="subscriber">SUBSCRIBER</option>
               </Select>
             </Field>
           </FormRow>
-          <FormRow status={status}>
-            <Checkbox checked={read_farmer} onChange={(e) => setReadFarmer(e.target.checked)} text="Search and View Farmer Records" />
-            <Checkbox checked={write_farmer} onChange={(e) => setWriteFarmer(e.target.checked)} text="Add, Edit and Delete Farmer Records" />
-          </FormRow>
-          <FormRow status={status}>
-            <Checkbox checked={read_farm} onChange={(e) => setReadFarm(e.target.checked)} text="View Farm Records" />
-            <Checkbox checked={write_farm} onChange={(e) => setWriteFarm(e.target.checked)} text="Add, Edit and Delete Farm Records" />
-          </FormRow>
-          <FormRow status={status}>
-            <Checkbox checked={read_user} onChange={(e) => setReadUser(e.target.checked)} text="Search and View User Accounts" />
-            <Checkbox checked={write_user} onChange={(e) => setWriteUser(e.target.checked)} text="Add, Edit and Delete User Accounts" />
-          </FormRow>
+          <FormError error={error} />
           <FormFooter>
             <Button
               disabled={status === 'loading'}
@@ -209,7 +140,6 @@ function UserUpdate() {
         </Form>
       </FadeAnimation>
     </PageContent>
-    // </Authorization>
   )
 }
 

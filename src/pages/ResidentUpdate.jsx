@@ -94,7 +94,7 @@ function ResidentUpdate() {
     //   province: province
     //   ].filter(Boolean)
     // }
-    // const CONFIG = { headers: { Authorization: `Bearer ${localStorage.getItem('qikstarter-drr-token')}` } }
+    // const CONFIG = { headers: { Authorization: `Bearer ${localStorage.getItem('q-drr-web-token')}` } }
 
     // axios
     //   .patch(URL, DATA, CONFIG)

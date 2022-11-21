@@ -17,43 +17,61 @@ import SectionHeader from '../components/SectionHeader'
 import Toggle from '../components/Toggle'
 import axios from 'axios'
 import { confirmAlert } from 'react-confirm-alert'
+import getIncidentById from '../api/getIncidentById'
 import { toJpeg } from 'html-to-image'
 import { toast } from 'react-toastify'
-
-const Incident = {
-  data: {
-    'id': 1,
-    'incident_at': '1995-12-08T00:00:00',
-    'name': 'VEHICULAR ACCIDENT',
-    'type': 'TRAUMA',
-    'barangay': 'MAGSAYSAY',
-    'municipality': 'SAGUDAY',
-    'province': 'QUIRINO',
-    'created_at': '2021-11-05T06:11:56.926268Z',
-    'updated_at': '2021-11-05T06:11:56.926268Z'
-  }
-}
 
 function IncidentInformation() {
   // SEND GET USER REQUEST
   const ROUTE = useParams()
+  const Incident = getIncidentById(ROUTE.incident_id)
 
   // INFORMATION STATE
   const Account = React.useContext(AccountContext)
   const [status, setStatus] = React.useState('loading')
-  const [name, setName] = React.useState('')
-  const [updated_at, setUpdatedAt] = React.useState('')
+  // INFORMATION STATE: INCIDENT
+  const [incident, setIncident] = React.useState({
+    name: null,
+    types: [],
+    types_ex: null,
+    municipal: null,
+    barangay: null,
+    purok: null,
+    latitude: null,
+    longitude: null,
+    caller_name: null,
+    caller_number: null,
+    response_team: null,
+    response_vehicle: null,
+    involved_vehicle_motorcycle: null,
+    involved_vehicle_hatchback: null,
+    involved_vehicle_sedan: null,
+    involved_vehicle_suv: null,
+    involved_vehicle_van: null,
+    involved_vehicle_pickup: null,
+    called_at: null,
+    occured_at: null,
+    created_at: null,
+    updated_at: null
+  })
 
   // ON FETCH INCIDENT
   React.useEffect(() => {
-    setStatus('success')
+    if (Incident.loading) setStatus('loading')
+    if (Incident.error) setStatus('error')
+
+    if (Incident.data) {
+      setStatus('success')
+      setIncident(Incident.data)
+    }
+
     return () => setStatus('loading')
-  }, [])
+  }, [Incident.loading, Incident.error, Incident.data])
 
   // DELETE INCIDENT
   function deleteIncident() {
-    const URL = process.env.BASE_URL + '/incidents/' + ROUTE.user_id
-    const CONFIG = { headers: { Authorization: `Bearer ${localStorage.getItem('q-drr-token')}` } }
+    const URL = process.env.BASE_URL + '/incidents/' + ROUTE.incident_id
+    const CONFIG = { headers: { Authorization: `Bearer ${localStorage.getItem('q-drr-web-token')}` } }
 
     confirmAlert({
       title: 'Delete Incident Record',
@@ -62,24 +80,24 @@ function IncidentInformation() {
         {
           label: 'Delete',
           onClick: () => {
-            // axios
-            //   .delete(URL, CONFIG)
-            //   .then((response) => {
-            //     if (response.status === 204) {
-            //       setStatus('success')
-            toast.success('Incident record has been deleted')
-            navigate('/incidents/records')
-            //   }
-            // })
-            // .catch((error) => {
-            //   setStatus('success')
-            //   if (error.response) {
-            //     if (error.response?.status === 403) toast.error('User credential is forbidden')
-            //     else if (error.response?.status === 404) toast.error('User was not found')
-            //     else if (error.response?.status === 500) toast.error('Unexpected server error')
-            //   } else if (error.request) console.error(error.request)
-            //   else console.error('Error', error.message)
-            // })
+            axios
+              .delete(URL, CONFIG)
+              .then((response) => {
+                if (response.status === 204) {
+                  setStatus('success')
+                  toast.success('Incident record has been deleted')
+                  navigate('/incidents/records')
+                }
+              })
+              .catch((error) => {
+                setStatus('success')
+                if (error.response) {
+                  if (error.response?.status === 403) toast.error('User credential is forbidden')
+                  else if (error.response?.status === 404) toast.error('Incident was not found')
+                  else if (error.response?.status === 500) toast.error('Unexpected server error')
+                } else if (error.request) console.error(error.request)
+                else console.error('Error', error.message)
+              })
           }
         },
         { label: 'Cancel' }
@@ -88,48 +106,14 @@ function IncidentInformation() {
   }
 
   return (
-    // <Authorization permissions={Account.permissions} permission="read_user">
-    // {/* {status === 'success' && (
-    //   <VicinityChecker
-    //     accountVicinity={Help.displayTags([Account.vicinity_province, Account.vicinity_municipality, Account.vicinity_barangay])}
-    //     recordAddress={Help.displayTags([User.data?.vicinity_province, User.data?.vicinity_municipality, User.data?.vicinity_barangay])}
-    //   />
-    // )} */}
     <PageContent>
       <FadeAnimation>
         <PaperView>
           <SectionHeader bigTitle="Incident Rescue Information">
-            <CSVLink
-              filename="INCIDENT.csv"
-              data={[{ ...Incident.data }] || []}
-              headers={[
-                { label: 'Name', key: 'name' },
-                { label: 'Email', key: 'email' },
-                { label: 'Office', key: 'office' },
-                { label: 'Position', key: 'position' },
-                { label: 'Permissions', key: 'permissions' },
-                { label: 'Deactivated', key: 'deactivated' },
-                { label: 'Date Created', key: 'created_at' },
-                { label: 'Date Updated', key: 'updated_at' }
-              ]}>
-              <ButtonIcon status={status} title="Download User Info">
-                <Download20 />
-              </ButtonIcon>
-            </CSVLink>
-            <ButtonIcon
-              // onClick={() => navigate('/incidents/records/' + ROUTE.incident_id + '/edit')}
-              // permission="write_user"
-              // permissions={Account.permissions}
-              status={status}
-              title="Edit incident record">
+            <ButtonIcon onClick={() => navigate('/incidents/records/' + ROUTE.incident_id + '/edit')} status={status} title="Edit incident record">
               <Edit20 />
             </ButtonIcon>
-            <ButtonIcon
-              onClick={deleteIncident}
-              // permission="write_user"
-              // permissions={Account.permissions}
-              status={status}
-              title="Delete incident record">
+            <ButtonIcon onClick={deleteIncident} status={status} title="Delete incident record">
               <TrashCan20 />
             </ButtonIcon>
             <ButtonIcon color="red" onClick={() => navigate('/incidents/records', { replace: true })} status={status} title="Close">
@@ -138,72 +122,87 @@ function IncidentInformation() {
           </SectionHeader>
           <SectionHeader title="1. Incident Response" />
           <SectionBody>
-            <Field label="Date and Time" status={status} text="AUG 3, 2021 08:52 AM" />
+            <Field label="Date and Time Called" status={status} text={Help.displayDateTimeSimple(incident.called_at)} />
           </SectionBody>
           <SectionBody>
-            <Field label="Name of Caller" status={status} text="DONDIE ADUWAN" />
-            <Field label="Caller Contact #" status={status} text={'09123456789'} />
+            <Field label="Name of Caller" status={status} text={Help.displayText(incident.caller_name)} />
+            <Field label="Caller Contact #" status={status} text={Help.displayText(incident.caller_number)} />
           </SectionBody>
           <SectionBody>
-            <Field label="Team" status={status} text="CHARLIE" />
-            <Field label="Vehicle" status={status} text="AMBULANCE VICKY" />
+            <Field label="Team" status={status} text={Help.displayText(incident.response_team)} />
+            <Field label="Vehicle" status={status} text={Help.displayText(incident.response_vehicle)} />
           </SectionBody>
           <SectionHeader title="2. Incident Information" />
-          <SectionBody title="Type/s of Incident">
-            <SectionBody>
-              <Field label="Trauma" status={status}>
-                <Toggle available={true} />
-              </Field>
-              <Field label="Medical" status={status}>
-                <Toggle available={false} />
-              </Field>
-              <Field label="Obstetric" status={status}>
-                <Toggle available={true} />
-              </Field>
-              <Field label="Transfer" status={status}>
-                <Toggle available={false} />
-              </Field>
-              <Field label="Vehicular" status={status}>
-                <Toggle available={true} />
-              </Field>
-              <Field label="Others" status={status}>
-                <Toggle available={false} />
-              </Field>
-            </SectionBody>
+          <div className="sub-section-header">2.1 Type/s of Incident</div>
+          <SectionBody>
+            <Field label="Trauma" status={status}>
+              <Toggle available={Help.findInArray(incident.types, 'trauma')} />
+            </Field>
+            <Field label="Medical" status={status}>
+              <Toggle available={Help.findInArray(incident.types, 'medical')} />
+            </Field>
+            <Field label="Obstetric" status={status}>
+              <Toggle available={Help.findInArray(incident.types, 'obstetric')} />
+            </Field>
+            <Field label="Transfer" status={status}>
+              <Toggle available={Help.findInArray(incident.types, 'transfer')} />
+            </Field>
+            <Field label="Vehicular" status={status}>
+              <Toggle available={Help.findInArray(incident.types, 'vehicular')} />
+            </Field>
+            <Field label="Other" status={status}>
+              <Toggle available={Help.findInArray(incident.types, 'other')} />
+            </Field>
+            {Help.findInArray(incident.types, 'other') && <Field label="Specified" text={Help.displayText(incident.types_ex)} />}
           </SectionBody>
-          <SectionBody title="Name of Incident">
-            <SectionBody>
-              <Field status={status} text="TRANSPORT" />
-            </SectionBody>
+          <div className="sub-section-header">2.2 Name of Incident</div>
+          <SectionBody>
+            <Field status={status} text={Help.displayText(incident.name)} />
           </SectionBody>
-          <SectionBody title="Vehicle/s Involved">
+          <div className="sub-section-header">2.3 Vehicle/s Involved</div>
+          {Help.findInArray(incident.types, 'vehicular') ? (
             <SectionBody>
-              <Field label="SUV" status={status} text="1" />
-              <Field label="Motorcycle" status={status} text="1" />
+              {incident.involved_vehicle_motorcycle > 0 && (
+                <Field label="Motorcycle" status={status} text={Help.displayNumberWithComma(incident.involved_vehicle_motorcycle)} />
+              )}
+              {incident.involved_vehicle_hatchback > 0 && (
+                <Field label="Hatchback" status={status} text={Help.displayNumberWithComma(incident.involved_vehicle_hatchback)} />
+              )}
+              {incident.involved_vehicle_sedan > 0 && (
+                <Field label="Sedan" status={status} text={Help.displayNumberWithComma(incident.involved_vehicle_sedan)} />
+              )}
+              {incident.involved_vehicle_suv > 0 && (
+                <Field label="Suv" status={status} text={Help.displayNumberWithComma(incident.involved_vehicle_suv)} />
+              )}
+              {incident.involved_vehicle_van > 0 && (
+                <Field label="Van" status={status} text={Help.displayNumberWithComma(incident.involved_vehicle_van)} />
+              )}
+              {incident.involved_vehicle_pickup > 0 && (
+                <Field label="Pickup" status={status} text={Help.displayNumberWithComma(incident.involved_vehicle_pickup)} />
+              )}
             </SectionBody>
+          ) : (
+            <SectionBody>NOT FOUND</SectionBody>
+          )}
+          <div className="sub-section-header">2.4 Place of Incident</div>
+          <SectionBody>
+            <Field label="Municipality" status={status} text={Help.displayText(incident.municipal)} />
+            <Field label="Barangay" status={status} text={Help.displayText(incident.barangay)} />
+            <Field label="Purok / Street" status={status} text={Help.displayText(incident.purok)} />
           </SectionBody>
-          <SectionBody title="Place of Incident">
-            <SectionBody>
-              <Field label="Municipality" status={status} text="CABARROGUIS" />
-              <Field label="Barangay" status={status} text="EDEN" />
-              <Field label="Purok / Street" status={status} text="PINOK" />
-            </SectionBody>
+          <div className="sub-section-header">2.5 Coordinates of Incident</div>
+          <SectionBody>
+            <Field label="Latitude" status={status} text={Help.displayNumber(incident.latitude)} />
+            <Field label="Longitude" status={status} text={Help.displayNumber(incident.longitude)} />
           </SectionBody>
-          <SectionBody title="Coordinates of Incident">
-            <SectionBody>
-              <Field label="Latitude" status={status} text="NOT FOUND" />
-              <Field label="Longitude" status={status} text="NOT FOUND" />
-            </SectionBody>
-            <SectionBody>
-              <Field label="Location" status={status} text="[MAP HERE]" />
-            </SectionBody>
+          <SectionBody>
+            <Field label="Location" status={status} text="[MAP HERE]" />
           </SectionBody>
-          <SectionBody title="Date and Time">
-            <SectionBody>
-              <Field status={status} text="NOT FOUND" />
-            </SectionBody>
+          <div className="sub-section-header">2.5 Time of Incident</div>
+          <SectionBody>
+            <Field status={status} text={Help.displayDateTimeSimple(incident.occured_at)} />
           </SectionBody>
-          <SectionFooter status={status}>Last updated by [NAME HERE] was [DATE AND TIME HERE]</SectionFooter>
+          <SectionFooter status={status}>Last updated by [NAME HERE] was {Help.displayDateTime(incident.created_at)}</SectionFooter>
         </PaperView>
 
         <PaperView>
@@ -395,7 +394,6 @@ function IncidentInformation() {
         </PaperView>
       </FadeAnimation>
     </PageContent>
-    // </Authorization>
   )
 }
 

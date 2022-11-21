@@ -21,6 +21,12 @@ export default Help = {
     let date = new Date(date_string)
     return date.toLocaleTimeString('en-us', options)
   },
+  displayDateTimeSimple(date_string) {
+    if (!date_string) return 'NOT FOUND'
+    let options = { year: 'numeric', month: 'long', day: 'numeric' }
+    let date = new Date(date_string)
+    return date.toLocaleTimeString('en-us', options)
+  },
   displayNumber(number) {
     return number || 'NOT FOUND'
   },
@@ -40,6 +46,10 @@ export default Help = {
   },
   displayText(text) {
     return text?.toUpperCase() || 'NOT FOUND'
+  },
+  findInArray: (arr = [''], str) => {
+    const result = arr.find((element) => element === str)
+    return Boolean(result)
   },
   formDataOrEmptyString: function (data) {
     return data || ''

@@ -134,3 +134,9 @@ a:link {
   text-align: center;
   color: #20a8df;
 }
+
+/* SUB SECTION HEADER */
+.sub-section-header {
+  padding: 0.5rem 2rem;
+  color: #20a8df;
+}

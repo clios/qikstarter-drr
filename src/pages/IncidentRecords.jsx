@@ -130,7 +130,7 @@ function IncidentRecords() {
               <Download20 />
             </ButtonIcon>
           </CSVLink>
-          <ButtonIcon label="Add Incident Record" onClick={() => navigate('/incidents/records/add')} status={status}>
+          <ButtonIcon color="green" label="Add Incident Record" onClick={() => navigate('/incidents/records/add')} status={status}>
             <Add20 />
           </ButtonIcon>
         </TableToolbar>

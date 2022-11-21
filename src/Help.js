@@ -73,5 +73,29 @@ export default Help = {
     else if (factual === 'no') return false
     else if (factual === '') return null
     else return factual
+  },
+  setBoolean: function (boolean) {
+    if (boolean) return true
+    return false
+  },
+  setDate: function (date) {
+    if (!date) return ''
+    return dayjs(date).format('YYYY-MM-DD')
+  },
+  setNumber: function (number) {
+    if (!number) return ''
+    return number
+  },
+  setSelect: function (select) {
+    if (!select) return ''
+    return select
+  },
+  setText: function (text) {
+    if (!text) return ''
+    return text
+  },
+  setTime: function (time) {
+    if (!time) return ''
+    return dayjs(time).format('HH:mm')
   }
 }

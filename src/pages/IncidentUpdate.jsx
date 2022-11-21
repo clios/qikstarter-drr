@@ -1,4 +1,6 @@
-import Account from '../json/account.json'
+import { Close20, Information24 } from '@carbon/icons-react'
+import { navigate, useParams } from '@reach/router'
+
 import AccountContext from '../contexts/AccountContext'
 import Address from '../Address'
 import Authorization from '../components/Authorization'
@@ -6,7 +8,7 @@ import Button from '../components/Button'
 import ButtonIcon from '../components/ButtonIcon'
 import Checkbox from '../components/Checkbox'
 import Cleave from 'cleave.js/react'
-import { Close20 } from '@carbon/icons-react'
+import { Entropy } from 'entropy-string'
 import FadeAnimation from '../components/FadeAnimation'
 import Field from '../components/Field'
 import Form from '../components/Form'
@@ -17,16 +19,24 @@ import Help from '../Help'
 import Input from '../components/Input'
 import PageContent from '../components/PageContent'
 import React from 'react'
+import SectionBody from '../components/SectionBody'
 import SectionHeader from '../components/SectionHeader'
 import Select from '../components/Select'
+import VicinityChecker from '../components/VicinityChecker'
 import axios from 'axios'
-import { navigate } from '@reach/router'
+import { confirmAlert } from 'react-confirm-alert'
+import getIncidentById from '../api/getIncidentById'
+import { toJpeg } from 'html-to-image'
 import { toast } from 'react-toastify'
 
-function IncidentCreate() {
+function IncidentUpdate() {
+  // SEND GET INCIDENT REQUEST
+  const ROUTE = useParams()
+  const Incident = getIncidentById(ROUTE.incident_id)
+
   // INFORMATION STATE
   const Account = React.useContext(AccountContext)
-  const [status, setStatus] = React.useState('success')
+  const [status, setStatus] = React.useState('loading')
   const [helper, setHelper] = React.useState({})
   const [error, setError] = React.useState({})
 
@@ -61,11 +71,73 @@ function IncidentCreate() {
   const [date_of_incident, setDateOfIncident] = React.useState('')
   const [time_of_incident, setTimeOfIncident] = React.useState('')
 
+  // ON FETCH INCIDENT
+  React.useEffect(() => {
+    if (Incident.loading) setStatus('loading')
+    if (Incident.error) setStatus('error')
+    if (Incident.data) {
+      let i = {
+        name: '',
+        types: '',
+        types_ex: '',
+        municipal: '',
+        barangay: '',
+        purok: '',
+        latitude: '',
+        longitude: '',
+        caller_name: '',
+        caller_number: '',
+        response_team: '',
+        response_vehicle: '',
+        involved_vehicle_motorcycle: '',
+        involved_vehicle_hatchback: '',
+        involved_vehicle_sedan: '',
+        involved_vehicle_suv: '',
+        involved_vehicle_van: '',
+        involved_vehicle_pickup: '',
+        called_at: '',
+        occured_at: ''
+      }
+      i = Incident.data
+      setStatus('success')
+      setDateCalled(Help.setDate(i.called_at))
+      setTimeCalled(Help.setTime(i.called_at))
+      setNameOfCaller(Help.setText(i.caller_name))
+      setCallerContactNumber(Help.setText(i.caller_number))
+      setTeamResponded(Help.setText(i.response_team))
+      setVehicleResponded(Help.setText(i.response_vehicle))
+      setTypeTrauma(Help.findInArray(i.types, 'trauma'))
+      setTypeMedical(Help.findInArray(i.types, 'medical'))
+      setTypeObstetric(Help.findInArray(i.types, 'obstetric'))
+      setTypeTransfer(Help.findInArray(i.types, 'transfer'))
+      setTypeVehicular(Help.findInArray(i.types, 'vehicular'))
+      setTypeOthers(Help.findInArray(i.types, 'other'))
+      setTypeOtherSpecify(Help.setText(i.types_ex))
+      setNameOfIncident(Help.setText(i.name))
+      setVehicleHatchback(Help.setNumber(i.involved_vehicle_hatchback))
+      setVehicleSedan(Help.setNumber(i.involved_vehicle_sedan))
+      setVehicleSuv(Help.setNumber(i.involved_vehicle_suv))
+      setVehicleVan(Help.setNumber(i.involved_vehicle_van))
+      setVehiclePickup(Help.setNumber(i.involved_vehicle_pickup))
+      setVehicleMotorcycle(Help.setNumber(i.involved_vehicle_motorcycle))
+      setMunicipality(Help.setText(i.municipal))
+      setBarangay(Help.setText(i.barangay))
+      setPurok(Help.setText(i.purok))
+      setLatitude(Help.setNumber(i.latitude))
+      setLongitude(Help.setNumber(i.longitude))
+      setDateOfIncident(Help.setDate(i.occured_at))
+      setTimeOfIncident(Help.setTime(i.occured_at))
+    }
+
+    return () => setStatus('loading')
+  }, [Incident.loading, Incident.error, Incident.data])
+
+  // SEND UPDATE INCIDENT REQUEST
   function submitForm(e) {
     e.preventDefault()
     setStatus('loading')
 
-    const URL = process.env.BASE_URL + '/incidents'
+    const URL = process.env.BASE_URL + '/incidents/' + ROUTE.incident_id
     const DATA = {
       name: Help.formInputText(name_of_incident),
       types: [
@@ -98,12 +170,12 @@ function IncidentCreate() {
     const CONFIG = { headers: { Authorization: `Bearer ${localStorage.getItem('q-drr-web-token')}` } }
 
     axios
-      .post(URL, DATA, CONFIG)
+      .patch(URL, DATA, CONFIG)
       .then((response) => {
+        setStatus('success')
         if (response.status === 201) {
-          setStatus('success')
-          toast.success('New incident record has been created')
-          navigate('/incidents/records/' + response.data.id, { replace: true })
+          toast.success('Incident record has beed updated')
+          navigate('/incidents/records/' + ROUTE.incident_id, { replace: true })
         }
       })
       .catch((error) => {
@@ -113,6 +185,7 @@ function IncidentCreate() {
             setHelper(error.response.data)
             setError(error.response.data)
           } else if (error.response?.status === 403) toast.error('User credential is forbidden')
+          else if (error.response?.status === 404) toast.error('Incident record was not found')
           else if (error.response?.status === 500) toast.error('Unexpected server error')
         } else if (error.request) console.error(error.request)
         else console.error('Error', error.message)
@@ -365,14 +438,13 @@ function IncidentCreate() {
           <FormError error={error} />
           <FormFooter>
             <Button
-              color="green"
               disabled={status === 'loading'}
-              loadingText="Creating..."
+              loadingText="Updating..."
               onClick={submitForm}
               status={status}
-              title="Create new incident record"
+              title="Update existing incident record"
               type="submit">
-              Create Incident Record
+              Update Incident Record
             </Button>
           </FormFooter>
         </Form>
@@ -381,4 +453,4 @@ function IncidentCreate() {
   )
 }
 
-export default IncidentCreate
+export default IncidentUpdate

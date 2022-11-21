@@ -16,6 +16,7 @@ import IncidentDashboard from './pages/IncidentDashboard'
 import IncidentInformation from './pages/IncidentInformation'
 import IncidentRecords from './pages/IncidentRecords'
 import IncidentTabs from './layouts/IncidentTabs'
+import IncidentUpdate from './pages/IncidentUpdate'
 import PopulationDashboard from './pages/PopulationDashboard'
 import PopulationTabs from './layouts/PopulationTabs'
 import React from 'react'
@@ -100,6 +101,7 @@ function Routes() {
           <IncidentRecords path="/records" />
           <IncidentInformation path="/records/:incident_id" />
           <IncidentCreate path="/records/add" />
+          <IncidentUpdate path="/records/:incident_id/edit" />
           <VictimCreate path="/records/:incident_id/victims/add" />
           <VictimInformation path="/records/:incident_id/victims/:victim_id" />
         </IncidentTabs>

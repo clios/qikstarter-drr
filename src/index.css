@@ -126,3 +126,11 @@ body {
 a:link {
   text-decoration: none;
 }
+
+/* VRI DASHBOARD TITLE */
+.vri-title {
+  font-size: 3rem;
+  padding: 2rem 0 0 0;
+  text-align: center;
+  color: #20a8df;
+}

@@ -39,6 +39,9 @@ import UserProfile from './pages/UserProfile'
 import UserRecords from './pages/UserRecords'
 import UserTabs from './layouts/UserTabs'
 import UserUpdate from './pages/UserUpdate'
+import VRIFlood from './pages/VRIFlood'
+import VRILandslide from './pages/VRILandslide'
+import VRITabs from './layouts/VRITabs'
 import VictimCreate from './pages/VictimCreate'
 import VictimInformation from './pages/VictimInformation'
 import YourAccountProfile from './pages/YourAccountProfile'
@@ -55,6 +58,12 @@ function Routes() {
           <YourAccountProfile path="/information" />
           <YourAccountUpdate path="/information/edit" />
         </YourAccountTabs>
+
+        <Redirect from="/vri" to="/vri/landslide" noThrow />
+        <VRITabs path="vri">
+          <VRILandslide path="/landslide" />
+          <VRIFlood path="/flood" />
+        </VRITabs>
 
         <Redirect from="/settlement-area" to="/settlement-area/landslide" noThrow />
         <SettlementAreaTabs path="settlement-area">

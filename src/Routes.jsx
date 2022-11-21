@@ -13,6 +13,7 @@ import IncidentRecords from './pages/IncidentRecords'
 import IncidentTabs from './layouts/IncidentTabs'
 import IncidentUpdate from './pages/IncidentUpdate'
 import PopulationDashboard from './pages/PopulationDashboard'
+import PopulationMap from './pages/PopulationMap'
 import PopulationTabs from './layouts/PopulationTabs'
 import React from 'react'
 import Sider from './layouts/Sider'
@@ -51,6 +52,7 @@ function Routes() {
         <Redirect from="/population" to="/population/dashboard" noThrow />
         <PopulationTabs path="population">
           <PopulationDashboard path="/dashboard" />
+          <PopulationMap path="/map" />
         </PopulationTabs>
 
         <Redirect from="/incidents" to="/incidents/dashboard" noThrow />

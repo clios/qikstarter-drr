@@ -17,6 +17,9 @@ function PopulationTabs(props) {
           <Link className="tabs-item" to="/population/dashboard" getProps={isPartiallyActive}>
             Dashboard
           </Link>
+          <Link className="tabs-item" to="/population/map" getProps={isPartiallyActive}>
+            Map
+          </Link>
         </div>
       </div>
       <div>{props.children}</div>

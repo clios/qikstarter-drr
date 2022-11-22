@@ -18,6 +18,7 @@ import Select from '../components/Select'
 import TableToolbar from '../components/TableToolbar'
 import boundaries from '../geojson/boundaries.geojson'
 import { confirmAlert } from 'react-confirm-alert'
+import getIncidentLocations from '../api/getIncidentLocations'
 import mapDEM from '../mapDEM'
 import mapEvent from '../mapEvent'
 import mapGeoJSON from '../mapGeoJSON'
@@ -28,16 +29,11 @@ import mapboxgl from 'mapbox-gl'
 import { navigate } from '@reach/router'
 import { toast } from 'react-toastify'
 
-// import getFarmLocations from '../api/getFarmLocations'
-// import getFarmerLocations from '../api/getFarmerLocations'
-
 mapboxgl.accessToken = process.env.MAPBOX_ACCESS_TOKEN
 mapboxgl.prewarm()
 
-const FARMER_LOCATIONS = 'farmer-locations'
-const FARMER_LOCATIONS_COLOR = '#20A8DF'
-const FARM_LOCATIONS = 'farm-locations'
-const FARM_LOCATIONS_COLOR = '#DF9C20'
+const INCIDENT_LOCATIONS = 'incident-locations'
+const INCIDENT_LOCATIONS_COLOR = '#df2020'
 
 function IncidentMap() {
   // INFORMATION STATE
@@ -47,60 +43,38 @@ function IncidentMap() {
   const [map, setMap] = React.useState(false)
 
   // INPUT STATE
-  const [farmer_locations_filter, setFarmerLocationsFilter] = React.useState(true)
-  const [farm_locations_filter, setFarmLocationsFilter] = React.useState(true)
+  const [incident_locations_filter, setIncidentLocationsFilter] = React.useState(true)
   const [boundaries_filter, setBoundariesFilter] = React.useState(true)
-  const [census, setCensus] = React.useState(2022)
-  const [address_province, setAddressProvince] = React.useState(Account.vicinity_province)
-  const [address_municipality, setAddressMunicipality] = React.useState(Account.vicinity_municipality)
-  const [address_barangay, setAddressBarangay] = React.useState(Account.vicinity_barangay)
-  // INPUT STATE: LANDSLIDE
-  const [landslide_very_high_filter, setLandslideVeryHighFilter] = React.useState(false)
-  const [landslide_high_filter, setLandslideHighFilter] = React.useState(false)
-  const [landslide_moderate_filter, setLandslideModerateFilter] = React.useState(false)
-  const [landslide_low_filter, setLandslideLowFilter] = React.useState(false)
-  // INPUT STATE: FLOOD
-  const [flood_very_high_filter, setFloodVeryHighFilter] = React.useState(false)
-  const [flood_high_filter, setFloodHighFilter] = React.useState(false)
-  const [flood_moderate_filter, setFloodModerateFilter] = React.useState(false)
-  const [flood_low_filter, setFloodLowFilter] = React.useState(false)
+  const [year, setYear] = React.useState(2022)
+  const [municipality, setMunicipality] = React.useState('')
+  const [barangay, setBarangay] = React.useState('')
   // INPUT STATE: PARAMS
-  const [params, setParams] = React.useState({ census, address_province, address_municipality, address_barangay })
+  const [params, setParams] = React.useState({ year, municipality, barangay })
 
-  // SEND GET FARMER AND FARM LOCATIONS REQUEST
-  // const FarmerLocations = getFarmerLocations(params)
-  // const FarmLocations = getFarmLocations(params)
+  // SEND GET INCIDENT LOCATIONS REQUEST
+  const IncidentLocations = getIncidentLocations(params)
 
   // UPDATE URL SEARCH PARAMETERS
   function updateParams() {
     let newParams = {}
-    if (census !== '') newParams.census = census
-    if (address_province !== '') newParams.address_province = address_province
-    if (address_municipality !== '') newParams.address_municipality = address_municipality
-    if (address_barangay !== '') newParams.address_barangay = address_barangay
+    if (year !== '') newParams.year = year
+    if (municipality !== '') newParams.municipality = municipality
+    if (barangay !== '') newParams.barangay = barangay
     setParams(newParams)
   }
 
   // ON QUICK UPDATE OF PARAMS
-  React.useEffect(() => updateParams(), [census, address_municipality, address_barangay])
+  React.useEffect(() => updateParams(), [year, municipality, barangay])
 
-  // ON GET FARMER LOCATIONS
-  // React.useEffect(() => {
-  //   if (FarmerLocations.loading) setStatus('loading')
-  //   if (FarmerLocations.error) setStatus('error')
-  //   if (FarmerLocations.data) setStatus('success')
-  //   return () => setStatus('loading')
-  // }, [FarmerLocations.loading, FarmerLocations.error, FarmerLocations.data])
+  // ON GET INCIDENT LOCATIONS
+  React.useEffect(() => {
+    if (IncidentLocations.loading) setStatus('loading')
+    if (IncidentLocations.error) setStatus('error')
+    if (IncidentLocations.data) setStatus('success')
+    return () => setStatus('loading')
+  }, [IncidentLocations.loading, IncidentLocations.error, IncidentLocations.data])
 
-  // ON GET FARM LOCATIONS
-  // React.useEffect(() => {
-  //   if (FarmLocations.loading) setStatus('loading')
-  //   if (FarmLocations.error) setStatus('error')
-  //   if (FarmLocations.data) setStatus('success')
-  //   return () => setStatus('loading')
-  // }, [FarmLocations.loading, FarmLocations.error, FarmLocations.data])
-
-  // ON RENDER, REVALIDATE FARMER AND CREATE MAP
+  // ON RENDER, REVALIDATE INCIDENT AND CREATE MAP
   React.useEffect(() => {
     setMap(
       new mapboxgl.Map({
@@ -131,38 +105,24 @@ function IncidentMap() {
     }
   }, [map])
 
-  // ON LOAD FARMER AND FARM DATA
+  // ON LOAD INCIDENT AND FARM DATA
   React.useEffect(() => {
     setStatus('loading')
-    // if (map && FarmerLocations.data && FarmLocations.data) {
-    if (map) {
+    if (map && IncidentLocations.data) {
       map.resize()
 
-      // CREATE FARMER GEOJSON
-      // const farmer_records = FarmerLocations.data.records
-      // const farmer_geojson = mapGeoJSON(map, FARMER_LOCATIONS, farmer_records, (item) => {
-      //   return {
-      //     'type': 'Feature',
-      //     'geometry': { 'type': 'Point', 'coordinates': [item.longitude, item.latitude] },
-      //     'properties': { 'id': item.id, 'name': item.name }
-      //   }
-      // })
-
-      // CREATE FARM GEOJSON
-      // const farm_records = FarmLocations.data.records
-      // const farm_geojson = mapGeoJSON(map, FARM_LOCATIONS, farm_records, (item) => {
-      //   return {
-      //     'type': 'Feature',
-      //     'geometry': { 'type': 'Point', 'coordinates': [item.longitude, item.latitude] },
-      //     'properties': { 'id': item.id, 'farmer_id': item.farmer_id, 'farmer_name': item.farmer_name }
-      //   }
-      // })
+      // CREATE INCIDENT GEOJSON
+      const incident_records = IncidentLocations.data.records
+      const incident_geojson = mapGeoJSON(map, INCIDENT_LOCATIONS, incident_records, (item) => {
+        return {
+          'type': 'Feature',
+          'geometry': { 'type': 'Point', 'coordinates': [item.longitude, item.latitude] },
+          'properties': { 'id': item.id, 'name': item.name }
+        }
+      })
 
       // ON LOAD
       map.on('load', () => {
-        // DIGITAL ELEVATION MODEL
-        mapDEM(map)
-
         // QUIRINO BARANGAY BOUNDARIES
         map.addSource('boundaries', { type: 'geojson', data: boundaries })
         mapLayer.boundaries(map)
@@ -177,55 +137,28 @@ function IncidentMap() {
           )
         })
 
-        // FARMER LOCATIONS
-        // map.addImage(FARMER_LOCATIONS, mapMarker(100, FARMER_LOCATIONS_COLOR, map), { pixelRatio: 2 })
-        // mapSource(map, FARMER_LOCATIONS, { type: 'geojson', data: farmer_geojson, cluster: true })
-        // mapLayer.cluster(map, FARMER_LOCATIONS, FARMER_LOCATIONS_COLOR)
-        // mapLayer.clusterCount(map, FARMER_LOCATIONS)
-        // mapLayer.unclusteredPoint(map, FARMER_LOCATIONS, FARMER_LOCATIONS)
-        // mapEvent.mouse(map, FARMER_LOCATIONS)
-        // mapEvent.clickCluster(map, FARMER_LOCATIONS)
-        // mapEvent.clickUnclusteredPoint(map, FARMER_LOCATIONS, (properties) => {
-        //   confirmAlert({
-        //     title: properties.name,
-        //     message: `House Location`,
-        //     buttons: [{ label: 'Go to records', onClick: () => navigate('/farmers/records/' + properties.id) }, { label: 'Close' }]
-        //   })
-        // })
-
-        // FARM LOCATIONS
-        // map.addImage(FARM_LOCATIONS, mapMarker(100, FARM_LOCATIONS_COLOR, map), { pixelRatio: 2 })
-        // mapSource(map, FARM_LOCATIONS, { type: 'geojson', data: farm_geojson, cluster: true })
-        // mapLayer.cluster(map, FARM_LOCATIONS, FARM_LOCATIONS_COLOR)
-        // mapLayer.clusterCount(map, FARM_LOCATIONS)
-        // mapLayer.unclusteredPoint(map, FARM_LOCATIONS, FARM_LOCATIONS)
-        // mapEvent.clickCluster(map, FARM_LOCATIONS)
-        // mapEvent.mouse(map, FARM_LOCATIONS)
-        // mapEvent.clickUnclusteredPoint(map, FARM_LOCATIONS, (properties) => {
-        //   confirmAlert({
-        //     title: properties.name,
-        //     message: `Farm Location`,
-        //     buttons: [{ label: 'Go to records', onClick: () => navigate('/farmers/records/' + properties.farmer_id) }, { label: 'Close' }]
-        //   })
-        // })
-
-        // ADD DISASTERS POLYGON ON MAP
-        Disasters.landslide.veryHigh(map)
-        Disasters.landslide.high(map)
-        Disasters.landslide.moderate(map)
-        Disasters.landslide.low(map)
-        Disasters.flood.veryHigh(map)
-        Disasters.flood.high(map)
-        Disasters.flood.moderate(map)
-        Disasters.flood.low(map)
+        // INCIDENT LOCATIONS
+        map.addImage(INCIDENT_LOCATIONS, mapMarker(100, INCIDENT_LOCATIONS_COLOR, map), { pixelRatio: 2 })
+        mapSource(map, INCIDENT_LOCATIONS, { type: 'geojson', data: incident_geojson, cluster: true })
+        mapLayer.cluster(map, INCIDENT_LOCATIONS, INCIDENT_LOCATIONS_COLOR)
+        mapLayer.clusterCount(map, INCIDENT_LOCATIONS)
+        mapLayer.unclusteredPoint(map, INCIDENT_LOCATIONS, INCIDENT_LOCATIONS)
+        mapEvent.mouse(map, INCIDENT_LOCATIONS)
+        mapEvent.clickCluster(map, INCIDENT_LOCATIONS)
+        mapEvent.clickUnclusteredPoint(map, INCIDENT_LOCATIONS, (properties) => {
+          confirmAlert({
+            title: properties.name,
+            message: `Incident Location`,
+            buttons: [{ label: 'Go to records', onClick: () => navigate('/incidents/records/' + properties.id) }, { label: 'Close' }]
+          })
+        })
       })
 
       map.on('idle', () => {
         setStatus('success')
       })
     }
-    // }, [map, FarmerLocations.data, FarmLocations.data])
-  }, [map])
+  }, [map, IncidentLocations.data])
 
   // ADD MAP LAYER TOGGLE
   React.useEffect(() => {
@@ -234,51 +167,24 @@ function IncidentMap() {
         if (map.getLayer(layer)) map.setLayoutProperty(layer, 'visibility', filter ? 'visible' : 'none')
       }
 
-      toggleMapLayer(map, 'farmer-locations-cluster-layer', farmer_locations_filter)
-      toggleMapLayer(map, 'farmer-locations-cluster-count-layer', farmer_locations_filter)
-      toggleMapLayer(map, 'farmer-locations-unclustered-point-layer', farmer_locations_filter)
-
-      toggleMapLayer(map, 'farm-locations-cluster-layer', farm_locations_filter)
-      toggleMapLayer(map, 'farm-locations-cluster-count-layer', farm_locations_filter)
-      toggleMapLayer(map, 'farm-locations-unclustered-point-layer', farm_locations_filter)
+      toggleMapLayer(map, 'incident-locations-cluster-layer', incident_locations_filter)
+      toggleMapLayer(map, 'incident-locations-cluster-count-layer', incident_locations_filter)
+      toggleMapLayer(map, 'incident-locations-unclustered-point-layer', incident_locations_filter)
 
       toggleMapLayer(map, 'boundaries-fill-layer', boundaries_filter)
       toggleMapLayer(map, 'boundaries-line-layer', boundaries_filter)
-
-      toggleMapLayer(map, 'landslide_very_high_layer', landslide_very_high_filter)
-      toggleMapLayer(map, 'landslide_high_layer', landslide_high_filter)
-      toggleMapLayer(map, 'landslide_moderate_layer', landslide_moderate_filter)
-      toggleMapLayer(map, 'landslide_low_layer', landslide_low_filter)
-      toggleMapLayer(map, 'flood_very_high_layer', flood_very_high_filter)
-      toggleMapLayer(map, 'flood_high_layer', flood_high_filter)
-      toggleMapLayer(map, 'flood_moderate_layer', flood_moderate_filter)
-      toggleMapLayer(map, 'flood_low_layer', flood_low_filter)
     }
-  }, [
-    map,
-    farmer_locations_filter,
-    farm_locations_filter,
-    boundaries_filter,
-    landslide_low_filter,
-    landslide_moderate_filter,
-    landslide_very_high_filter,
-    landslide_high_filter,
-    flood_low_filter,
-    flood_moderate_filter,
-    flood_very_high_filter,
-    flood_high_filter
-  ])
+  }, [map, incident_locations_filter, boundaries_filter])
 
   // ON QUICK UPDATE OF PARAMS
-  React.useEffect(() => updateParams(), [census, address_municipality, address_barangay])
+  React.useEffect(() => updateParams(), [year, municipality, barangay])
 
   // REFRESH AND RESET TABLE
   function refreshLocations() {
     setStatus('loading')
     setTimeout(() => {
       setStatus('success')
-      FarmerLocations.mutate()
-      FarmLocations.mutate()
+      IncidentLocations.mutate()
     }, 500)
   }
 
@@ -308,24 +214,17 @@ function IncidentMap() {
                   text={boundaries_filter ? 'Display' : 'Hidden'}
                 />
               </Field>
-              <Field label="Farmer" status={status}>
+              <Field label="Incidents" status={status}>
                 <Checkbox
-                  checked={farmer_locations_filter}
-                  onChange={(e) => setFarmerLocationsFilter(e.target.checked)}
-                  text={farmer_locations_filter ? 'Display' : 'Hidden'}
-                />
-              </Field>
-              <Field label="Farm" status={status}>
-                <Checkbox
-                  checked={farm_locations_filter}
-                  onChange={(e) => setFarmLocationsFilter(e.target.checked)}
-                  text={farm_locations_filter ? 'Display' : 'Hidden'}
+                  checked={incident_locations_filter}
+                  onChange={(e) => setIncidentLocationsFilter(e.target.checked)}
+                  text={incident_locations_filter ? 'Display' : 'Hidden'}
                 />
               </Field>
             </FormRow>
             <FormRow>
               <Field label="Year" status={status}>
-                <Select onChange={(e) => setCensus(e.target.value)} value={census}>
+                <Select onChange={(e) => setYear(e.target.value)} value={year}>
                   <option value={2022}>2022</option>
                   <option value={2023}>2023</option>
                   ))
@@ -334,10 +233,10 @@ function IncidentMap() {
               <Field label="Municipality" status={status}>
                 <Select
                   onChange={(e) => {
-                    setAddressBarangay('')
-                    setAddressMunicipality(e.target.value)
+                    setBarangay('')
+                    setMunicipality(e.target.value)
                   }}
-                  value={address_municipality}>
+                  value={municipality}>
                   <option value="">ALL MUNICIPALS</option>
                   {Address.Municipalities('02', 'QUIRINO').map((item, index) => (
                     <option key={index} value={item}>
@@ -347,54 +246,14 @@ function IncidentMap() {
                 </Select>
               </Field>
               <Field label="Barangay" status={status}>
-                <Select onChange={(e) => setAddressBarangay(e.target.value)} value={address_barangay}>
+                <Select onChange={(e) => setBarangay(e.target.value)} value={barangay}>
                   <option value="">ALL BARANGAYS</option>
-                  {Address.Barangays('02', 'QUIRINO', address_municipality).map((item, index) => (
+                  {Address.Barangays('02', 'QUIRINO', municipality).map((item, index) => (
                     <option key={index} value={item}>
                       {item}
                     </option>
                   ))}
                 </Select>
-              </Field>
-            </FormRow>
-            <FormRow>
-              <Field label="Landslide Prone" status={status}>
-                <Checkbox
-                  checked={landslide_very_high_filter}
-                  onChange={(e) => setLandslideVeryHighFilter(e.target.checked)}
-                  text="Very High Susceptibility"
-                />
-              </Field>
-              <Field label="Landslide Prone" status={status}>
-                <Checkbox checked={landslide_high_filter} onChange={(e) => setLandslideHighFilter(e.target.checked)} text="High Susceptibility" />
-              </Field>
-              <Field label="Landslide Prone" status={status}>
-                <Checkbox
-                  checked={landslide_moderate_filter}
-                  onChange={(e) => setLandslideModerateFilter(e.target.checked)}
-                  text="Moderate Susceptibility"
-                />
-              </Field>
-              <Field label="Landslide Prone" status={status}>
-                <Checkbox checked={landslide_low_filter} onChange={(e) => setLandslideLowFilter(e.target.checked)} text="Low Susceptibility" />
-              </Field>
-            </FormRow>
-            <FormRow>
-              <Field label="Flood Prone" status={status}>
-                <Checkbox
-                  checked={flood_very_high_filter}
-                  onChange={(e) => setFloodVeryHighFilter(e.target.checked)}
-                  text="Very High Susceptibility"
-                />
-              </Field>
-              <Field label="Flood Prone" status={status}>
-                <Checkbox checked={flood_high_filter} onChange={(e) => setFloodHighFilter(e.target.checked)} text="High Susceptibility" />
-              </Field>
-              <Field label="Flood Prone" status={status}>
-                <Checkbox checked={flood_moderate_filter} onChange={(e) => setFloodModerateFilter(e.target.checked)} text="Moderate Susceptibility" />
-              </Field>
-              <Field label="Flood Prone" status={status}>
-                <Checkbox checked={flood_low_filter} onChange={(e) => setFloodLowFilter(e.target.checked)} text="Low Susceptibility" />
               </Field>
             </FormRow>
           </SearchBox>

@@ -1,0 +1,9 @@
+.psal-row-one {
+  display: grid;
+  grid-template-columns: 2fr 2fr 2fr;
+}
+
+.psal-row-two {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}

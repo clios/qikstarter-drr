@@ -1,3 +1,5 @@
+import './VRI.css'
+
 import AgriAnnualBarChart from '../fragments/VRI/AgricultureLandslide/AnnualBarChart'
 import AgriAnnualTotalBarChartMunicipalities from '../fragments/VRI/AgricultureLandslide/AnnualTotalBarChartMunicipalities'
 import AgriPerennialBarChart from '../fragments/VRI/AgricultureLandslide/PerennialBarChart'
@@ -46,12 +48,12 @@ function VRILandslide() {
 
         <PaperView>
           <div className="vri-title">Agriculture</div>
-          <div className="pal-row-one">
+          <div className="psal-row-one">
             <AgriAnnualBarChart />
             <AgriTotalCard />
             <AgriPerennialBarChart />
           </div>
-          <div className="pal-row-two">
+          <div className="psal-row-two">
             <AgriAnnualTotalBarChartMunicipalities />
             <AgriPerennialTotalBarChartMunicipalities />
           </div>
@@ -59,12 +61,12 @@ function VRILandslide() {
 
         <PaperView>
           <div className="vri-title">Critical Infrastructure</div>
-          <div className="pcil-row-one">
+          <div className="psal-row-one">
             <CIBuildingBarChart />
             <CITotalCard />
             <CIBridgeBarChart />
           </div>
-          <div className="pcil-row-two">
+          <div className="psal-row-two">
             <CIBuildingTotalBarChartMunicipalities />
             <CIBridgeTotalBarChartMunicipalities />
           </div>
@@ -72,7 +74,7 @@ function VRILandslide() {
 
         <PaperView>
           <div className="vri-title">Road Lifeline</div>
-          <div className="prll-row-one">
+          <div className="psal-row-one">
             <RLSusceptibilityBarChart />
             <RLTotalCard />
             <RLRoadClassificationBarChart />

@@ -36,7 +36,7 @@ function VRIFlood() {
             <SATotalCard />
             <SASusceptibilityAreaChart />
           </div>
-          <div className="psal-row-two">
+          <div className="pal-row-two">
             <SATotalBarChartMunicipalities />
           </div>
           <div className="psal-row-three">
@@ -46,12 +46,12 @@ function VRIFlood() {
 
         <PaperView>
           <div className="vri-title">Agriculture</div>
-          <div className="pal-row-one">
+          <div className="psal-row-one">
             <AgriAnnualBarChart />
             <AgriTotalCard />
             <AgriPerennialBarChart />
           </div>
-          <div className="pal-row-two">
+          <div className="psal-row-two">
             <AgriAnnualTotalBarChartMunicipalities />
             <AgriPerennialTotalBarChartMunicipalities />
           </div>
@@ -59,12 +59,12 @@ function VRIFlood() {
 
         <PaperView>
           <div className="vri-title">Critical Infrastructure</div>
-          <div className="pcil-row-one">
+          <div className="psal-row-one">
             <CIBuildingBarChart />
             <CITotalCard />
             <CIBridgeBarChart />
           </div>
-          <div className="pcil-row-two">
+          <div className="psal-row-two">
             <CIBuildingTotalBarChartMunicipalities />
             <CIBridgeTotalBarChartMunicipalities />
           </div>
@@ -72,7 +72,7 @@ function VRIFlood() {
 
         <PaperView>
           <div className="vri-title">Road Lifeline</div>
-          <div className="prll-row-one">
+          <div className="psal-row-one">
             <RLSusceptibilityBarChart />
             <RLTotalCard />
             <RLRoadClassificationBarChart />

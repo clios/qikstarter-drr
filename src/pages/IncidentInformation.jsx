@@ -36,6 +36,7 @@ function IncidentInformation() {
   const Account = React.useContext(AccountContext)
   const [status, setStatus] = React.useState('loading')
   const [map, setMap] = React.useState(null)
+  const [totalVictims, setTotalVictims] = React.useState(0)
 
   // INFORMATION STATE: INCIDENT
   const [incident, setIncident] = React.useState({
@@ -156,6 +157,7 @@ function IncidentInformation() {
 
     if (Victims.data) {
       setStatus('success')
+      setTotalVictims(Victims.data.records.total)
     }
 
     return () => setStatus('loading')
@@ -316,7 +318,11 @@ function IncidentInformation() {
               <Add20 />
             </ButtonIcon>
           </SectionHeader>
-          <Table status={status} emptyLabel="No victim/s found" headers={['Victim ID', 'Name', 'Age', 'Gender', 'Status'].filter(Boolean)}>
+          <Table
+            status={status}
+            emptyLabel="No victim/s found"
+            headers={['Victim ID', 'Name', 'Age', 'Gender', 'Status'].filter(Boolean)}
+            total={totalVictims}>
             {status === 'success' &&
               Victims.data?.records.victims.map((item, index) => {
                 return (

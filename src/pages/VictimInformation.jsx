@@ -192,10 +192,14 @@ function VictimInformation() {
             </SectionBody>
           </SectionBody>
           <SectionBody title="Event(s) / Activities leading to the Incident or Injury">
-            <SectionBody status={status}>{Help.displayDateTimeSimple(victim.events_leading_to_incident)}</SectionBody>
+            <SectionBody status={status}>
+              <Field label="Description" status={status} text={Help.displayDateTimeSimple(victim.events_leading_to_incident)} />
+            </SectionBody>
           </SectionBody>
           <SectionHeader title="6. Interventions Given" />
-          <SectionBody status={status}>{Help.displayText(victim.intervention)}</SectionBody>
+          <SectionBody status={status}>
+            <Field label="Description" status={status} text={Help.displayText(victim.intervention)} />
+          </SectionBody>
           <SectionHeader title="7. Endorsement to Health Facility" />
           <SectionBody>
             <Field label="Name" status={status} text={Help.displayText(victim.endorsement_person)} />

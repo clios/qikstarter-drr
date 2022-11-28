@@ -13,10 +13,12 @@ import React from 'react'
 import SectionBody from '../components/SectionBody'
 import SectionFooter from '../components/SectionFooter'
 import SectionHeader from '../components/SectionHeader'
+import Table from '../components/Table'
 import Toggle from '../components/Toggle'
 import axios from 'axios'
 import { confirmAlert } from 'react-confirm-alert'
 import getIncidentById from '../api/getIncidentById'
+import getVictims from '../api/getVictims'
 import mapMarker from '../mapMarker'
 import mapboxgl from 'mapbox-gl'
 import { toast } from 'react-toastify'
@@ -28,6 +30,7 @@ function IncidentInformation() {
   // SEND GET USER REQUEST
   const ROUTE = useParams()
   const Incident = getIncidentById(ROUTE.incident_id)
+  const Victims = getVictims({ incident_id: ROUTE.incident_id, orders: 'name:asc' })
 
   // INFORMATION STATE
   const Account = React.useContext(AccountContext)
@@ -145,6 +148,18 @@ function IncidentInformation() {
 
     return () => setStatus('loading')
   }, [Incident.loading, Incident.error, Incident.data])
+
+  // ON FETCH VICTIMS
+  React.useEffect(() => {
+    if (Victims.loading) setStatus('loading')
+    if (Victims.error) setStatus('error')
+
+    if (Victims.data) {
+      setStatus('success')
+    }
+
+    return () => setStatus('loading')
+  }, [Victims.loading, Victims.error, Victims.data])
 
   // DELETE INCIDENT
   function deleteIncident() {
@@ -301,174 +316,28 @@ function IncidentInformation() {
               <Add20 />
             </ButtonIcon>
           </SectionHeader>
-
-          <PaperView>
-            <SectionHeader title="Victim 1: BEN KAPPA">
-              <ButtonIcon
-                onClick={() => navigate('/incidents/records/1/victims/1')}
-                // permission="write_user"
-                // permissions={Account.permissions}
-                status={status}
-                title="View victim record">
-                <Catalog20 />
-              </ButtonIcon>
-              <ButtonIcon
-                // permission="write_user"
-                // permissions={Account.permissions}
-                status={status}
-                title="Edit victim record">
-                <Edit20 />
-              </ButtonIcon>
-              <ButtonIcon
-                // permission="write_user"
-                // permissions={Account.permissions}
-                status={status}
-                title="Delete victim record">
-                <TrashCan20 />
-              </ButtonIcon>
-            </SectionHeader>
-            <SectionBody>
-              <Field label="Status" status={status} text="YELLOW" />
-              <Field label="Gender" status={status} text="MALE" />
-              <Field label="Age" status={status} text="27" />
-            </SectionBody>
-
-            <SectionHeader bigTitle="Vital Sign Monitoring">
-              <ButtonIcon
-                // permission="write_user"
-                // permissions={Account.permissions}
-                status={status}
-                title="Refresh vital signs">
-                <Reset20 />
-              </ButtonIcon>
-              <ButtonIcon
-                label="Add Vital Sign"
-                onClick={() => navigate('/incidents/records/1/victims/1/vital_signs/1', { replace: true })}
-                // permission="write_user"
-                // permissions={Account.permissions}
-                status={status}>
-                <Add20 />
-              </ButtonIcon>
-            </SectionHeader>
-            <SectionHeader title="May 21, 2022 04:47 PM">
-              <ButtonIcon
-                // permission="write_user"
-                // permissions={Account.permissions}
-                status={status}
-                title="Delete vital sign record">
-                <TrashCan20 />
-              </ButtonIcon>
-            </SectionHeader>
-            <SectionBody>
-              <Field label="Airway" status={status} text="CLEAR" />
-              <Field label="Respiratory Rate" status={status} text="80 cycles per minute" />
-            </SectionBody>
-            <SectionBody>
-              <Field label="Pulse/Heart Rate" status={status} text="200 beats per minute" />
-              <Field label="Blood Pressure" status={status} text="80/50 mmHg" />
-            </SectionBody>
-            <SectionHeader title="May 21, 2022 05:18 PM">
-              <ButtonIcon
-                // permission="write_user"
-                // permissions={Account.permissions}
-                status={status}
-                title="Delete vital sign record">
-                <TrashCan20 />
-              </ButtonIcon>
-            </SectionHeader>
-            <SectionBody>
-              <Field label="Airway" status={status} text="CLEAR" />
-              <Field label="Respiratory Rate" status={status} text="80 cycles per minute" />
-            </SectionBody>
-            <SectionBody>
-              <Field label="Pulse/Heart Rate" status={status} text="200 beats per minute" />
-              <Field label="Blood Pressure" status={status} text="80/50 mmHg" />
-            </SectionBody>
-          </PaperView>
-
-          <PaperView>
-            <SectionHeader title="Victim 2: TODMA DOPLI">
-              <ButtonIcon
-                onClick={() => navigate('/incidents/records/1/victims/1')}
-                // permission="write_user"
-                // permissions={Account.permissions}
-                status={status}
-                title="View victim record">
-                <Catalog20 />
-              </ButtonIcon>
-              <ButtonIcon
-                // permission="write_user"
-                // permissions={Account.permissions}
-                status={status}
-                title="Edit victim record">
-                <Edit20 />
-              </ButtonIcon>
-              <ButtonIcon
-                // permission="write_user"
-                // permissions={Account.permissions}
-                status={status}
-                title="Delete victim record">
-                <TrashCan20 />
-              </ButtonIcon>
-            </SectionHeader>
-            <SectionBody>
-              <Field label="Status" status={status} text="YELLOW" />
-              <Field label="Gender" status={status} text="MALE" />
-              <Field label="Age" status={status} text="27" />
-            </SectionBody>
-
-            <SectionHeader bigTitle="Vital Sign Monitoring">
-              <ButtonIcon
-                // permission="write_user"
-                // permissions={Account.permissions}
-                status={status}
-                title="Refresh vital signs">
-                <Reset20 />
-              </ButtonIcon>
-              <ButtonIcon
-                label="Add Vital Sign"
-                onClick={() => navigate('/incidents/records/1/victims/1/vital_signs/1', { replace: true })}
-                // permission="write_user"
-                // permissions={Account.permissions}
-                status={status}>
-                <Add20 />
-              </ButtonIcon>
-            </SectionHeader>
-            <SectionHeader title="May 21, 2022 04:47 PM">
-              <ButtonIcon
-                // permission="write_user"
-                // permissions={Account.permissions}
-                status={status}
-                title="Delete vital sign record">
-                <TrashCan20 />
-              </ButtonIcon>
-            </SectionHeader>
-            <SectionBody>
-              <Field label="Airway" status={status} text="CLEAR" />
-              <Field label="Respiratory Rate" status={status} text="80 cycles per minute" />
-            </SectionBody>
-            <SectionBody>
-              <Field label="Pulse/Heart Rate" status={status} text="200 beats per minute" />
-              <Field label="Blood Pressure" status={status} text="80/50 mmHg" />
-            </SectionBody>
-            <SectionHeader title="May 21, 2022 05:18 PM">
-              <ButtonIcon
-                // permission="write_user"
-                // permissions={Account.permissions}
-                status={status}
-                title="Delete vital sign record">
-                <TrashCan20 />
-              </ButtonIcon>
-            </SectionHeader>
-            <SectionBody>
-              <Field label="Airway" status={status} text="CLEAR" />
-              <Field label="Respiratory Rate" status={status} text="80 cycles per minute" />
-            </SectionBody>
-            <SectionBody>
-              <Field label="Pulse/Heart Rate" status={status} text="200 beats per minute" />
-              <Field label="Blood Pressure" status={status} text="80/50 mmHg" />
-            </SectionBody>
-          </PaperView>
+          <Table status={status} emptyLabel="No victim/s found" headers={['Victim ID', 'Name', 'Age', 'Gender', 'Status'].filter(Boolean)}>
+            {status === 'success' &&
+              Victims.data?.records.victims.map((item, index) => {
+                return (
+                  <tr
+                    key={index}
+                    onClick={() => navigate(`/incidents/records/${item.incident_id}/victims/${item.id}`)}
+                    title="Click to view more details">
+                    <td>{item.id}</td>
+                    <td>{item.name}</td>
+                    <td>{Help.displayNumberWithComma(item.age)}</td>
+                    <td>{Help.displayText(item.sex)}</td>
+                    <td>
+                      {item.status === 'green' && <div className="box-green" />}
+                      {item.status === 'yellow' && <div className="box-yellow" />}
+                      {item.status === 'red' && <div className="box-red" />}
+                      {item.status === 'black' && '⬛'}
+                    </td>
+                  </tr>
+                )
+              })}
+          </Table>
         </PaperView>
       </FadeAnimation>
     </PageContent>

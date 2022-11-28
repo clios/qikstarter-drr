@@ -48,7 +48,7 @@ export default Help = {
     return text?.toUpperCase() || 'NOT FOUND'
   },
   findInArray: (arr = [''], str) => {
-    const result = arr.find((element) => element === str)
+    const result = arr?.find((element) => element === str)
     return Boolean(result)
   },
   formDataOrEmptyString: function (data) {

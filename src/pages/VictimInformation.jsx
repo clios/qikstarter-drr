@@ -227,7 +227,7 @@ function VictimInformation() {
               <Add20 />
             </ButtonIcon>
           </SectionHeader>
-          <SectionBody>
+          <PaperView>
             <Table
               className="no-click"
               status={status}
@@ -262,7 +262,7 @@ function VictimInformation() {
                   )
                 })}
             </Table>
-          </SectionBody>
+          </PaperView>
           <SectionHeader title="3. Glasgow Coma Scale" />
           <SectionBody>
             <Field label="Best Eye Response" status={status} text={Help.displayText(victim.best_eye_response)} />
@@ -281,52 +281,48 @@ function VictimInformation() {
             <Field label="Location" status={status} text={Help.displayText(victim.pain_location)} />
           </SectionBody>
           <SectionHeader title="6. Secondary Assessment" />
-          <SectionBody title="History of Illness">
-            <SectionBody>
-              <Field label="Heart Disease" status={status}>
-                <Toggle available={Help.findInArray(victim.history_of_illness, 'heart disease')} />
-              </Field>
-              <Field label="Hypertension" status={status}>
-                <Toggle available={Help.findInArray(victim.history_of_illness, 'hypertension')} />
-              </Field>
-              <Field label="Stroke" status={status}>
-                <Toggle available={Help.findInArray(victim.history_of_illness, 'stroke')} />
-              </Field>
-              <Field label="Diabetes" status={status}>
-                <Toggle available={Help.findInArray(victim.history_of_illness, 'diabetes')} />
-              </Field>
-              <Field label="Asthma" status={status}>
-                <Toggle available={Help.findInArray(victim.history_of_illness, 'asthma')} />
-              </Field>
-              <Field label="Tuberculosis" status={status}>
-                <Toggle available={Help.findInArray(victim.history_of_illness, 'tuberculosis')} />
-              </Field>
-              <Field label="Seizure" status={status}>
-                <Toggle available={Help.findInArray(victim.history_of_illness, 'seizure')} />
-              </Field>
-              <Field label="Covid-19" status={status}>
-                <Toggle available={Help.findInArray(victim.history_of_illness, 'covid-19')} />
-              </Field>
-              <Field label="Others" status={status} text={Help.displayText(victim.history_of_illness_ex)} />
-            </SectionBody>
+          <div className="sub-section-header">6.1 History of Illness</div>
+          <SectionBody>
+            <Field label="Heart Disease" status={status}>
+              <Toggle available={Help.findInArray(victim.history_of_illness, 'heart disease')} />
+            </Field>
+            <Field label="Hypertension" status={status}>
+              <Toggle available={Help.findInArray(victim.history_of_illness, 'hypertension')} />
+            </Field>
+            <Field label="Stroke" status={status}>
+              <Toggle available={Help.findInArray(victim.history_of_illness, 'stroke')} />
+            </Field>
+            <Field label="Diabetes" status={status}>
+              <Toggle available={Help.findInArray(victim.history_of_illness, 'diabetes')} />
+            </Field>
+            <Field label="Asthma" status={status}>
+              <Toggle available={Help.findInArray(victim.history_of_illness, 'asthma')} />
+            </Field>
+            <Field label="Tuberculosis" status={status}>
+              <Toggle available={Help.findInArray(victim.history_of_illness, 'tuberculosis')} />
+            </Field>
+            <Field label="Seizure" status={status}>
+              <Toggle available={Help.findInArray(victim.history_of_illness, 'seizure')} />
+            </Field>
+            <Field label="Covid-19" status={status}>
+              <Toggle available={Help.findInArray(victim.history_of_illness, 'covid-19')} />
+            </Field>
+            <Field label="Others" status={status} text={Help.displayText(victim.history_of_illness_ex)} />
           </SectionBody>
-          <SectionBody title="History of Last Hospitalization">
-            <SectionBody>
-              <Field label="Date of Last Confinement" status={status} text={Help.displayDateTimeSimple(victim.last_hospitalization_date)} />
-              <Field label="Name of Hospital/Institution" status={status} text={Help.displayText(victim.last_hospitalization_from)} />
-              <Field label="Reason for Hospitalization" status={status} text={Help.displayText(victim.last_hospitalization_reason)} />
-            </SectionBody>
+          <div className="sub-section-header">6.2 History of Last Hospitalization</div>
+          <SectionBody>
+            <Field label="Date of Last Confinement" status={status} text={Help.displayDateTimeSimple(victim.last_hospitalization_date)} />
+            <Field label="Name of Hospital/Institution" status={status} text={Help.displayText(victim.last_hospitalization_from)} />
+            <Field label="Reason for Hospitalization" status={status} text={Help.displayText(victim.last_hospitalization_reason)} />
           </SectionBody>
-          <SectionBody title="Intake/s">
-            <SectionBody>
-              <Field label="Last Oral Intake" status={status} text={Help.displayDateTimeSimple(victim.oral_intake)} />
-              <Field label="Last Alcohol Intake" status={status} text={Help.displayDateTimeSimple(victim.alcohol_intake)} />
-            </SectionBody>
+          <div className="sub-section-header">6.3 Last Intake/s</div>
+          <SectionBody>
+            <Field label="Last Oral Intake" status={status} text={Help.displayDateTimeSimple(victim.oral_intake)} />
+            <Field label="Last Alcohol Intake" status={status} text={Help.displayDateTimeSimple(victim.alcohol_intake)} />
           </SectionBody>
-          <SectionBody title="Event(s) / Activities leading to the Incident or Injury">
-            <SectionBody status={status}>
-              <Field label="Description" status={status} text={Help.displayText(victim.events_leading_to_incident)} />
-            </SectionBody>
+          <div className="sub-section-header">6.4 Event(s) / Activities leading to the Incident or Injury</div>
+          <SectionBody status={status}>
+            <Field label="Description" status={status} text={Help.displayText(victim.events_leading_to_incident)} />
           </SectionBody>
           <SectionHeader title="7. Interventions Given" />
           <SectionBody status={status}>

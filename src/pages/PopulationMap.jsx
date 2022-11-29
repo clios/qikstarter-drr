@@ -190,7 +190,6 @@ function PopulationMap() {
         mapEvent.mouse(map, HOUSEHOLD_LOCATIONS)
         mapEvent.clickCluster(map, HOUSEHOLD_LOCATIONS)
         mapEvent.clickUnclusteredPoint(map, HOUSEHOLD_LOCATIONS, (properties) => {
-          console.log(properties)
           toast.info(
             <div>
               <span className="text-blue">Household Head:</span>

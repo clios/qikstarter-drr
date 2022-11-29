@@ -297,53 +297,45 @@ function IncidentInformation() {
           <SectionBody>
             <Field status={status} text={Help.displayDateTimeSimple(incident.occured_at)} />
           </SectionBody>
-          <SectionFooter status={status}>Last updated by [NAME HERE] was {Help.displayDateTime(incident.created_at)}</SectionFooter>
-        </PaperView>
-
-        <PaperView>
-          <SectionHeader bigTitle="Victim Records">
+          <SectionHeader title="3. Victim Records">
             <ButtonIcon
-              // permission="write_user"
-              // permissions={Account.permissions}
-              status={status}
-              title="Refresh victim records">
-              <Reset20 />
-            </ButtonIcon>
-            <ButtonIcon
+              color="green"
               label="Add Victim Record"
               onClick={() => navigate(`/incidents/records/${ROUTE.incident_id}/victims/add`, { replace: true })}
-              // permission="write_user"
-              // permissions={Account.permissions}
               status={status}>
               <Add20 />
             </ButtonIcon>
           </SectionHeader>
-          <Table
-            status={status}
-            emptyLabel="No victim/s found"
-            headers={['Victim ID', 'Name', 'Age', 'Gender', 'Status'].filter(Boolean)}
-            total={totalVictims}>
-            {status === 'success' &&
-              Victims.data?.records.victims.map((item, index) => {
-                return (
-                  <tr
-                    key={index}
-                    onClick={() => navigate(`/incidents/records/${item.incident_id}/victims/${item.id}`)}
-                    title="Click to view more details">
-                    <td>{item.id}</td>
-                    <td>{item.name?.toUpperCase()}</td>
-                    <td>{Help.displayNumberWithComma(item.age)}</td>
-                    <td>{Help.displayText(item.sex)}</td>
-                    <td>
-                      {item.status === 'green' && <div className="box-green" />}
-                      {item.status === 'yellow' && <div className="box-yellow" />}
-                      {item.status === 'red' && <div className="box-red" />}
-                      {item.status === 'black' && '⬛'}
-                    </td>
-                  </tr>
-                )
-              })}
-          </Table>
+          <PaperView>
+            <Table
+              status={status}
+              emptyLabel="No victim/s found"
+              headers={['Victim ID', 'Name', 'Age', 'Gender', 'Status', 'GCS Score'].filter(Boolean)}
+              total={totalVictims}>
+              {status === 'success' &&
+                Victims.data?.records.victims.map((item, index) => {
+                  return (
+                    <tr
+                      key={index}
+                      onClick={() => navigate(`/incidents/records/${item.incident_id}/victims/${item.id}`)}
+                      title="Click to view more details">
+                      <td>{item.id}</td>
+                      <td>{item.name?.toUpperCase()}</td>
+                      <td>{Help.displayNumberWithComma(item.age)}</td>
+                      <td>{Help.displayText(item.sex)}</td>
+                      <td>
+                        {item.status === 'green' && <div className="box-green" />}
+                        {item.status === 'yellow' && <div className="box-yellow" />}
+                        {item.status === 'red' && <div className="box-red" />}
+                        {item.status === 'black' && '⬛'}
+                      </td>
+                      <td>{Help.displayNumber(item.total_gcs_score)}</td>
+                    </tr>
+                  )
+                })}
+            </Table>
+          </PaperView>
+          <SectionFooter status={status}>Last updated by [NAME HERE] was {Help.displayDateTime(incident.created_at)}</SectionFooter>
         </PaperView>
       </FadeAnimation>
     </PageContent>

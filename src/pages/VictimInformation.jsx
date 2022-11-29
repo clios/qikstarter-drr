@@ -13,7 +13,10 @@ import React from 'react'
 import SectionBody from '../components/SectionBody'
 import SectionHeader from '../components/SectionHeader'
 import Toggle from '../components/Toggle'
+import axios from 'axios'
+import { confirmAlert } from 'react-confirm-alert'
 import getVictimById from '../api/getVictimById'
+import { toast } from 'react-toastify'
 
 function VictimInformation() {
   // SEND GET USER REQUEST
@@ -80,6 +83,43 @@ function VictimInformation() {
     return () => setStatus('loading')
   }, [Victim.loading, Victim.error, Victim.data])
 
+  // DELETE VICTIM
+  function deleteVictim() {
+    const URL = process.env.BASE_URL + '/victims/' + ROUTE.victim_id
+    const CONFIG = { headers: { Authorization: `Bearer ${localStorage.getItem('q-drr-web-token')}` } }
+
+    confirmAlert({
+      title: 'Delete Victim Record',
+      message: 'This victim record will be permanently lost and you will not be able to recover it.',
+      buttons: [
+        {
+          label: 'Delete',
+          onClick: () => {
+            axios
+              .delete(URL, CONFIG)
+              .then((response) => {
+                if (response.status === 204) {
+                  setStatus('success')
+                  toast.success('Victim record has been deleted')
+                  navigate('/incidents/records/' + ROUTE.incident_id)
+                }
+              })
+              .catch((error) => {
+                setStatus('success')
+                if (error.response) {
+                  if (error.response?.status === 403) toast.error('User credential is forbidden')
+                  else if (error.response?.status === 404) toast.error('Victim was not found')
+                  else if (error.response?.status === 500) toast.error('Unexpected server error')
+                } else if (error.request) console.error(error.request)
+                else console.error('Error', error.message)
+              })
+          }
+        },
+        { label: 'Cancel' }
+      ]
+    })
+  }
+
   return (
     <PageContent>
       <FadeAnimation>
@@ -94,7 +134,7 @@ function VictimInformation() {
               <Edit20 />
             </ButtonIcon>
             <ButtonIcon
-              // onClick={deleteIncident}
+              onClick={deleteVictim}
               // permission="write_user"
               // permissions={Account.permissions}
               status={status}
@@ -166,8 +206,8 @@ function VictimInformation() {
               <Field label="Asthma" status={status}>
                 <Toggle available={Help.findInArray(victim.history_of_illness, 'asthma')} />
               </Field>
-              <Field label="Tubercolosis" status={status}>
-                <Toggle available={Help.findInArray(victim.history_of_illness, 'tubercolosis')} />
+              <Field label="Tuberculosis" status={status}>
+                <Toggle available={Help.findInArray(victim.history_of_illness, 'tuberculosis')} />
               </Field>
               <Field label="Seizure" status={status}>
                 <Toggle available={Help.findInArray(victim.history_of_illness, 'seizure')} />
@@ -180,7 +220,7 @@ function VictimInformation() {
           </SectionBody>
           <SectionBody title="History of Last Hospitalization">
             <SectionBody>
-              <Field label="Date of Last Confinement" status={status} text={Help.displayText(victim.last_hospitalization_date)} />
+              <Field label="Date of Last Confinement" status={status} text={Help.displayDateTimeSimple(victim.last_hospitalization_date)} />
               <Field label="Name of Hospital/Institution" status={status} text={Help.displayText(victim.last_hospitalization_from)} />
               <Field label="Reason for Hospitalization" status={status} text={Help.displayText(victim.last_hospitalization_reason)} />
             </SectionBody>
@@ -193,7 +233,7 @@ function VictimInformation() {
           </SectionBody>
           <SectionBody title="Event(s) / Activities leading to the Incident or Injury">
             <SectionBody status={status}>
-              <Field label="Description" status={status} text={Help.displayDateTimeSimple(victim.events_leading_to_incident)} />
+              <Field label="Description" status={status} text={Help.displayText(victim.events_leading_to_incident)} />
             </SectionBody>
           </SectionBody>
           <SectionHeader title="6. Interventions Given" />

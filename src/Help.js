@@ -51,6 +51,10 @@ export default Help = {
     const result = arr?.find((element) => element === str)
     return Boolean(result)
   },
+  formArray: function (arr) {
+    if (arr.length === 0) return null
+    return arr
+  },
   formDataOrEmptyString: function (data) {
     return data || ''
   },
@@ -58,7 +62,7 @@ export default Help = {
     return date ? dayjs(`${date}T${time}:00`).format('YYYY-MM-DDTHH:mm:ssZ') : null
   },
   formInputDate: function (date) {
-    return date ? dayjs(date).format('YYYY-MM-DD') : null
+    return date ? dayjs(date).format('YYYY-MM-DDTHH:mm:ssZ') : null
   },
   formInputNumber: function (number) {
     if (number === '') return null

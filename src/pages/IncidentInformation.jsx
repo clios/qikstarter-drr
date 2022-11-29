@@ -311,7 +311,7 @@ function IncidentInformation() {
             </ButtonIcon>
             <ButtonIcon
               label="Add Victim Record"
-              onClick={() => navigate('/incidents/records/1/victims/add', { replace: true })}
+              onClick={() => navigate(`/incidents/records/${ROUTE.incident_id}/victims/add`, { replace: true })}
               // permission="write_user"
               // permissions={Account.permissions}
               status={status}>
@@ -331,7 +331,7 @@ function IncidentInformation() {
                     onClick={() => navigate(`/incidents/records/${item.incident_id}/victims/${item.id}`)}
                     title="Click to view more details">
                     <td>{item.id}</td>
-                    <td>{item.name}</td>
+                    <td>{item.name?.toUpperCase()}</td>
                     <td>{Help.displayNumberWithComma(item.age)}</td>
                     <td>{Help.displayText(item.sex)}</td>
                     <td>

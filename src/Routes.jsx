@@ -29,6 +29,8 @@ import VRITabs from './layouts/VRITabs'
 import VictimCreate from './pages/VictimCreate'
 import VictimInformation from './pages/VictimInformation'
 import VictimUpdate from './pages/VictimUpdate'
+import VitalSignCreate from './pages/VitalSignCreate'
+import VitalSignUpdate from './pages/VitalSignUpdate'
 import YourAccountProfile from './pages/YourAccountProfile'
 import YourAccountTabs from './layouts/YourAccountTabs'
 import YourAccountUpdate from './pages/YourAccountUpdate'
@@ -66,6 +68,8 @@ function Routes() {
           <VictimCreate path="/records/:incident_id/victims/add" />
           <VictimInformation path="/records/:incident_id/victims/:victim_id" />
           <VictimUpdate path="/records/:incident_id/victims/:victim_id/edit" />
+          <VitalSignCreate path="/records/:incident_id/victims/:victim_id/vital_signs/add" />
+          <VitalSignUpdate path="/records/:incident_id/victims/:victim_id/vital_signs/:vital_sign_id/edit" />
           <IncidentMap path="/map" />
         </IncidentTabs>
 

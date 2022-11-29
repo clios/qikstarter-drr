@@ -12,20 +12,24 @@ import PaperView from '../components/PaperView'
 import React from 'react'
 import SectionBody from '../components/SectionBody'
 import SectionHeader from '../components/SectionHeader'
+import Table from '../components/Table'
 import Toggle from '../components/Toggle'
 import axios from 'axios'
 import { confirmAlert } from 'react-confirm-alert'
 import getVictimById from '../api/getVictimById'
+import getVitalSigns from '../api/getVitalSigns'
 import { toast } from 'react-toastify'
 
 function VictimInformation() {
   // SEND GET USER REQUEST
   const ROUTE = useParams()
   const Victim = getVictimById(ROUTE.victim_id)
+  const VitalSigns = getVitalSigns({ victim_id: ROUTE.victim_id, orders: 'recorded_at:desc' })
 
   // INFORMATION STATE
   const Account = React.useContext(AccountContext)
   const [status, setStatus] = React.useState('loading')
+  const [vitalSigns, setVitalSigns] = React.useState([])
 
   // INFORMATION STATE: INCIDENT
   const [victim, setVictim] = React.useState({
@@ -83,6 +87,19 @@ function VictimInformation() {
     return () => setStatus('loading')
   }, [Victim.loading, Victim.error, Victim.data])
 
+  // ON FETCH VITAL SIGNS
+  React.useEffect(() => {
+    if (VitalSigns.loading) setStatus('loading')
+    if (VitalSigns.error) setStatus('error')
+
+    if (VitalSigns.data) {
+      setStatus('success')
+      setVitalSigns(VitalSigns.data)
+    }
+
+    return () => setStatus('loading')
+  }, [VitalSigns.loading, VitalSigns.error, VitalSigns.data])
+
   // DELETE VICTIM
   function deleteVictim() {
     const URL = process.env.BASE_URL + '/victims/' + ROUTE.victim_id
@@ -109,6 +126,43 @@ function VictimInformation() {
                 if (error.response) {
                   if (error.response?.status === 403) toast.error('User credential is forbidden')
                   else if (error.response?.status === 404) toast.error('Victim was not found')
+                  else if (error.response?.status === 500) toast.error('Unexpected server error')
+                } else if (error.request) console.error(error.request)
+                else console.error('Error', error.message)
+              })
+          }
+        },
+        { label: 'Cancel' }
+      ]
+    })
+  }
+
+  // DELETE VITAL SIGN
+  function deleteVitalSign(id) {
+    const URL = process.env.BASE_URL + '/vitalSigns/' + id
+    const CONFIG = { headers: { Authorization: `Bearer ${localStorage.getItem('q-drr-web-token')}` } }
+
+    confirmAlert({
+      title: 'Delete Vital Sign Record',
+      message: 'This vital sign record will be permanently lost and you will not be able to recover it.',
+      buttons: [
+        {
+          label: 'Delete',
+          onClick: () => {
+            setStatus('loading')
+            axios
+              .delete(URL, CONFIG)
+              .then((response) => {
+                if (response.status === 204) {
+                  toast.success('Vital sign record has been deleted')
+                  VitalSigns.mutate().then(() => setStatus('success'))
+                }
+              })
+              .catch((error) => {
+                setStatus('success')
+                if (error.response) {
+                  if (error.response?.status === 403) toast.error('User credential is forbidden')
+                  else if (error.response?.status === 404) toast.error('Vital sign was not found')
                   else if (error.response?.status === 500) toast.error('Unexpected server error')
                 } else if (error.request) console.error(error.request)
                 else console.error('Error', error.message)
@@ -164,24 +218,69 @@ function VictimInformation() {
             <Field label="Contact Person" status={status} text={Help.displayText(victim.contact_person)} />
             <Field label="Contact Number" status={status} text={Help.displayText(victim.contact_number)} />
           </SectionBody>
-          <SectionHeader title="2. Glasgow Coma Scale" />
+          <SectionHeader title="2. Vital Signs Monitoring">
+            <ButtonIcon
+              color="green"
+              label="Add Vital Sign Record"
+              onClick={() => navigate(`/incidents/records/${ROUTE.incident_id}/victims/${ROUTE.victim_id}/vital_signs/add`, { replace: true })}
+              status={status}>
+              <Add20 />
+            </ButtonIcon>
+          </SectionHeader>
+          <SectionBody>
+            <Table
+              className="no-click"
+              status={status}
+              emptyLabel="No vital sign record/s  found"
+              headers={['Recorded At', 'Airway', 'Respiratory Rate (CPM)', 'Pulse/Heart Rate (BPM)', 'Blood Pressure (mmHg)', 'Action'].filter(
+                Boolean
+              )}
+              total={vitalSigns.records?.total}>
+              {status === 'success' &&
+                vitalSigns.records?.vital_signs.map((item, index) => {
+                  return (
+                    <tr key={index}>
+                      <td>{Help.displayDateTimeSimple(item.recorded_at)}</td>
+                      <td>{item.airway?.toUpperCase()}</td>
+                      <td>{Help.displayNumber(item.respiratory_rate)}</td>
+                      <td>{Help.displayNumber(item.pulse_rate)}</td>
+                      <td>
+                        {item.systolic}/{item.diastolic}
+                      </td>
+                      <td>
+                        <ButtonIcon
+                          status={status}
+                          label="Edit"
+                          onClick={() => navigate(`/incidents/records/${ROUTE.incident_id}/victims/${ROUTE.victim_id}/vital_signs/${item.id}/edit`)}>
+                          <Edit20 />
+                        </ButtonIcon>
+                        <ButtonIcon color="red" status={status} label="Delete" onClick={() => deleteVitalSign(item.id)}>
+                          <TrashCan20 />
+                        </ButtonIcon>
+                      </td>
+                    </tr>
+                  )
+                })}
+            </Table>
+          </SectionBody>
+          <SectionHeader title="3. Glasgow Coma Scale" />
           <SectionBody>
             <Field label="Best Eye Response" status={status} text={Help.displayText(victim.best_eye_response)} />
             <Field label="Best Verbal Response" status={status} text={Help.displayText(victim.best_verbal_response)} />
             <Field label="Best Motor Response" status={status} text={Help.displayText(victim.best_motor_response)} />
             <Field label="Total GCS Score" status={status} text={Help.displayNumber(victim.total_gcs_score)} />
           </SectionBody>
-          <SectionHeader title="3. Bleeding" />
+          <SectionHeader title="4. Bleeding" />
           <SectionBody>
             <Field label="Bleeding Status" status={status} text={Help.displayText(victim.bleeding_status)} />
             <Field label="Location" status={status} text={Help.displayText(victim.bleeding_status_location)} />
           </SectionBody>
-          <SectionHeader title="4. Pain Scale" />
+          <SectionHeader title="5. Pain Scale" />
           <SectionBody>
             <Field label="Onset of Pain" text={Help.displayText(victim.pain_onset)} />
             <Field label="Location" status={status} text={Help.displayText(victim.pain_location)} />
           </SectionBody>
-          <SectionHeader title="5. Secondary Assessment" />
+          <SectionHeader title="6. Secondary Assessment" />
           <SectionBody title="History of Illness">
             <SectionBody>
               <Field label="Heart Disease" status={status}>
@@ -229,54 +328,17 @@ function VictimInformation() {
               <Field label="Description" status={status} text={Help.displayText(victim.events_leading_to_incident)} />
             </SectionBody>
           </SectionBody>
-          <SectionHeader title="6. Interventions Given" />
+          <SectionHeader title="7. Interventions Given" />
           <SectionBody status={status}>
             <Field label="Description" status={status} text={Help.displayText(victim.intervention)} />
           </SectionBody>
-          <SectionHeader title="7. Endorsement to Health Facility" />
+          <SectionHeader title="8. Endorsement to Health Facility" />
           <SectionBody>
             <Field label="Name" status={status} text={Help.displayText(victim.endorsement_person)} />
             <Field label="Date & Time" status={status} text={Help.displayDateTimeSimple(victim.endorsement_date)} />
             <Field label="Name of Hospital/Institution" status={status} text={Help.displayText(victim.endorsement_hospital)} />
           </SectionBody>
         </PaperView>
-
-        {/* <PaperView>
-          <SectionHeader bigTitle="Vital Signs Monitoring">
-            <ButtonIcon
-              // permission="write_user"
-              // permissions={Account.permissions}
-              status={status}
-              title="Refresh vital signs">
-              <Reset20 />
-            </ButtonIcon>
-            <ButtonIcon
-              label="Add Vital Sign"
-              onClick={() => navigate('/incidents/records/1/victims/1/vital_signs/1', { replace: true })}
-              // permission="write_user"
-              // permissions={Account.permissions}
-              status={status}>
-              <Add20 />
-            </ButtonIcon>
-          </SectionHeader>
-          <SectionHeader title="1. 05-21-2022 04:47 PM">
-            <ButtonIcon
-              // permission="write_user"
-              // permissions={Account.permissions}
-              status={status}
-              title="Delete vital sign record">
-              <TrashCan20 />
-            </ButtonIcon>
-          </SectionHeader>
-          <SectionBody>
-            <Field label="Airway" status={status} text="CLEAR" />
-            <Field label="Respiratory Rate" status={status} text="80 cycles per minute" />
-          </SectionBody>
-          <SectionBody>
-            <Field label="Pulse/Heart Rate" status={status} text="200 beats per minute" />
-            <Field label="Blood Pressure" status={status} text="80/50 mmHg" />
-          </SectionBody>
-        </PaperView> */}
       </FadeAnimation>
     </PageContent>
   )

@@ -1,13 +1,14 @@
+import { Close20, Information24 } from '@carbon/icons-react'
 import { navigate, useParams } from '@reach/router'
 
-import Account from '../json/account.json'
 import AccountContext from '../contexts/AccountContext'
 import Address from '../Address'
 import Authorization from '../components/Authorization'
 import Button from '../components/Button'
 import ButtonIcon from '../components/ButtonIcon'
 import Checkbox from '../components/Checkbox'
-import { Close20 } from '@carbon/icons-react'
+import Cleave from 'cleave.js/react'
+import { Entropy } from 'entropy-string'
 import FadeAnimation from '../components/FadeAnimation'
 import Field from '../components/Field'
 import Form from '../components/Form'
@@ -18,17 +19,25 @@ import Help from '../Help'
 import Input from '../components/Input'
 import PageContent from '../components/PageContent'
 import React from 'react'
+import SectionBody from '../components/SectionBody'
 import SectionHeader from '../components/SectionHeader'
 import Select from '../components/Select'
 import Textarea from '../components/Textarea'
+import VicinityChecker from '../components/VicinityChecker'
 import axios from 'axios'
+import { confirmAlert } from 'react-confirm-alert'
+import getVictimById from '../api/getVictimById'
+import { toJpeg } from 'html-to-image'
 import { toast } from 'react-toastify'
 
-function VictimCreate() {
-  // INFORMATION STATE
+function VictimUpdate() {
+  // SEND GET VICTIM REQUEST
   const ROUTE = useParams()
+  const Victim = getVictimById(ROUTE.victim_id)
+
+  // INFORMATION STATE
   const Account = React.useContext(AccountContext)
-  const [status, setStatus] = React.useState('success')
+  const [status, setStatus] = React.useState('loading')
   const [helper, setHelper] = React.useState({})
   const [error, setError] = React.useState({})
 
@@ -81,11 +90,101 @@ function VictimCreate() {
   const [endorsement_time, setEndorsementTime] = React.useState('')
   const [endorsement_hospital, setEndorsementHospital] = React.useState('')
 
+  // ON FETCH INCIDENT
+  React.useEffect(() => {
+    if (Victim.loading) setStatus('loading')
+    if (Victim.error) setStatus('error')
+    if (Victim.data) {
+      let v = {
+        id: null,
+        incident_id: null,
+        name: null,
+        sex: null,
+        age: null,
+        birthday: null,
+        civil_status: null,
+        municipal: null,
+        barangay: null,
+        purok: null,
+        contact_person: null,
+        contact_number: null,
+        intervention: null,
+        status: null,
+        best_eye_response: null,
+        best_verbal_response: null,
+        best_motor_response: null,
+        total_gcs_score: null,
+        bleeding_status: null,
+        bleeding_status_location: null,
+        pain_onset: null,
+        pain_location: null,
+        history_of_illness: null,
+        history_of_illness_ex: null,
+        last_hospitalization_from: null,
+        last_hospitalization_reason: null,
+        last_hospitalization_date: null,
+        oral_intake: null,
+        alcohol_intake: null,
+        events_leading_to_incident: null,
+        endorsement_person: null,
+        endorsement_hospital: null,
+        endorsement_date: null,
+        created_at: null,
+        updated_at: null
+      }
+      v = Victim.data
+      setStatus('success')
+      setVictimStatus(Help.setText(v.status))
+      // setName()
+      // setBirthdate()
+      // setSex()
+      // setMaritalStatus()
+      // setMunicipality()
+      // setBarangay()
+      // setPurok()
+      // setContactPerson()
+      // setContactNumber()
+      // setBestEyeResponse()
+      // setBestVerbalResponse()
+      // setBestMotorResponse()
+      // setBleedingStatus()
+      // setLocationOfBleed()
+      // setOnsetOfPain()
+      // setLocationOfPain()
+      // setHistoryOfIllnessOther()
+      // setHistoryOfIllnessHeartDisease()
+      // setHistoryOfIllnessHypertension()
+      // setHistoryOfIllnessStroke()
+      // setHistoryOfIllnessDiabetes()
+      // setHistoryOfIllnessAsthma()
+      // setHistoryOfIllnessTuberculosis()
+      // setHistoryOfIllnessSeizure()
+      // setHistoryOfIllnessCovid_19()
+      // setHistoryOfIllnessSpecify()
+      // setLastHospitalizationDate()
+      // setLastHospitalizationName()
+      // setLastHospitalizationReason()
+      // setOralIntakeDate()
+      // setOralIntakeTime()
+      // setAlcoholIntakeDate()
+      // setAlcoholIntakeTime()
+      // setActivitiesLeadingToIncident()
+      // setInterventionsGiven()
+      // setEndorsementFullName()
+      // setEndorsementDate()
+      // setEndorsementTime()
+      // setEndorsementHospital()
+    }
+
+    return () => setStatus('loading')
+  }, [Victim.loading, Victim.error, Victim.data])
+
+  // SEND UPDATE VICTIM REQUEST
   function submitForm(e) {
     e.preventDefault()
     setStatus('loading')
 
-    const URL = process.env.BASE_URL + '/victims'
+    const URL = process.env.BASE_URL + '/victims/' + ROUTE.victim_id
     const DATA = {
       incident_id: Help.formInputNumber(ROUTE.incident_id),
       name: Help.formInputText(name),
@@ -133,12 +232,12 @@ function VictimCreate() {
     const CONFIG = { headers: { Authorization: `Bearer ${localStorage.getItem('q-drr-web-token')}` } }
 
     axios
-      .post(URL, DATA, CONFIG)
+      .patch(URL, DATA, CONFIG)
       .then((response) => {
+        setStatus('success')
         if (response.status === 201) {
-          setStatus('success')
-          toast.success('New victim record has been created')
-          navigate(`/incidents/records/${ROUTE.incident_id}`, { replace: true })
+          toast.success('Vicitm record has beed updated')
+          navigate(`/incidents/records/${ROUTE.incident_id}/victims/${ROUTE.victim_id}`, { replace: true })
         }
       })
       .catch((error) => {
@@ -148,6 +247,7 @@ function VictimCreate() {
             setHelper(error.response.data)
             setError(error.response.data)
           } else if (error.response?.status === 403) toast.error('User credential is forbidden')
+          else if (error.response?.status === 404) toast.error('Victim record was not found')
           else if (error.response?.status === 500) toast.error('Unexpected server error')
         } else if (error.request) console.error(error.request)
         else console.error('Error', error.message)
@@ -155,14 +255,13 @@ function VictimCreate() {
   }
 
   return (
-    // <Authorization permissions={Account.permissions} permission="write_resident">
     <PageContent>
       <FadeAnimation>
         <Form status={status}>
-          <SectionHeader bigTitle="Create Victim Record">
+          <SectionHeader bigTitle="Update Victim Record">
             <ButtonIcon
               color="red"
-              onClick={() => navigate(`/incidents/records/${ROUTE.incident_id}`, { replace: true })}
+              onClick={() => navigate(`/incidents/records/${ROUTE.incident_id}/victims/${ROUTE.victim_id}`, { replace: true })}
               status={status}
               title="Close this form">
               <Close20 />
@@ -411,19 +510,18 @@ function VictimCreate() {
           <FormFooter>
             <Button
               disabled={status === 'loading'}
-              loadingText="Creating..."
+              loadingText="Updating..."
               onClick={submitForm}
               status={status}
-              title="Create new victim record"
+              title="Update existing victim record"
               type="submit">
-              Create Victim Record
+              Update Victim Record
             </Button>
           </FormFooter>
         </Form>
       </FadeAnimation>
     </PageContent>
-    // </Authorization>
   )
 }
 
-export default VictimCreate
+export default VictimUpdate

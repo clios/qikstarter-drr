@@ -28,6 +28,7 @@ import VRILandslide from './pages/VRILandslide'
 import VRITabs from './layouts/VRITabs'
 import VictimCreate from './pages/VictimCreate'
 import VictimInformation from './pages/VictimInformation'
+import VictimUpdate from './pages/VictimUpdate'
 import YourAccountProfile from './pages/YourAccountProfile'
 import YourAccountTabs from './layouts/YourAccountTabs'
 import YourAccountUpdate from './pages/YourAccountUpdate'
@@ -64,6 +65,7 @@ function Routes() {
           <IncidentUpdate path="/records/:incident_id/edit" />
           <VictimCreate path="/records/:incident_id/victims/add" />
           <VictimInformation path="/records/:incident_id/victims/:victim_id" />
+          <VictimUpdate path="/records/:incident_id/victims/:victim_id/edit" />
           <IncidentMap path="/map" />
         </IncidentTabs>
 

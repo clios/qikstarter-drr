@@ -126,19 +126,12 @@ function VictimInformation() {
         <PaperView>
           <SectionHeader bigTitle="Victim Information">
             <ButtonIcon
-              // onClick={() => navigate('/incidents/records/' + ROUTE.incident_id + '/edit')}
-              // permission="write_user"
-              // permissions={Account.permissions}
+              onClick={() => navigate(`/incidents/records/${ROUTE.incident_id}/victims/${ROUTE.victim_id}/edit`)}
               status={status}
               title="Edit incident record">
               <Edit20 />
             </ButtonIcon>
-            <ButtonIcon
-              onClick={deleteVictim}
-              // permission="write_user"
-              // permissions={Account.permissions}
-              status={status}
-              title="Delete incident record">
+            <ButtonIcon onClick={deleteVictim} status={status} title="Delete incident record">
               <TrashCan20 />
             </ButtonIcon>
             <ButtonIcon

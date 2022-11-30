@@ -1,4 +1,4 @@
-import { Close20, Information24 } from '@carbon/icons-react'
+import { ArrowLeft20, Information24 } from '@carbon/icons-react'
 import { navigate, useParams } from '@reach/router'
 
 import AccountContext from '../contexts/AccountContext'
@@ -260,11 +260,12 @@ function VictimUpdate() {
         <Form status={status}>
           <SectionHeader bigTitle="Update Victim Record">
             <ButtonIcon
-              color="red"
+              color="gray"
+              label="Back to Victim Information"
               onClick={() => navigate(`/incidents/records/${ROUTE.incident_id}/victims/${ROUTE.victim_id}`, { replace: true })}
               status={status}
               title="Close this form">
-              <Close20 />
+              <ArrowLeft20 />
             </ButtonIcon>
           </SectionHeader>
           <FormRow>
@@ -404,14 +405,13 @@ function VictimUpdate() {
             </Field>
           </FormRow>
           <SectionHeader title="5. Secondary Assessment" />
+          <div className="sub-section-header">5.1 History of Illness</div>
           <FormRow>
-            <Field label="History of Illness">
-              <Checkbox
-                checked={history_of_illness_heart_disease}
-                onChange={(e) => setHistoryOfIllnessHeartDisease(e.target.checked)}
-                text="Heart Disease"
-              />
-            </Field>
+            <Checkbox
+              checked={history_of_illness_heart_disease}
+              onChange={(e) => setHistoryOfIllnessHeartDisease(e.target.checked)}
+              text="Heart Disease"
+            />
             <Checkbox
               checked={history_of_illness_hypertension}
               onChange={(e) => setHistoryOfIllnessHypertension(e.target.checked)}
@@ -441,41 +441,39 @@ function VictimUpdate() {
               />
             </Field>
           </FormRow>
-          <FormRow title="History of Last Hospitalization">
-            <FormRow>
-              <Field label="Date">
-                <Input onChange={(e) => setLastHospitalizationDate(e.target.value)} type="date" value={last_hospitalization_date} />
-              </Field>
-              <Field label="Name of Hospital/Institution">
-                <Input onChange={(e) => setLastHospitalizationName(e.target.value)} uppercase type="text" value={last_hospitalization_name} />
-              </Field>
-              <Field label="Reason for Hospitalization">
-                <Input onChange={(e) => setLastHospitalizationReason(e.target.value)} uppercase type="text" value={last_hospitalization_reason} />
-              </Field>
-            </FormRow>
-          </FormRow>
-          <FormRow title="Oral Intake">
-            <FormRow>
-              <Field label="Date" status={status}>
-                <Input onChange={(e) => setOralIntakeDate(e.target.value)} uppercase required type="date" value={oral_intake_date} />
-              </Field>
-              <Field label="Time" status={status}>
-                <Input onChange={(e) => setOralIntakeTime(e.target.value)} uppercase required type="time" value={oral_intake_time} />
-              </Field>
-            </FormRow>
-          </FormRow>
-          <FormRow title="Alcohol Intake">
-            <FormRow>
-              <Field label="Date" status={status}>
-                <Input onChange={(e) => setAlcoholIntakeDate(e.target.value)} uppercase required type="date" value={alcohol_intake_date} />
-              </Field>
-              <Field label="Time" status={status}>
-                <Input onChange={(e) => setAlcoholIntakeTime(e.target.value)} uppercase required type="time" value={alcohol_intake_time} />
-              </Field>
-            </FormRow>
-          </FormRow>
+          <div className="sub-section-header">5.2 History of Last Hospitalization</div>
           <FormRow>
-            <Field label="Activities leading to the incident or injury">
+            <Field label="Date">
+              <Input onChange={(e) => setLastHospitalizationDate(e.target.value)} type="date" value={last_hospitalization_date} />
+            </Field>
+            <Field label="Name of Hospital/Institution">
+              <Input onChange={(e) => setLastHospitalizationName(e.target.value)} uppercase type="text" value={last_hospitalization_name} />
+            </Field>
+            <Field label="Reason for Hospitalization">
+              <Input onChange={(e) => setLastHospitalizationReason(e.target.value)} uppercase type="text" value={last_hospitalization_reason} />
+            </Field>
+          </FormRow>
+          <div className="sub-section-header">5.3 Oral Intake</div>
+          <FormRow>
+            <Field label="Date" status={status}>
+              <Input onChange={(e) => setOralIntakeDate(e.target.value)} uppercase required type="date" value={oral_intake_date} />
+            </Field>
+            <Field label="Time" status={status}>
+              <Input onChange={(e) => setOralIntakeTime(e.target.value)} uppercase required type="time" value={oral_intake_time} />
+            </Field>
+          </FormRow>
+          <div className="sub-section-header">5.4 Alcohol Intake</div>
+          <FormRow>
+            <Field label="Date" status={status}>
+              <Input onChange={(e) => setAlcoholIntakeDate(e.target.value)} uppercase required type="date" value={alcohol_intake_date} />
+            </Field>
+            <Field label="Time" status={status}>
+              <Input onChange={(e) => setAlcoholIntakeTime(e.target.value)} uppercase required type="time" value={alcohol_intake_time} />
+            </Field>
+          </FormRow>
+          <div className="sub-section-header">5.5 Activities leading to the incident or injury</div>
+          <FormRow>
+            <Field label="Description">
               <Input
                 onChange={(e) => setActivitiesLeadingToIncident(e.target.value)}
                 uppercase

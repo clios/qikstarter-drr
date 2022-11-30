@@ -3,6 +3,7 @@ import { Add20, Download20, Filter20, Reset20 } from '@carbon/icons-react'
 import AccountContext from '../contexts/AccountContext'
 import Address from '../Address'
 import Authorization from '../components/Authorization'
+import Button from '../components/Button'
 import ButtonIcon from '../components/ButtonIcon'
 import { CSVLink } from 'react-csv'
 import FadeAnimation from '../components/FadeAnimation'
@@ -130,9 +131,9 @@ function IncidentRecords() {
               <Download20 />
             </ButtonIcon>
           </CSVLink>
-          <ButtonIcon color="green" label="Add Incident Record" onClick={() => navigate('/incidents/records/add')} status={status}>
-            <Add20 />
-          </ButtonIcon>
+          <Button color="green" onClick={() => navigate('/incidents/records/add')} status={status}>
+            Create Incident Rescue Record
+          </Button>
         </TableToolbar>
         <SearchBox className={display ? 'display' : 'hidden'}>
           <FormRow>

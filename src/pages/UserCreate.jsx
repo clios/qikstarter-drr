@@ -1,4 +1,4 @@
-import { Close20, Information24 } from '@carbon/icons-react'
+import { ArrowLeft20, Information24 } from '@carbon/icons-react'
 
 import Account from '../json/account.json'
 import AccountContext from '../contexts/AccountContext'
@@ -111,9 +111,14 @@ function UserCreate() {
     <PageContent>
       <FadeAnimation>
         <Form status={status}>
-          <SectionHeader bigTitle="New User Account Form">
-            <ButtonIcon color="red" onClick={() => navigate('/users/records', { replace: true })} status={status} title="Close">
-              <Close20 />
+          <SectionHeader bigTitle="Create User Account">
+            <ButtonIcon
+              color="gray"
+              label="Back to User Accounts"
+              onClick={() => navigate('/users/records', { replace: true })}
+              status={status}
+              title="Close">
+              <ArrowLeft20 />
             </ButtonIcon>
           </SectionHeader>
           <SectionHeader title="1. Personal" />

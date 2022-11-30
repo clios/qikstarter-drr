@@ -136,6 +136,19 @@ a:link {
   color: #20a8df;
 }
 
+.sub-section-table {
+  padding: 1rem 4rem 1rem 4rem;
+  background-color: hsla(0, 0%, 100%, 0.1);
+}
+
+.sub-section-table > * {
+  border: 2px solid #df9c20;
+}
+
+.sub-section-action {
+  display: flex;
+}
+
 /* FIX MAPBOX EXPORT */
 .mapboxgl-export-list {
   background-color: hsl(226, 78%, 8%);

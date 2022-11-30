@@ -1,6 +1,6 @@
+import { ArrowLeft20 } from '@carbon/icons-react'
 import Button from '../components/Button'
 import ButtonIcon from '../components/ButtonIcon'
-import { Close20 } from '@carbon/icons-react'
 import FadeAnimation from '../components/FadeAnimation'
 import Field from '../components/Field'
 import Form from '../components/Form'
@@ -93,8 +93,13 @@ function YourAccountUpdate() {
       <FadeAnimation>
         <Form status={status}>
           <SectionHeader bigTitle="Update Your Account">
-            <ButtonIcon color="red" onClick={() => navigate('/your-account/information')} status={status} title="Close this form">
-              <Close20 />
+            <ButtonIcon
+              color="gray"
+              label="Back to Your Account Information"
+              onClick={() => navigate('/your-account/information')}
+              status={status}
+              title="Close this form">
+              <ArrowLeft20 />
             </ButtonIcon>
           </SectionHeader>
           <SectionHeader title="1. Personal" />

@@ -3,12 +3,12 @@ import { navigate, useParams } from '@reach/router'
 import Account from '../json/account.json'
 import AccountContext from '../contexts/AccountContext'
 import Address from '../Address'
+import { ArrowLeft20 } from '@carbon/icons-react'
 import Authorization from '../components/Authorization'
 import Button from '../components/Button'
 import ButtonIcon from '../components/ButtonIcon'
 import Checkbox from '../components/Checkbox'
 import Cleave from 'cleave.js/react'
-import { Close20 } from '@carbon/icons-react'
 import FadeAnimation from '../components/FadeAnimation'
 import Field from '../components/Field'
 import Form from '../components/Form'
@@ -123,11 +123,12 @@ function VitalSignUpdate() {
         <Form status={status}>
           <SectionHeader bigTitle="Update Vital Sign Record">
             <ButtonIcon
-              color="red"
+              color="gray"
+              label="Back to Victim Information"
               onClick={() => navigate(`/incidents/records/${ROUTE.incident_id}/victims/${ROUTE.victim_id}`, { replace: true })}
               status={status}
               title="Close this form">
-              <Close20 />
+              <ArrowLeft20 />
             </ButtonIcon>
           </SectionHeader>
           <FormRow>

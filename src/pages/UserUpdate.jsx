@@ -1,4 +1,4 @@
-import { Close20, Information24 } from '@carbon/icons-react'
+import { ArrowLeft20, Information24 } from '@carbon/icons-react'
 import { navigate, useParams } from '@reach/router'
 
 import AccountContext from '../contexts/AccountContext'
@@ -98,9 +98,14 @@ function UserUpdate() {
     <PageContent>
       <FadeAnimation>
         <Form status={status}>
-          <SectionHeader bigTitle="Existing User Account Form">
-            <ButtonIcon color="red" onClick={() => navigate(`/users/records/${ROUTE.user_id}`, { replace: true })} status={status} title="Close">
-              <Close20 />
+          <SectionHeader bigTitle="Update User Account">
+            <ButtonIcon
+              color="gray"
+              label="Back to User Account Information"
+              onClick={() => navigate(`/users/records/${ROUTE.user_id}`, { replace: true })}
+              status={status}
+              title="Close">
+              <ArrowLeft20 />
             </ButtonIcon>
           </SectionHeader>
           <SectionHeader title="1. Personal" />

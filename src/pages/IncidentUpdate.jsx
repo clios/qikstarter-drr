@@ -1,4 +1,4 @@
-import { Close20, Information24 } from '@carbon/icons-react'
+import { ArrowLeft20, Information24 } from '@carbon/icons-react'
 import { navigate, useParams } from '@reach/router'
 
 import AccountContext from '../contexts/AccountContext'
@@ -196,9 +196,14 @@ function IncidentUpdate() {
     <PageContent>
       <FadeAnimation>
         <Form status={status}>
-          <SectionHeader bigTitle="Incident Rescue Form">
-            <ButtonIcon color="red" onClick={() => navigate('/incidents/records', { replace: true })} status={status} title="Close this form">
-              <Close20 />
+          <SectionHeader bigTitle="Update Incident Rescue">
+            <ButtonIcon
+              color="gray"
+              label="Back to Incident Rescue Information"
+              onClick={() => navigate(`/incidents/records/${ROUTE.incident_id}`, { replace: true })}
+              status={status}
+              title="Close this form">
+              <ArrowLeft20 />
             </ButtonIcon>
           </SectionHeader>
           <SectionHeader title="1. Incident Response" />

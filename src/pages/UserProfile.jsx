@@ -1,4 +1,4 @@
-import { Close20, Download20, Edit20, Information24, Password20, Power24, TrashCan20 } from '@carbon/icons-react'
+import { ArrowLeft20, Download20, Edit20, Information24, Password20, Power24, TrashCan20 } from '@carbon/icons-react'
 import { navigate, useParams } from '@reach/router'
 
 import AccountContext from '../contexts/AccountContext'
@@ -183,11 +183,16 @@ function UserProfile() {
             <ButtonIcon onClick={() => navigate('/users/records/' + ROUTE.user_id + '/edit')} status={status} title="Edit user account">
               <Edit20 />
             </ButtonIcon>
-            <ButtonIcon onClick={deleteUser} status={status} title="Delete user account">
+            <ButtonIcon color="red" onClick={deleteUser} status={status} title="Delete user account">
               <TrashCan20 />
             </ButtonIcon>
-            <ButtonIcon color="red" onClick={() => navigate('/users/records', { replace: true })} status={status} title="Close">
-              <Close20 />
+            <ButtonIcon
+              color="gray"
+              label="Back to User Accounts"
+              onClick={() => navigate('/users/records', { replace: true })}
+              status={status}
+              title="Close">
+              <ArrowLeft20 />
             </ButtonIcon>
           </SectionHeader>
           <SectionHeader title="1. Personal" />

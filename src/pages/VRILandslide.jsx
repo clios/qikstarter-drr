@@ -38,7 +38,7 @@ function VRILandslide() {
             <SATotalCard />
             <SASusceptibilityAreaChart />
           </div>
-          <div className="psal-row-two">
+          <div className="pal-row-two">
             <SATotalBarChartMunicipalities />
           </div>
           <div className="psal-row-three">

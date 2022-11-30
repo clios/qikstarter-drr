@@ -3,6 +3,7 @@ import { Add20, Download20, Filter20, Reset20 } from '@carbon/icons-react'
 import AccountContext from '../contexts/AccountContext'
 import Address from '../Address'
 import Authorization from '../components/Authorization'
+import Button from '../components/Button'
 import ButtonIcon from '../components/ButtonIcon'
 import { CSVLink } from 'react-csv'
 import FadeAnimation from '../components/FadeAnimation'
@@ -96,9 +97,9 @@ function UserRecords() {
           <ButtonIcon label="Refresh" onClick={refreshTable} status={status} title="Refresh and reset table">
             <Reset20 />
           </ButtonIcon>
-          <ButtonIcon color="green" label="Add User Account" onClick={() => navigate('/users/records/add')} status={status}>
-            <Add20 />
-          </ButtonIcon>
+          <Button color="green" onClick={() => navigate('/users/records/add')} status={status}>
+            Create User Account
+          </Button>
         </TableToolbar>
         <Table status={status} emptyLabel="No users found" headers={['Index', 'Name', 'Office', 'Status', 'Date Updated']} total={totalCount}>
           {status === 'success' &&

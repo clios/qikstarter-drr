@@ -1,8 +1,9 @@
-import { Add20, Catalog20, Close20, Edit20, Reset20, TrashCan20 } from '@carbon/icons-react'
+import { Add20, ArrowLeft20, Catalog20, Edit20, Reset20, TrashCan20 } from '@carbon/icons-react'
 import { DPI, Format, MapboxExportControl, PageOrientation, Size } from '@watergis/mapbox-gl-export'
 import { navigate, useParams } from '@reach/router'
 
 import AccountContext from '../contexts/AccountContext'
+import Button from '../components/Button'
 import ButtonIcon from '../components/ButtonIcon'
 import FadeAnimation from '../components/FadeAnimation'
 import Field from '../components/Field'
@@ -75,6 +76,7 @@ function IncidentInformation() {
         zoom: 8
       })
     )
+    window.scrollTo(0, 0)
   }, [])
 
   // AFTER CREATING MAP, ADD CONTROLS
@@ -208,11 +210,16 @@ function IncidentInformation() {
             <ButtonIcon onClick={() => navigate('/incidents/records/' + ROUTE.incident_id + '/edit')} status={status} title="Edit incident record">
               <Edit20 />
             </ButtonIcon>
-            <ButtonIcon onClick={deleteIncident} status={status} title="Delete incident record">
+            <ButtonIcon color="red" onClick={deleteIncident} status={status} title="Delete incident record">
               <TrashCan20 />
             </ButtonIcon>
-            <ButtonIcon color="red" onClick={() => navigate('/incidents/records', { replace: true })} status={status} title="Close">
-              <Close20 />
+            <ButtonIcon
+              color="gray"
+              label="Back to Incident Records"
+              onClick={() => navigate('/incidents/records', { replace: true })}
+              status={status}
+              title="Close">
+              <ArrowLeft20 />
             </ButtonIcon>
           </SectionHeader>
           <SectionHeader title="1. Incident Response" />
@@ -298,15 +305,11 @@ function IncidentInformation() {
             <Field status={status} text={Help.displayDateTimeSimple(incident.occured_at)} />
           </SectionBody>
           <SectionHeader title="3. Victim Records">
-            <ButtonIcon
-              color="green"
-              label="Add Victim Record"
-              onClick={() => navigate(`/incidents/records/${ROUTE.incident_id}/victims/add`, { replace: true })}
-              status={status}>
-              <Add20 />
-            </ButtonIcon>
+            <Button color="green" onClick={() => navigate(`/incidents/records/${ROUTE.incident_id}/victims/add`, { replace: true })} status={status}>
+              Add Victim Record
+            </Button>
           </SectionHeader>
-          <PaperView>
+          <div className="sub-section-table">
             <Table
               status={status}
               emptyLabel="No victim/s found"
@@ -334,7 +337,7 @@ function IncidentInformation() {
                   )
                 })}
             </Table>
-          </PaperView>
+          </div>
           <SectionFooter status={status}>Last updated by [NAME HERE] was {Help.displayDateTime(incident.created_at)}</SectionFooter>
         </PaperView>
       </FadeAnimation>

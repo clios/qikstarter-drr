@@ -1,7 +1,8 @@
-import { Add20, Catalog20, Close20, Download20, Edit20, Reset20, TrashCan20 } from '@carbon/icons-react'
+import { Add20, ArrowLeft20, Catalog20, Download20, Edit16, Edit20, Reset20, TrashCan16, TrashCan20 } from '@carbon/icons-react'
 import { navigate, useParams } from '@reach/router'
 
 import AccountContext from '../contexts/AccountContext'
+import Button from '../components/Button'
 import ButtonIcon from '../components/ButtonIcon'
 import { CSVLink } from 'react-csv'
 import FadeAnimation from '../components/FadeAnimation'
@@ -185,15 +186,16 @@ function VictimInformation() {
               title="Edit incident record">
               <Edit20 />
             </ButtonIcon>
-            <ButtonIcon onClick={deleteVictim} status={status} title="Delete incident record">
+            <ButtonIcon color="red" onClick={deleteVictim} status={status} title="Delete incident record">
               <TrashCan20 />
             </ButtonIcon>
             <ButtonIcon
-              color="red"
+              color="gray"
+              label="Back to Incident Rescue Information"
               onClick={() => navigate(`/incidents/records/${ROUTE.incident_id}`, { replace: true })}
               status={status}
               title="Close">
-              <Close20 />
+              <ArrowLeft20 />
             </ButtonIcon>
           </SectionHeader>
           <SectionBody>
@@ -219,15 +221,14 @@ function VictimInformation() {
             <Field label="Contact Number" status={status} text={Help.displayText(victim.contact_number)} />
           </SectionBody>
           <SectionHeader title="2. Vital Signs Monitoring">
-            <ButtonIcon
+            <Button
               color="green"
-              label="Add Vital Sign Record"
               onClick={() => navigate(`/incidents/records/${ROUTE.incident_id}/victims/${ROUTE.victim_id}/vital_signs/add`, { replace: true })}
               status={status}>
-              <Add20 />
-            </ButtonIcon>
+              Add Vital Sign Record
+            </Button>
           </SectionHeader>
-          <PaperView>
+          <div className="sub-section-table">
             <Table
               className="no-click"
               status={status}
@@ -248,21 +249,25 @@ function VictimInformation() {
                         {item.systolic}/{item.diastolic}
                       </td>
                       <td>
-                        <ButtonIcon
-                          status={status}
-                          label="Edit"
-                          onClick={() => navigate(`/incidents/records/${ROUTE.incident_id}/victims/${ROUTE.victim_id}/vital_signs/${item.id}/edit`)}>
-                          <Edit20 />
-                        </ButtonIcon>
-                        <ButtonIcon color="red" status={status} label="Delete" onClick={() => deleteVitalSign(item.id)}>
-                          <TrashCan20 />
-                        </ButtonIcon>
+                        <div className="sub-section-action">
+                          <ButtonIcon
+                            color="gray"
+                            status={status}
+                            onClick={() =>
+                              navigate(`/incidents/records/${ROUTE.incident_id}/victims/${ROUTE.victim_id}/vital_signs/${item.id}/edit`)
+                            }>
+                            <Edit16 />
+                          </ButtonIcon>
+                          <ButtonIcon color="gray" status={status} onClick={() => deleteVitalSign(item.id)}>
+                            <TrashCan16 />
+                          </ButtonIcon>
+                        </div>
                       </td>
                     </tr>
                   )
                 })}
             </Table>
-          </PaperView>
+          </div>
           <SectionHeader title="3. Glasgow Coma Scale" />
           <SectionBody>
             <Field label="Best Eye Response" status={status} text={Help.displayText(victim.best_eye_response)} />

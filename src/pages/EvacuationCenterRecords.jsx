@@ -1,12 +1,11 @@
 import { Add20, Download20, Filter20, Reset20 } from '@carbon/icons-react'
 
-import Account from '../json/account.json'
 import AccountContext from '../contexts/AccountContext'
 import Address from '../Address'
 import Authorization from '../components/Authorization'
+import Button from '../components/Button'
 import ButtonIcon from '../components/ButtonIcon'
 import { CSVLink } from 'react-csv'
-import EvacuationCenters from '../json/evacuation_centers.json'
 import FadeAnimation from '../components/FadeAnimation'
 import Field from '../components/Field'
 import FormRow from '../components/FormRow'
@@ -20,12 +19,13 @@ import Select from '../components/Select'
 import Table from '../components/Table'
 import TableFooter from '../components/TableFooter'
 import TableToolbar from '../components/TableToolbar'
+import getEvacuationCenters from '../api/getEvacuationCenters'
 import { navigate } from '@reach/router'
 import { toast } from 'react-toastify'
 
 function EvacuationCenterRecords() {
   // INFORMATION STATE
-  // const Account = React.useContext(AccountContext)
+  const Account = React.useContext(AccountContext)
   const [status, setStatus] = React.useState('loading')
   const [display, setDisplay] = React.useState(false)
   const [totalCount, setTotalCount] = React.useState(0)
@@ -35,13 +35,12 @@ function EvacuationCenterRecords() {
   const [page, setPage] = React.useState(1)
   const [orders, setOrders] = React.useState('updated_at:desc')
   const [name, setName] = React.useState('')
-  const [address_province, setAddressProvince] = React.useState(Account.vicinity_province)
-  const [address_municipality, setAddressMunicipality] = React.useState(Account.vicinity_municipality)
-  const [address_barangay, setAddressBarangay] = React.useState(Account.vicinity_barangay)
+  const [address_municipality, setAddressMunicipality] = React.useState('')
+  const [address_barangay, setAddressBarangay] = React.useState('')
   const [params, setParams] = React.useState({ limit, page, orders })
 
   // SEND GET EVACUATION CENTERS REQUEST
-  // const EvacuationCenters = getEvacuationCenters(params)
+  const EvacuationCenters = getEvacuationCenters(params)
 
   // UPDATE URL SEARCH PARAMETERS
   function updateParams() {
@@ -49,9 +48,9 @@ function EvacuationCenterRecords() {
     if (limit !== '') newParams.limit = limit
     if (page !== '') newParams.page = page
     if (orders !== '') newParams.orders = orders
-    // if (vicinity_province !== '') newParams.vicinity_province = vicinity_province
-    // if (vicinity_municipality !== '') newParams.vicinity_municipality = vicinity_municipality
-    // if (vicinity_barangay !== '') newParams.vicinity_barangay = vicinity_barangay
+    if (name !== '') newParams.name = name
+    if (address_municipality !== '') newParams.municipal = address_municipality
+    if (address_barangay !== '') newParams.barangay = address_barangay
     setParams(newParams)
   }
 
@@ -62,7 +61,7 @@ function EvacuationCenterRecords() {
   }, [name])
 
   // ON QUICK UPDATE OF PARAMS
-  React.useEffect(() => updateParams(), [limit, page, orders])
+  React.useEffect(() => updateParams(), [limit, page, orders, address_municipality, address_barangay])
 
   // ON GET EVACUATION CENTERS
   React.useEffect(() => {
@@ -70,7 +69,7 @@ function EvacuationCenterRecords() {
     if (EvacuationCenters.error) setStatus('error')
     if (EvacuationCenters.data) {
       setStatus('success')
-      setTotalCount(EvacuationCenters.data?.total_count)
+      setTotalCount(EvacuationCenters.data?.records.total)
     }
     return () => setStatus('loading')
   }, [EvacuationCenters.loading, EvacuationCenters.error, EvacuationCenters.data])
@@ -78,21 +77,12 @@ function EvacuationCenterRecords() {
   // REFRESH AND RESET TABLE
   function refreshTable() {
     setStatus('loading')
-    setTimeout(() => {
+    EvacuationCenters.mutate().then(() => {
       setStatus('success')
-      setPage(1)
-      setLimit(50)
-      setName('')
-      setOrders('updated_at:desc')
-      // setVicinityProvince(Account.vicinity_province)
-      // setVicinityMunicipality(Account.vicinity_municipality)
-      // setVicinityBarangay(Account.vicinity_barangay)
-      // Users.mutate()
-    }, 500)
+    })
   }
 
   return (
-    // <Authorization permissions={Account.permissions} permission="read_evacuation_centers">
     <PageContent>
       <FadeAnimation>
         <TableToolbar
@@ -116,32 +106,46 @@ function EvacuationCenterRecords() {
           </ButtonIcon>
           <CSVLink
             filename={`EVACUATION CENTERS.csv`}
-            data={EvacuationCenters.data?.records || []}
+            data={EvacuationCenters.data?.records.evacuation_centers || []}
             headers={[
-              { label: 'Evacuation Center', key: 'name' },
+              { label: 'ID', key: 'id' },
+              { label: 'Name', key: 'name' },
               { label: 'Capacity', key: 'capacity' },
+              { label: 'Municipal', key: 'municipal' },
               { label: 'Barangay', key: 'barangay' },
-              { label: 'Municipality', key: 'municipality' },
-              { label: 'Province', key: 'province' },
-              { label: 'Date Created', key: 'created_at' },
-              { label: 'Date Updated', key: 'updated_at' }
+              { label: 'Purok', key: 'purok' },
+              { label: 'Latitude', key: 'latitude' },
+              { label: 'Longitude', key: 'longitude' },
+              { label: 'Backup Power Source', key: 'facility_backup_power_source' },
+              { label: 'Breastfeeding', key: 'facility_breastfeeding' },
+              { label: 'Clinic', key: 'facility_clinic' },
+              { label: 'Communication Room', key: 'facility_communication_room' },
+              { label: 'Council', key: 'facility_council' },
+              { label: 'Couples Room', key: 'facility_couples_room' },
+              { label: 'Dining', key: 'facility_dining' },
+              { label: 'Distilation Area', key: 'facility_distilation_area' },
+              { label: 'Electrical Room', key: 'facility_electrical_room' },
+              { label: 'Kitchen', key: 'facility_kitchen' },
+              { label: 'Laundry Area', key: 'facility_laundry_area' },
+              { label: 'Pharmacy', key: 'facility_pharmacy' },
+              { label: 'Play Room', key: 'facility_play_room' },
+              { label: 'Registration Area', key: 'facility_registration_area' },
+              { label: 'Rest Room', key: 'facility_rest_room' },
+              { label: 'Water Station', key: 'facility_water_station' },
+              { label: 'Is Government Owned', key: 'is_government_owned' },
+              { label: 'Created At', key: 'created_at' },
+              { label: 'Updated At', key: 'updated_at' }
             ]}>
             <ButtonIcon label="Download" status={status} title="Download current table">
               <Download20 />
             </ButtonIcon>
           </CSVLink>
-          <ButtonIcon
-            label="Add Evacuation Center Record"
-            // onClick={() => navigate('/evacuation/centers/add')}
-            // permission="write_user"
-            // permissions={Account.permissions}
-            status={status}>
-            <Add20 />
-          </ButtonIcon>
+          <Button color="green" onClick={() => navigate('/evacuation/centers/add')} status={status}>
+            Creaate Evacuation Center Record
+          </Button>
         </TableToolbar>
         <SearchBox className={display ? 'display' : 'hidden'}>
           <FormRow>
-            {/* {Account.vicinity_municipality === '' && ( */}
             <Field label="Municipality" status={status}>
               <Select
                 onChange={(e) => {
@@ -157,8 +161,6 @@ function EvacuationCenterRecords() {
                 ))}
               </Select>
             </Field>
-            {/* )} */}
-            {/* {Account.vicinity_barangay === '' && ( */}
             <Field label="Barangay" status={status}>
               <Select onChange={(e) => setAddressBarangay(e.target.value)} value={address_barangay}>
                 <option value="">ALL BARANGAYS</option>
@@ -169,7 +171,6 @@ function EvacuationCenterRecords() {
                 ))}
               </Select>
             </Field>
-            {/* )} */}
             <Field label="Order By" status={status}>
               <Select onChange={(e) => setOrders(e.target.value)} value={orders}>
                 <option value="name:desc">NAME (DESC)</option>
@@ -185,17 +186,18 @@ function EvacuationCenterRecords() {
         <Table
           status={status}
           emptyLabel="No evacuation centers found"
-          headers={['Index', 'Name', 'Capacity', 'Municipality', 'Barangay'].filter(Boolean)}
+          headers={['Index', 'Name', 'Capacity', 'Address'].filter(Boolean)}
           total={totalCount}>
           {status === 'success' &&
-            EvacuationCenters.data?.records.map((item, index) => {
+            EvacuationCenters.data?.records.evacuation_centers.map((item, index) => {
               return (
                 <tr key={index} onClick={() => navigate(`/evacuation/centers/${item.id}`)} title="Click to view more details">
                   <td>{Help.displayTableIndex(limit, page, index)}</td>
-                  <td>{item.name}</td>
-                  <td>{item.capacity?.toLocaleString()}</td>
-                  <td>{item.municipality}</td>
-                  <td>{item.barangay}</td>
+                  <td>{item.name?.toUpperCase()}</td>
+                  <td>{Help.displayNumberWithComma(item.capacity)}</td>
+                  <td>
+                    {item.municipal}, {item.barangay}
+                  </td>
                 </tr>
               )
             })}
@@ -211,7 +213,6 @@ function EvacuationCenterRecords() {
         />
       </FadeAnimation>
     </PageContent>
-    // </Authorization>
   )
 }
 

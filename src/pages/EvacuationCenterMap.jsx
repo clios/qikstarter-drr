@@ -1,168 +1,253 @@
-import 'leaflet.bigimage'
+import { DPI, Format, MapboxExportControl, PageOrientation, Size } from '@watergis/mapbox-gl-export'
+import { Filter20, Reset20 } from '@carbon/icons-react'
 
-import { Filter20, Printer20, Reset20 } from '@carbon/icons-react'
-
-import Account from '../json/account.json'
 import AccountContext from '../contexts/AccountContext'
 import Address from '../Address'
+import Authorization from '../components/Authorization'
 import ButtonIcon from '../components/ButtonIcon'
-import DashboardToolbar from '../components/DashboardToolbar'
+import Checkbox from '../components/Checkbox'
+import Disasters from '../Disasters'
 import FadeAnimation from '../components/FadeAnimation'
 import Field from '../components/Field'
 import FormRow from '../components/FormRow'
-import Input from '../components/Input'
-import L from 'leaflet'
+import Loader from '../components/Loader'
 import PageContent from '../components/PageContent'
 import React from 'react'
 import SearchBox from '../components/SearchBox'
 import Select from '../components/Select'
 import TableToolbar from '../components/TableToolbar'
+import boundaries from '../geojson/boundaries.geojson'
+import { confirmAlert } from 'react-confirm-alert'
+import getEvacuationCenterLocations from '../api/getEvacuationCenterLocations'
+import mapDEM from '../mapDEM'
+import mapEvent from '../mapEvent'
+import mapGeoJSON from '../mapGeoJSON'
+import mapLayer from '../mapLayer'
+import mapMarker from '../mapMarker'
+import mapSource from '../mapSource'
+import mapboxgl from 'mapbox-gl'
+import { navigate } from '@reach/router'
+import { toast } from 'react-toastify'
 
-// MAP TILE LAYER URL TEMPLATE
-const MAP_TILE_LAYER_URL = 'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}'
+mapboxgl.accessToken = process.env.MAPBOX_ACCESS_TOKEN
+mapboxgl.prewarm()
 
-// MAP TILE LAYER OPTIONS
-const MAP_TILE_LAYER_OPTIONS = {
-  attribution:
-    'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> ' +
-    'contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-  maxZoom: 20,
-  id: 'mapbox/satellite-streets-v11',
-  tileSize: 512,
-  zoomOffset: -1,
-  accessToken: process.env.MAPBOX_ACCESS_TOKEN
-}
-
-// DEFAULT VIEW LOCATION AND ZOOM LEVEL
-const DEFAULT_VIEW_LOCATION = [16.523711, 121.516725]
-const DEFAULT_ZOOM_LEVEL = 10
+const EVACUATION_CENTER_LOCATIONS = 'evacuation-center-locations'
+const EVACUATION_CENTER_LOCATIONS_COLOR = '#df2020'
 
 function EvacuationCenterMap() {
   // INFORMATION STATE
-  // const Account = React.useContext(AccountContext)
+  const Account = React.useContext(AccountContext)
   const [status, setStatus] = React.useState('success')
   const [display, setDisplay] = React.useState(false)
-  const [map, setMap] = React.useState(null)
-  const [locations, setLocations] = React.useState([])
+  const [map, setMap] = React.useState(false)
 
   // INPUT STATE
-  const [limit, setLimit] = React.useState(50)
-  const [page, setPage] = React.useState(1)
-  const [orders, setOrders] = React.useState('updated_at:desc')
-  const [name, setName] = React.useState('')
-  const [address_province, setAddressProvince] = React.useState(Account.vicinity_province)
-  const [address_municipality, setAddressMunicipality] = React.useState(Account.vicinity_municipality)
-  const [address_barangay, setAddressBarangay] = React.useState(Account.vicinity_barangay)
-  const [params, setParams] = React.useState({ limit, page, orders })
+  const [evacuation_center_locations_filter, setEvacuationCenterLocationsFilter] = React.useState(true)
+  const [boundaries_filter, setBoundariesFilter] = React.useState(true)
+  const [municipality, setMunicipality] = React.useState('')
+  const [barangay, setBarangay] = React.useState('')
+  // INPUT STATE: PARAMS
+  const [params, setParams] = React.useState({ municipal: municipality, barangay })
 
-  // ON RENDER CREATE MAP
+  // SEND GET EVACUATION CENTER LOCATIONS REQUEST
+  const EvacuationCenterLocations = getEvacuationCenterLocations(params)
+
+  // UPDATE URL SEARCH PARAMETERS
+  function updateParams() {
+    let newParams = {}
+    if (municipality !== '') newParams.municipal = municipality
+    if (barangay !== '') newParams.barangay = barangay
+    setParams(newParams)
+  }
+
+  // ON QUICK UPDATE OF PARAMS
+  React.useEffect(() => updateParams(), [municipality, barangay])
+
+  // ON GET EVACUATION CENTER LOCATIONS
   React.useEffect(() => {
-    setMap(L.map('map', { scrollWheelZoom: true }).setView(DEFAULT_VIEW_LOCATION, DEFAULT_ZOOM_LEVEL))
+    if (EvacuationCenterLocations.loading) setStatus('loading')
+    if (EvacuationCenterLocations.error) setStatus('error')
+    if (EvacuationCenterLocations.data) setStatus('success')
+    return () => setStatus('loading')
+  }, [EvacuationCenterLocations.loading, EvacuationCenterLocations.error, EvacuationCenterLocations.data])
+
+  // ON RENDER, REVALIDATE EVACUATION CENTER AND CREATE MAP
+  React.useEffect(() => {
+    setMap(
+      new mapboxgl.Map({
+        center: [121.647584, 16.323105],
+        container: 'map',
+        style: 'mapbox://styles/mapbox/satellite-streets-v11',
+        zoom: 8
+      })
+    )
   }, [])
 
-  // ON MAP CREATION, SET MAP TILE LAYER
+  // AFTER CREATING MAP, ADD CONTROLS
   React.useEffect(() => {
-    map && L.tileLayer(MAP_TILE_LAYER_URL, MAP_TILE_LAYER_OPTIONS).addTo(map)
-    map && L.control.BigImage().addTo(map)
+    if (map) {
+      map.addControl(new mapboxgl.NavigationControl({ visualizePitch: true }))
+      map.addControl(new mapboxgl.FullscreenControl())
+      map.addControl(
+        new MapboxExportControl({
+          PageSize: Size.A4,
+          PageOrientation: PageOrientation.Portrait,
+          Format: Format.PNG,
+          DPI: DPI[96],
+          Crosshair: true,
+          PrintableArea: true,
+          accessToken: process.env.MAPBOX_ACCESS_TOKEN
+        })
+      )
+    }
   }, [map])
 
+  // ON LOAD EVACUATION CENTER DATA
+  React.useEffect(() => {
+    setStatus('loading')
+    if (map && EvacuationCenterLocations.data) {
+      map.resize()
+
+      // CREATE EVACUATION CENTER GEOJSON
+      const evacuation_center_records = EvacuationCenterLocations.data.records
+      const evacuation_center_geojson = mapGeoJSON(map, EVACUATION_CENTER_LOCATIONS, evacuation_center_records, (item) => {
+        return {
+          'type': 'Feature',
+          'geometry': { 'type': 'Point', 'coordinates': [item.longitude, item.latitude] },
+          'properties': { 'id': item.id, 'name': item.name }
+        }
+      })
+
+      // ON LOAD
+      map.on('load', () => {
+        // QUIRINO BARANGAY BOUNDARIES
+        map.addSource('boundaries', { type: 'geojson', data: boundaries })
+        mapLayer.boundaries(map)
+        map.on('click', 'boundaries-fill-layer', (e) => {
+          const properties = e.features[0].properties
+          toast.info(
+            <div>
+              {properties.BRGY || 'N/A'}, {properties.MUN}
+              <br />
+              Area: {properties.AREA__HA_?.toLocaleString()} hectares
+            </div>
+          )
+        })
+
+        // EVACUATION CENTER LOCATIONS
+        map.addImage(EVACUATION_CENTER_LOCATIONS, mapMarker(100, EVACUATION_CENTER_LOCATIONS_COLOR, map), { pixelRatio: 2 })
+        mapSource(map, EVACUATION_CENTER_LOCATIONS, { type: 'geojson', data: evacuation_center_geojson, cluster: true })
+        mapLayer.cluster(map, EVACUATION_CENTER_LOCATIONS, EVACUATION_CENTER_LOCATIONS_COLOR)
+        mapLayer.clusterCount(map, EVACUATION_CENTER_LOCATIONS)
+        mapLayer.unclusteredPoint(map, EVACUATION_CENTER_LOCATIONS, EVACUATION_CENTER_LOCATIONS)
+        mapEvent.mouse(map, EVACUATION_CENTER_LOCATIONS)
+        mapEvent.clickCluster(map, EVACUATION_CENTER_LOCATIONS)
+        mapEvent.clickUnclusteredPoint(map, EVACUATION_CENTER_LOCATIONS, (properties) => {
+          confirmAlert({
+            title: properties.name,
+            message: `Evacuation Center Location`,
+            buttons: [{ label: 'Go to records', onClick: () => navigate('/evacuation/centers/' + properties.id) }, { label: 'Close' }]
+          })
+        })
+      })
+
+      map.on('idle', () => {
+        setStatus('success')
+      })
+    }
+  }, [map, EvacuationCenterLocations.data])
+
+  // ADD MAP LAYER TOGGLE
+  React.useEffect(() => {
+    if (map) {
+      function toggleMapLayer(map, layer, filter) {
+        if (map.getLayer(layer)) map.setLayoutProperty(layer, 'visibility', filter ? 'visible' : 'none')
+      }
+
+      toggleMapLayer(map, 'evacuation-center-locations-cluster-layer', evacuation_center_locations_filter)
+      toggleMapLayer(map, 'evacuation-center-locations-cluster-count-layer', evacuation_center_locations_filter)
+      toggleMapLayer(map, 'evacuation-center-locations-unclustered-point-layer', evacuation_center_locations_filter)
+
+      toggleMapLayer(map, 'boundaries-fill-layer', boundaries_filter)
+      toggleMapLayer(map, 'boundaries-line-layer', boundaries_filter)
+    }
+  }, [map, evacuation_center_locations_filter, boundaries_filter])
+
+  // REFRESH
+  function refreshLocations() {
+    setStatus('loading')
+    EvacuationCenterLocations.mutate().then(() => {
+      setStatus('success')
+    })
+  }
+
   return (
-    <PageContent>
-      <FadeAnimation>
-        <TableToolbar>
-          <ButtonIcon
-            label="Filters"
-            onClick={() => setDisplay(!display)}
-            title={display ? 'Hide filter options' : 'Display more filter options'}
-            status={status}>
-            <Filter20 />
-          </ButtonIcon>
-          <ButtonIcon label="Refresh">
-            <Reset20 />
-          </ButtonIcon>
-          <ButtonIcon label="Print">
-            <Printer20 />
-          </ButtonIcon>
-        </TableToolbar>
-        <SearchBox className={display ? 'display' : 'hidden'}>
-          <FormRow>
-            {/* {Account.vicinity_municipality === '' && ( */}
-            <Field label="Municipality" status={status}>
-              <Select
-                onChange={(e) => {
-                  setAddressBarangay('')
-                  setAddressMunicipality(e.target.value)
-                }}
-                value={address_municipality}>
-                <option value="">ALL MUNICIPALS</option>
-                {Address.Municipalities('02', 'QUIRINO').map((item, index) => (
-                  <option key={index} value={item}>
-                    {item}
-                  </option>
-                ))}
-              </Select>
-            </Field>
-            {/* )} */}
-            {/* {Account.vicinity_barangay === '' && ( */}
-            <Field label="Barangay" status={status}>
-              <Select onChange={(e) => setAddressBarangay(e.target.value)} value={address_barangay}>
-                <option value="">ALL BARANGAYS</option>
-                {Address.Barangays('02', 'QUIRINO', address_municipality).map((item, index) => (
-                  <option key={index} value={item}>
-                    {item}
-                  </option>
-                ))}
-              </Select>
-            </Field>
-            {/* )} */}
-            <Field label="Order By" status={status}>
-              <Select onChange={(e) => setOrders(e.target.value)} value={orders}>
-                <option value="name:desc">NAME (DESC)</option>
-                <option value="name:asc">NAME (ASC)</option>
-                <option value="capacity:desc">CAPACITY (DESC)</option>
-                <option value="capacity:asc">CAPACITY (ASC)</option>
-                <option value="name:desc">DATE OCCURED (DESC)</option>
-                <option value="name:asc">DATE OCCURED (ASC)</option>
-              </Select>
-            </Field>
-          </FormRow>
-        </SearchBox>
-        {/* <DashboardToolbar>
-          <Field label="Municipality" status={status}>
-            <Select
-              onChange={(e) => {
-                Barangay('')
-                Municipality(e.target.value)
-              }}
-              value={municipality}>
-              <option value="">ALL MUNICIPALS</option>
-              {Address.Municipalities('02', 'QUIRINO').map((item, index) => (
-                <option key={index} value={item}>
-                  {item}
-                </option>
-              ))}
-            </Select>
-          </Field>
-          <Field label="Barangay" status={status}>
-            <Select onChange={(e) => Barangay(e.target.value)} value={barangay}>
-              <option value="">ALL BARANGAYS</option>
-              {Address.Barangays('02', 'QUIRINO', municipality).map((item, index) => (
-                <option key={index} value={item}>
-                  {item}
-                </option>
-              ))}
-            </Select>
-          </Field>
-          <Field label="Purok" status={status}>
-            <Input onChange={(e) => Purok(e.target.value)} size={5} type="text" value={purok} />
-          </Field>
-          <Field label="Street" status={status}>
-            <Input onChange={(e) => Street(e.target.value)} size={15} type="text" value={street} />
-          </Field>
-        </DashboardToolbar> */}
-        <div id="map" className="map-container" />
-      </FadeAnimation>
-    </PageContent>
+    <React.Fragment>
+      {status === 'loading' && <Loader />}
+      <PageContent>
+        <FadeAnimation>
+          <TableToolbar>
+            <ButtonIcon
+              label="Filters"
+              onClick={() => setDisplay(!display)}
+              title={display ? 'Hide filter options' : 'Display more filter options'}
+              status={status}>
+              <Filter20 />
+            </ButtonIcon>
+            <ButtonIcon label="Refresh" status={status} onClick={() => refreshLocations()}>
+              <Reset20 />
+            </ButtonIcon>
+          </TableToolbar>
+          <SearchBox className={display ? 'display' : 'hidden'}>
+            <FormRow>
+              <Field label="Boundaries" status={status}>
+                <Checkbox
+                  checked={boundaries_filter}
+                  onChange={(e) => setBoundariesFilter(e.target.checked)}
+                  text={boundaries_filter ? 'Display' : 'Hidden'}
+                />
+              </Field>
+              <Field label="Evacuation Centers" status={status}>
+                <Checkbox
+                  checked={evacuation_center_locations_filter}
+                  onChange={(e) => setEvacuationCenterLocationsFilter(e.target.checked)}
+                  text={evacuation_center_locations_filter ? 'Display' : 'Hidden'}
+                />
+              </Field>
+            </FormRow>
+            <FormRow>
+              <Field label="Municipality" status={status}>
+                <Select
+                  onChange={(e) => {
+                    setBarangay('')
+                    setMunicipality(e.target.value)
+                  }}
+                  value={municipality}>
+                  <option value="">ALL MUNICIPALS</option>
+                  {Address.Municipalities('02', 'QUIRINO').map((item, index) => (
+                    <option key={index} value={item}>
+                      {item}
+                    </option>
+                  ))}
+                </Select>
+              </Field>
+              <Field label="Barangay" status={status}>
+                <Select onChange={(e) => setBarangay(e.target.value)} value={barangay}>
+                  <option value="">ALL BARANGAYS</option>
+                  {Address.Barangays('02', 'QUIRINO', municipality).map((item, index) => (
+                    <option key={index} value={item}>
+                      {item}
+                    </option>
+                  ))}
+                </Select>
+              </Field>
+            </FormRow>
+          </SearchBox>
+          <div id="map" className="map-container" />
+        </FadeAnimation>
+      </PageContent>
+    </React.Fragment>
   )
 }
 

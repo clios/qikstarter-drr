@@ -1,8 +1,10 @@
 import { Redirect, Router } from '@reach/router'
 
+import EvacuationCenterCreate from './pages/EvacuationCenterCreate'
 import EvacuationCenterInformation from './pages/EvacuationCenterInformation'
 import EvacuationCenterMap from './pages/EvacuationCenterMap'
 import EvacuationCenterRecords from './pages/EvacuationCenterRecords'
+import EvacuationCenterUpdate from './pages/EvacuationCenterUpdate'
 import EvacuationDashboard from './pages/EvacuationDashboard'
 import EvacuationTabs from './layouts/EvacuationTabs'
 import IncidentCreate from './pages/IncidentCreate'
@@ -78,6 +80,8 @@ function Routes() {
           <EvacuationDashboard path="/dashboard" />
           <EvacuationCenterRecords path="/centers" />
           <EvacuationCenterInformation path="/centers/:evacuation_center_id" />
+          <EvacuationCenterCreate path="/centers/add" />
+          <EvacuationCenterUpdate path="/centers/:evacuation_center_id/edit" />
           <EvacuationCenterMap path="/map" />
         </EvacuationTabs>
 

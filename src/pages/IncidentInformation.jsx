@@ -338,7 +338,9 @@ function IncidentInformation() {
                 })}
             </Table>
           </div>
-          <SectionFooter status={status}>Last updated by [NAME HERE] was {Help.displayDateTime(incident.created_at)}</SectionFooter>
+          <SectionFooter status={status}>
+            Last updated by {Help.displayText(incident.last_updated_by)} was {Help.displayDateTime(incident.created_at)}
+          </SectionFooter>
         </PaperView>
       </FadeAnimation>
     </PageContent>
